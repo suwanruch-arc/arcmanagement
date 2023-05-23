@@ -1,7 +1,7 @@
 <a type="{{ $type }}" href="{{ $href }}" class="btn btn-{{ $color }}">
-    @if ($slot->isNotEmpty())
-        {{ $slot }}
-    @else
+    @if (empty($slot->toHtml()))
         {{ $text }}
+    @else
+        {{ $slot }}
     @endif
 </a>

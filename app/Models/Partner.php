@@ -9,15 +9,24 @@ class Partner extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'keyword'
+    ];
 
     public static function list()
     {
-        $partner = Partner::all(); // Retrieve all users
+        $partner = Partner::all(); // Retrieve all partners
 
         foreach ($partner as $item) {
             $partnerList[$item->id] = $item->name;
         }
 
         return $partnerList;
+    }
+
+    public function departments()
+    {
+        return $this->hasMany(Department::class);
     }
 }

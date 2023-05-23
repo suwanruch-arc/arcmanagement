@@ -4,7 +4,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 @endif
-<table class="table" id="dataTable" width="100%">
+<table class="table table-bordered" id="dataTable" width="100%">
     {{ $slot }}
 </table>
 <script>

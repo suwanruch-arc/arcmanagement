@@ -11,7 +11,7 @@
                         @foreach ($item as $menu)
                             <li class="nav-item">
                                 <a class="align-middle nav-link @if (isset($menu['url']) && Request::is($menu['url'])) active @endif"
-                                    href="{{ $menu['url'] ?? '#' }}">
+                                    href="{{ '/' . $menu['url'] ?? '#' }}">
                                     <span data-feather="{{ $menu['icon'] ?? 'box' }}"></span>
                                     {{ $menu['text'] }}
                                 </a>

@@ -5,6 +5,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\AccountController;
+use App\Http\Controllers\Managements\DepartmentController;
+use App\Http\Controllers\Managements\PartnerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +39,8 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('admin')->prefix('manage')->name('manage.')->group(function () {
+        Route::resource('partners', PartnerController::class);
+        Route::resource('partners.departments', DepartmentController::class);
         Route::resource('users', UserController::class);
     });
 });

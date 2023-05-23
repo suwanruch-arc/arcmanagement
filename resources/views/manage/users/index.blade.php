@@ -37,7 +37,7 @@
                             <td>{{ $user->role }}</td>
                             <td>{{ $user->from }}</td>
                             <td>{{ $user->status }}</td>
-                            <td>
+                            <td class="text-center">
                                 <x-action-btn route="manage.users" :params="['user' => $user->id]" />
                             </td>
                         </tr>
