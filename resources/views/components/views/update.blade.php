@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <x-container cols="12" md="8" lg="6">
+    <x-container :cols="$cols ?? 12" :md="$cols ?? 8" :lg="$cols ?? 6">
         <x-card>
             <x-form method="POST" action="{{ route($route . '.update', $params) }}">
                 @method('PUT')

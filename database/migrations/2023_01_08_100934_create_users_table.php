@@ -20,8 +20,8 @@ class CreateUsersTable extends Migration
             $table->string('username', 255)->unique();
             $table->string('password');
             $table->string('contact_number')->nullable();
-            $table->foreignId('partner_id')->nullable()->constrained('partners');
-            $table->foreignId('department_id')->nullable()->constrained('departments');
+            $table->foreignId('partner_id')->nullable()->constrained('partners')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('department_id')->nullable()->constrained('departments')->cascadeOnUpdate()->nullOnDelete();
             $table->enum('position', ["admin", "leader", "staff"]);
             $table->enum('role', ["admin", "moderator", "user"]);
             $table->enum('status', ["active", "inactive"]);

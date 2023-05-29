@@ -6,7 +6,7 @@ return [
     'menus' => [
         [
             'text' => 'Dashboard',
-            'url' => '/',
+            'url' => 'dashboard',
         ],
     ],
     'reports' => ReportController::getReportList(),
@@ -18,6 +18,11 @@ return [
         ]
     ],
     'management' => [
+        [
+            'icon' => 'file-text',
+            'text' => 'Reports',
+            'url' => 'manage/reports'
+        ],
         [
             'icon' => 'users',
             'text' => 'Partners',

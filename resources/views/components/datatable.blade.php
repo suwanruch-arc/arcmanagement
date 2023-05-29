@@ -10,6 +10,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         let table = new DataTable('#dataTable', {
+            ordering: {{ $sort }},
             responsive: true,
             buttons: [{
                 extend: 'copy',

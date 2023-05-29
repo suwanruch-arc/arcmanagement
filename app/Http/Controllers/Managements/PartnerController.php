@@ -7,6 +7,9 @@ use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\File;
+use App\Providers\FileServiceProvider;
+use Illuminate\Support\Facades\Storage;
 
 class PartnerController extends Controller
 {
@@ -15,6 +18,7 @@ class PartnerController extends Controller
         $type = $model ? 'update' : 'create';
         $fields = [
             'type' => $type,
+            'id' => $model ? $model->id : '',
             'name' => old('name') ?? ($model ? $model->name : ''),
             'keyword' => old('keyword') ?? ($model ? $model->keyword : ''),
             'department_name' => old('department_name') ?? '',
@@ -30,7 +34,7 @@ class PartnerController extends Controller
      */
     public function index()
     {
-        $partners = Partner::all();
+        $partners = Partner::where('status', 'active')->get();
         return view('manage.partners.index')->with(compact('partners'));
     }
 
@@ -71,17 +75,26 @@ class PartnerController extends Controller
 
             $department = new Department;
             $department->partner_id = $partner->id;
-            $department->name = $validated['department_name'] ?? 'main';
+            $department->name = $validated['department_name'] ?? "{$partner->name}-main";
             $department->keyword = $validated['department_keyword'] ?? $partner->keyword;
             $department->is_main = 'yes';
             $department->save();
 
             if ($request->hasFile('logo')) {
-                // FileService::store($request->file('logo'), "partner/{$partner->keyword}/logo", $partner->id, 'partners', 'logo');
+                $file = $request->file('logo');
+                $field = 'logo';
+
+                $path_file = "partner/{$partner->keyword}/logo";
+                $id = $department->id;
+                $table = $department->getTable();
+                FileServiceProvider::store($file, $path_file, $id, $table,  $field);
             }
         });
 
         $name = $partner->name;
+
+        return redirect()->route("manage.partners.index")
+            ->with('success', __('message.created', ['name' => $name]));
     }
 
     /**
@@ -101,9 +114,14 @@ class PartnerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Partner $partner)
     {
-        //
+        return view('components.views.update', [
+            'params' => ['partner' => $partner->id],
+            'title' => 'Partner',
+            'route' => 'manage.partners',
+            'fields' => $this->fields($partner),
+        ])->with(compact('partner'));
     }
 
     /**
@@ -113,9 +131,34 @@ class PartnerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Partner $partner)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'keyword' => 'required|max:5|unique:partners,id,' . $partner->id,
+        ]);
+
+        DB::transaction(function () use ($validated, $request, &$partner) {
+            $partner->fill($validated);
+            $partner->save();
+
+            if ($request->hasFile('logo')) {
+                $file = $request->file('logo');
+                $field = 'logo';
+
+                $department = Department::firstWhere(['partner_id' => $partner->id, 'is_main' => 'yes']);
+                $path_file = "partner/{$partner->keyword}/logo";
+                $id = $department->id;
+                $table = $department->getTable();
+
+                FileServiceProvider::update($file, $path_file, $id, $table,  $field);
+            }
+        });
+
+        $name = $partner->name;
+
+        return redirect()->route("manage.partners.index")
+            ->with('success', __('message.updated', ['name' => $name]));
     }
 
     /**
@@ -124,8 +167,20 @@ class PartnerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Partner $partner)
     {
-        //
+        $name = $partner->name;
+        $path = "partner/{$partner->keyword}";
+
+        foreach ($partner->departments as $department) {
+            File::where(['table_name' => $department->getTable(), 'table_id' => $department->id, 'table_field' => 'logo'])->delete();
+            $department->delete();
+        }
+
+        $partner->delete();
+
+        Storage::disk('public')->deleteDirectory($path);
+
+        return redirect()->route("manage.partners.index")->with('success', __('message.deleted', ['name' => $name]));
     }
 }

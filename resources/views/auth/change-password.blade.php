@@ -8,10 +8,16 @@
     <x-container cols="6">
         <x-card>
             <x-form method="POST" action="{{ route('account.update-password') }}">
-                <x-input required type="password" name="password" id="password" label="Password"
-                    placeholder="กรุณากรอกรหัสผ่าน" min="6" max="20" />
-                <x-input required type="password" name="confirm_password" id="confirm_password" label="Confirm Password"
-                    placeholder="ยืนยันกรอกรหัสผ่าน" min="6" max="20" />
+                <div class="row row-cols-1 row-cols-md-2">
+                    <div class="col">
+                        <x-input required type="password" name="password" id="password" label="Password"
+                            placeholder="กรุณากรอกรหัสผ่าน" min="6" max="20" />
+                    </div>
+                    <div class="col">
+                        <x-input required type="password" name="confirm_password" id="confirm_password"
+                            label="Confirm Password" placeholder="ยืนยันกรอกรหัสผ่าน" min="6" max="20" />
+                    </div>
+                </div>
             </x-form>
         </x-card>
     </x-container>

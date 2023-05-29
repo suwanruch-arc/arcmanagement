@@ -30,12 +30,6 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
-                'name' => 'UOB',
-                'keyword' => 'uob',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
-            ],
-            [
                 'name' => 'KBank',
                 'keyword' => 'kbank',
                 'created_at' => date('Y-m-d H:i:s'),

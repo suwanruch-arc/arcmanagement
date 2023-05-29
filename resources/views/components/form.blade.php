@@ -8,7 +8,7 @@
         </ul>
     </div>
 @endif
-<form {{ $attributes }}>
+<form {{ $attributes }} enctype="multipart/form-data">
     @csrf
     {{ $slot }}
     <button class="btn btn-success mt-" type="submit">Save</button>

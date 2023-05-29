@@ -8,7 +8,7 @@
     <x-container fluid>
         <x-header-btn justify="end" />
         <x-card>
-            <x-datatable>
+            <x-datatable sort>
                 <thead>
                     <tr>
                         <th>Name</th>

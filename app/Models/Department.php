@@ -9,6 +9,13 @@ class Department extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'partner_id',
+        'name',
+        'keyword',
+        'status'
+    ];
+
     public function partner()
     {
         return $this->belongsTo(Partner::class);

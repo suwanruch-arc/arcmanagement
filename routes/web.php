@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\AccountController;
 use App\Http\Controllers\Managements\DepartmentController;
 use App\Http\Controllers\Managements\PartnerController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +30,7 @@ Route::prefix('auth')->name('auth.')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', function () {
+    Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
@@ -38,9 +39,12 @@ Route::middleware('auth')->group(function () {
         Route::post('update-password', [AccountController::class, 'updatePassword'])->name('update-password');
     });
 
-    Route::middleware('admin')->prefix('manage')->name('manage.')->group(function () {
-        Route::resource('partners', PartnerController::class);
-        Route::resource('partners.departments', DepartmentController::class);
-        Route::resource('users', UserController::class);
+    Route::middleware('admin')->group(function () {
+        Route::prefix('manage')->name('manage.')->group(function () {
+            Route::resource('reports', ReportController::class);
+            Route::resource('partners', PartnerController::class);
+            Route::resource('partners.departments', DepartmentController::class);
+            Route::resource('users', UserController::class);
+        });
     });
 });
