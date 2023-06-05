@@ -1,5 +1,5 @@
 <div class="col">
-    <x-select label="Partner" name="partner_id" required>
+    <x-select select2 label="Partner" name="partner_id" required>
         @foreach ($partnerList as $id => $name)
             <option value="{{ $id }}" @if ($id === $partnerValue) selected @endif>
                 {{ $name }}
@@ -8,7 +8,7 @@
     </x-select>
 </div>
 <div class="col">
-    <x-select label="Department" name="department_id" required>
+    <x-select select2 label="Department" name="department_id" required>
         @foreach ($departmentList as $partner => $department)
             <optgroup label="{{ $partner }}">
                 @foreach ($department as $id => $name)

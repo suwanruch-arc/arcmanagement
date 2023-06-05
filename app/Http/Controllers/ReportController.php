@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Report;
+use App\Models\UserReport;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -14,7 +15,10 @@ class ReportController extends Controller
 
     public function fields($model = null)
     {
-
+        if ($model) {
+            $assign_users_collection = UserReport::where('report_id', $model->id)->get();
+            $assign_users = $assign_users_collection->pluck('id')->toArray();
+        }
         $type = $model ? 'update' : 'create';
         $fields = [
             'type' => $type,
@@ -24,7 +28,8 @@ class ReportController extends Controller
             'type_query' => old('type_query') ?? ($model ? $model->type_query : 'std'),
             'name' => old('name') ?? ($model ? $model->name : ''),
             'description' => old('description') ?? ($model ? $model->description : ''),
-            'totalCol' => ($model ? count($model->columns) : 0),
+            // 'totalCol' => ($model ? count($model->columns) : 0),
+            'assign_users' => $assign_users ?? []
         ];
         return $fields;
     }
@@ -39,9 +44,19 @@ class ReportController extends Controller
     {
         return view('components.views.create', [
             'title' => 'Report',
-            'header' => 'Report',
             'route' => 'manage.reports',
             'fields' => $this->fields(),
+            'cols' => 12,
+        ]);
+    }
+
+    public function edit(Report $report)
+    {
+        return view('components.views.update', [
+            'title' => $report->name,
+            'route' => 'manage.reports',
+            'params' => ['report' => $report->id],
+            'fields' => $this->fields($report),
             'cols' => 12,
         ]);
     }

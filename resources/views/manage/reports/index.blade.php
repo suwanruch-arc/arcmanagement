@@ -18,7 +18,7 @@
                 <tbody>
                     @forelse ($reports as $report)
                         <tr>
-                            <td>{{ $user->name }}</td>
+                            <td>{{ $report->name }}</td>
                             <td class="text-center">
                                 <x-action-btn route="manage.reports" :params="['report' => $report->id]" />
                             </td>

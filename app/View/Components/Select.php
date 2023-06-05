@@ -14,8 +14,9 @@ class Select extends Component
     public $multiple;
     public $id;
     public $src;
+    public $select2;
 
-    public function __construct($src = [], $multiple = null, $name = '', $label = null, $value = null, $required = false, $id = null)
+    public function __construct($src = [], $multiple = null, $name = '', $label = null, $value = null, $required = false, $select2 = false, $id = null)
     {
         $this->name = $name;
         $this->label = $label;
@@ -24,6 +25,7 @@ class Select extends Component
         $this->multiple = $multiple;
         $this->id = $id;
         $this->src = $src;
+        $this->select2 = $select2;
     }
 
     /**

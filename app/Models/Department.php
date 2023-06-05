@@ -31,4 +31,9 @@ class Department extends Model
 
         return $departmentList;
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

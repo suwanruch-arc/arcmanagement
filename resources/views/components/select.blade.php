@@ -6,7 +6,7 @@
     </label>
 @endif
 <div class="mb-3">
-    <select class="form-select select2 @error($name) is-invalid @enderror"
+    <select class="form-select @if ($select2) select2 @endif @error($name) is-invalid @enderror"
         @if ($required) required @endif @if ($multiple) multiple @endif
         name="{{ $name }}" id="{{ $id ?? $name }}">
         <option selected disabled value="">Choose...</option>

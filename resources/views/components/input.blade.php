@@ -5,17 +5,21 @@
         @endif
     </label>
 @endif
-<div class="input-group mb-3 @error($name) has-validation @enderror">
-    @if ($prepend)
-        <span class="input-group-text">{{ $prepend }}</span>
-    @endif
+<div class="input-group mb-3  @error($name) was-validated @enderror">
+    @if ($type === 'area')
+        <textarea class="form-control" name="{{ $name }}" id="{{ $id ?? $name }}" rows="3">{{ $value }}</textarea>
+    @else
+        @if ($prepend)
+            <span class="input-group-text">{{ $prepend }}</span>
+        @endif
 
-    <input @if ($required) required @endif type="{{ $type }}" name="{{ $name }}"
-        id="{{ $id ?? $name }}" class="form-control @error($name) is-invalid @enderror" value="{{ $value }}"
-        placeholder="{{ $placeholder }}" minlength="{{ $min }}" maxlength="{{ $max }}">
+        <input @if ($required) required @endif type="{{ $type }}" name="{{ $name }}"
+            id="{{ $id ?? $name }}" class="form-control @error($name) is-invalid @enderror" value="{{ $value }}"
+            placeholder="{{ $placeholder }}" minlength="{{ $min }}" maxlength="{{ $max }}">
 
-    @if ($append)
-        <span class="input-group-text">{{ $append }}</span>
+        @if ($append)
+            <span class="input-group-text">{{ $append }}</span>
+        @endif
     @endif
 
     @error($name)
