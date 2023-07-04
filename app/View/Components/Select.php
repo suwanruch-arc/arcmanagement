@@ -35,6 +35,6 @@ class Select extends Component
      */
     public function render()
     {
-        return view('components.select');
+        return view('components.forms.select');
     }
 }

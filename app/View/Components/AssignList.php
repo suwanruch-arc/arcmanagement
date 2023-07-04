@@ -28,7 +28,7 @@ class AssignList extends Component
     public function render()
     {
         $partners = Partner::all();
-        return view('components.assign-list', [
+        return view('components.forms.assign-list', [
             'partners' => $partners
         ]);
     }

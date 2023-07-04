@@ -32,6 +32,6 @@ class PartnerDepartmentSelect extends Component
      */
     public function render()
     {
-        return view('components.partner-department-select');
+        return view('components.forms.partner-department-select');
     }
 }

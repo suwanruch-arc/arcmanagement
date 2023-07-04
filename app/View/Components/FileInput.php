@@ -30,6 +30,6 @@ class FileInput extends Component
      */
     public function render()
     {
-        return view('components.file-input');
+        return view('components.forms.file-input');
     }
 }

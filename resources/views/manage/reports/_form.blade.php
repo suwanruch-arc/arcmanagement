@@ -27,36 +27,7 @@
     <div class="col-8 border-start">
         <div class="row row-cols-1">
             <div class="col">
-                <table class="table table-bordered" width="100%">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th width="85%"></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th class="text-center align-middle">SELECT</td>
-                            <td id="fieldArea">b</td>
-                            <td class="text-center align-middle">
-                                <button onclick="addSelectField()" type="button"
-                                    class="btn btn-sm btn-outline-primary">
-                                    <span data-feather="plus"></span>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr id="stdArea">
-                            <th>FROM</th>
-                        </tr>
-                        <tr id="stdArea">
-                            <th>WHERE</th>
-                        </tr>
-                        <tr id="sqlArea">
-                            <th>SQL</th>
-                        </tr>
-                    </tbody>
-                </table>
+                <span id="formStatement"></span>
             </div>
         </div>
     </div>
@@ -65,22 +36,56 @@
 @section('js')
     <script>
         $(document).ready(function() {
-            $('#type_query').change(function() {
-                switch (this.value) {
-                    case 'std':
-                        $('[id=stdArea]').show();
-                        $('#sqlArea').hide();
-                        break;
-                    case 'raw':
-                        $('[id=stdArea]').hide();
-                        $('#sqlArea').show();
-                        break;
-                }
+            getTypeForm()
+            $('#type_query').change(function(e) {
+                e.preventDefault();
+                getTypeForm()
             });
         });
 
+        function getTypeForm() {
+            const type_query = $('#type_query').val();
+            $.ajax({
+                type: "GET",
+                url: "{{ route('manage.reports.get-form') }}",
+                data: {
+                    type_query: type_query
+                },
+                dataType: "html",
+                success: function(response) {
+                    console.log(response);
+                    $('#formStatement').html(response)
+                }
+            });
+        }
+
         function addSelectField() {
-            alert('123')
+            $.ajax({
+                type: "GET",
+                url: "{{ route('manage.reports.get-select-form') }}",
+                dataType: "html",
+                success: function(response) {
+                    $('#formSelect').append(response)
+                }
+            });
+        }
+
+        function removeSelectField(that) {
+            let cc = $('#select_count');
+            cc.val(parseInt(cc.val() - 1));
+            $(that).parent().parent().remove();
         }
     </script>
+@endsection
+
+@section('css')
+    <style>
+        #formSelect>div {
+            margin: 5px 0px;
+        }
+
+        #formSelect>div:last-child {
+            border-bottom: 0 !important;
+        }
+    </style>
 @endsection

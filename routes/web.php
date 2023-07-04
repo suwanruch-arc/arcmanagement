@@ -20,6 +20,10 @@ use App\Http\Controllers\ReportController;
 |
 */
 
+Route::get('/', function () {
+    return redirect()->route('dashboard');
+});
+
 Route::prefix('auth')->name('auth.')->group(function () {
     // Login Routes
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login-form');
@@ -41,6 +45,10 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('admin')->group(function () {
         Route::prefix('manage')->name('manage.')->group(function () {
+            Route::prefix('reports')->name('reports.')->group(function () {
+                Route::get('get-form', [ReportController::class, 'getForm'])->name('get-form');
+                Route::get('get-select-form', [ReportController::class, 'getSelectForm'])->name('get-select-form');
+            });
             Route::resource('reports', ReportController::class);
             Route::resource('partners', PartnerController::class);
             Route::resource('partners.departments', DepartmentController::class);

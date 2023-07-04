@@ -4,7 +4,7 @@
     @endif
 </label>
 <div class="mb-1">
-    <select class="form-control select2" name="assign_lists" id="assign_lists" multiple>
+    <select class="form-control select2" name="assign_lists[]" id="assign_lists" multiple>
         @foreach ($partners as $partner)
             <optgroup label="{{ $partner->name }}">
                 @foreach ($partner->users as $user)

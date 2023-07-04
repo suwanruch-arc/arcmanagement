@@ -34,6 +34,24 @@ class ReportController extends Controller
         return $fields;
     }
 
+    public function getForm(Request $request)
+    {
+        $type_query = $request->type_query;
+        switch ($type_query) {
+            case 'std':
+                return view('manage.reports._standard-form');
+                break;
+            case 'raw':
+                return view('manage.reports._sql-form');
+                break;
+        }
+    }
+
+    public function getSelectForm()
+    {
+        return view('manage.reports._select-form');
+    }
+
     public function index()
     {
         $reports = Report::all();
@@ -48,6 +66,11 @@ class ReportController extends Controller
             'fields' => $this->fields(),
             'cols' => 12,
         ]);
+    }
+
+    public function store(Request $request)
+    {
+        print_r($request->all());
     }
 
     public function edit(Report $report)
