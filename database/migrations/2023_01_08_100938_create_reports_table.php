@@ -15,7 +15,7 @@ class CreateReportsTable extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->enum('connection',['mysql','db_95','db_ecoupon_a','db_ecoupon_b']);
+            $table->enum('connection',['main','db_95','db_ecoupon_a','db_ecoupon_b']);
             $table->enum('type_query',['std','raw']);
             $table->string('uuid')->unique();
             $table->string('name', 255);

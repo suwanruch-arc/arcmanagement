@@ -13,7 +13,7 @@
     <div class="container-fluid">
         <div class="row">
             @include('includes.dashboard.sidebar')
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-3 py-4">
+            <main id="mainSection" class="col-md-9 ms-sm-auto col-lg-10 px-3 py-4">
                 @yield('title')
                 <section class="pt-3">
                     @yield('content')

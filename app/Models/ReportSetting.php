@@ -5,13 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserReport extends Model
+class ReportSetting extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'report_id',
-        'user_id',
-        'assigned_by',
+        'is_search',
+        'label',
+        'field',
+        'condition',
     ];
 }

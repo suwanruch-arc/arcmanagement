@@ -1,6 +1,7 @@
 @if ($type === 'switch')
     <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" role="switch" id="{{ $id ?? $name }}" name="{{ $name }}">
+        <input class="form-check-input" type="checkbox" role="switch" id="{{ $id ?? $name }}" name="{{ $name }}"
+            @if ($value) checked @endif>
         <label class="form-check-label" for="{{ $id ?? $name }}">{{ $label ?? 'Switch' }}</label>
     </div>
 @else

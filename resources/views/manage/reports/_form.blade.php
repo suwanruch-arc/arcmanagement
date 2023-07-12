@@ -2,7 +2,7 @@
     <div class="col-4 border-end">
         <div class="row row-cols-1 row-cols-md-2">
             <div class="col">
-                <x-select :src="['mysql' => 'Main', 'db_95' => 'DB 95', 'db_a' => 'DB Ecoupon A', 'db_b' => 'DB Ecoupon B']" label="Connection" name="connection" :value="$connection" required />
+                <x-select :src="['main' => 'Main', 'db_95' => 'DB 95', 'db_a' => 'DB Ecoupon A', 'db_b' => 'DB Ecoupon B']" label="Connection" name="connection" :value="$connection" required />
             </div>
             <div class="col">
                 <x-select :src="['std' => 'Standard', 'raw' => 'Raw SQL']" label="Type" name="type_query" :value="$type_query" required />
@@ -20,14 +20,16 @@
         </div>
         <div class="row row-cols-1">
             <div class="col">
-                <x-assign-list :selected="$assign_users" />
+                <x-assign-list :selected="$assign_users" required />
             </div>
         </div>
     </div>
     <div class="col-8 border-start">
         <div class="row row-cols-1">
             <div class="col">
-                <span id="formStatement"></span>
+                <span id="formStatement">
+
+                </span>
             </div>
         </div>
     </div>
@@ -49,11 +51,11 @@
                 type: "GET",
                 url: "{{ route('manage.reports.get-form') }}",
                 data: {
+                    report: '{{ $report_id }}',
                     type_query: type_query
                 },
                 dataType: "html",
                 success: function(response) {
-                    console.log(response);
                     $('#formStatement').html(response)
                 }
             });
