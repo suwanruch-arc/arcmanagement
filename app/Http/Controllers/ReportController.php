@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\ReportSetting;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 
 class ReportController extends Controller
 {
@@ -147,18 +148,43 @@ class ReportController extends Controller
             'where' => 'nullable',
         ]);
 
-        $assign_lists = $report->assign_lists->pluck('user_id')->toArray();
-        $already_assign = array_intersect(array_map('strval', $assign_lists), $request->assign_lists);
-
-        DB::transaction(function () use ($validated, $request, $assign_lists, $already_assign, &$report) {
+        DB::transaction(function () use ($validated, $request,  &$report) {
             $report->fill($validated);
             $report->updated_by = Auth::id();
             $report->save();
 
-            if (count($already_assign) != count($assign_lists)) {
+            UserReport::where('report_id', $report->id)->delete();
 
+            if (isset($request->assign_lists) && count($request->assign_lists)) {
+                foreach ($request->assign_lists as $user_id) {
+                    $assign = new UserReport();
+                    $assign->report_id = $report->id;
+                    $assign->user_id = $user_id;
+                    $assign->assigned_by = Auth::id();
+                    $assign->save();
+                }
+            }
+
+            ReportSetting::where('report_id', $report->id)->delete();
+
+            if (isset($request->selects) && count($request->selects)) {
+                foreach ($request->selects as $select) {
+                    $item = (object) $select;
+                    $report_setting = new ReportSetting();
+                    $report_setting->report_id = $report->id;
+                    $report_setting->is_search = (isset($item->is_search) && $item->is_search === 'on' ? 'yes' : 'no');
+                    $report_setting->label = $item->label;
+                    $report_setting->field = $item->field;
+                    $report_setting->condition = $item->condition;
+                    $report_setting->save();
+                }
             }
         });
+
+        $name = $report->name;
+
+        return redirect()->route('manage.reports.index')
+            ->with('success', __('message.updated', ['name' => $name]));
     }
 
     public function destroy(Report $report)
@@ -173,5 +199,31 @@ class ReportController extends Controller
 
         return redirect()->route('manage.reports.index')
             ->with('success', __('message.deleted', ['name' => $name]));
+    }
+
+    public function show($uuid)
+    {
+        $report = Report::whereUuid($uuid)->first();
+        $table = $report->from;
+        $results = DB::connection($report->connection)->table($table)->get()->toArray();
+
+        if (!count($report->settings)) {
+            $ignoreStr = ['id', 'password', 'remember_token'];
+            $patterns = ['_'];
+            foreach (Schema::getColumnListing($table) as $key => $field) {
+                if (!in_array($field, $ignoreStr) && !preg_match("/_id/", $field)) {
+                    $select['label'] = ucwords(str_replace($patterns, ' ', $field));
+                    $select['field'] = $field;
+                    $select['is_search'] = 'no';
+                    $selects = (object) $select;
+                    $report->settings->push($selects);
+                }
+            }
+        }
+
+        return view('site.reports.show', [
+            'report' => $report,
+            'results' => json_decode(json_encode($results), true)
+        ]);
     }
 }

@@ -1,4 +1,4 @@
-<a type="{{ $type }}" href="{{ $href }}" class="btn btn-{{ $color }}">
+<a type="{{ $type }}" href="{{ $href }}" class="btn btn-{{ $color }} {{ $class }}">
     @if (empty($slot->toHtml()))
         {{ $text }}
     @else

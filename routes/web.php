@@ -43,6 +43,12 @@ Route::middleware('auth')->group(function () {
         Route::post('update-password', [AccountController::class, 'updatePassword'])->name('update-password');
     });
 
+    Route::name('site.')->group(function () {
+        Route::prefix('reports')->name('reports.')->group(function () {
+            Route::get('{uuid}', [ReportController::class, 'show'])->name('show');
+        });
+    });
+
     Route::middleware('admin')->group(function () {
         Route::prefix('manage')->name('manage.')->group(function () {
             Route::prefix('reports')->name('reports.')->group(function () {

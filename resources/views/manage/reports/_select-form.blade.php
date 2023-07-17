@@ -1,5 +1,5 @@
 @php
-    $rand = rand(1111, 9999);
+    $rand = $_id ?? rand(1111, 9999);
 @endphp
 <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-4 p-2 m-0 border-bottom">
     <div class="col">
@@ -27,7 +27,7 @@
     </div>
     <div class="col d-flex align-items-center justify-content-between">
         <x-input type="switch" label="Search" name="selects[{{ $rand }}][is_search]"
-            id="is_search-{{ $rand }}" :value="$is_search === 'yes' ? true : false" />
+            id="is_search-{{ $rand }}" :value="isset($is_search) && $is_search === 'yes' ? true : false" />
         <button type="button" class="btn btn-outline-danger btn-sm"
             onclick="removeSelectField(this)"><b>ลบ</b></button>
     </div>

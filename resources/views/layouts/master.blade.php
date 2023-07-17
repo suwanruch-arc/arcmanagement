@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>{{ env('APP_NAME') }}</title>
+    <title>ARCManagement</title>
     @include('includes.head')
     <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet" />
     @yield('css')

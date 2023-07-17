@@ -18,6 +18,7 @@
                 @if ($report)
                     @foreach ($report->settings as $item)
                         @include('manage.reports._select-form', [
+                            '_id' => $item->id,
                             'label' => $item->label,
                             'field' => $item->field,
                             'condition' => $item->condition,
