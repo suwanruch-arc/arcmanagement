@@ -22,7 +22,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($results as $result)
+                        @foreach ($results as $result)
                             <tr>
                                 @foreach ($report->settings as $setting)
                                     <td>
@@ -30,11 +30,7 @@
                                     </td>
                                 @endforeach
                             </tr>
-                        @empty
-                            <tr colspan="{{ count($report->settings) }}">
-                                <td>No Has Data...</td>
-                            </tr>
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </x-datatable>
             </div>

@@ -201,11 +201,36 @@ class ReportController extends Controller
             ->with('success', __('message.deleted', ['name' => $name]));
     }
 
-    public function show($uuid)
+    public function show($uuid, Request $request)
     {
+        $search = $request->input();
         $report = Report::whereUuid($uuid)->first();
         $table = $report->from;
-        $results = DB::connection($report->connection)->table($table)->get()->toArray();
+        $where = $report->where;
+        $query = DB::connection($report->connection)->table($table);
+        if (!empty($where)) {
+            $query->whereRaw($where);
+        }
+        if ($search) {
+            $conditions = $report->settings->pluck('condition', 'field')->toArray();
+            $statement = [];
+            foreach ($search as $field => $value) {
+                switch ($conditions[$field]) {
+                    case 'LIKE':
+                        $statement[] = "{$field} LIKE '%{$value}%'";
+                        break;
+
+                    default:
+                        $statement[] = "{$field} = '{$value}'";
+                        break;
+                }
+            }
+            $searchStatement = implode(' AND ', $statement);
+        }
+        if (isset($searchStatement)) {
+            $query->whereRaw($searchStatement);
+        }
+        $results = $query->get()->toArray();
 
         if (!count($report->settings)) {
             $ignoreStr = ['id', 'password', 'remember_token'];
@@ -220,7 +245,6 @@ class ReportController extends Controller
                 }
             }
         }
-
         return view('site.reports.show', [
             'report' => $report,
             'results' => json_decode(json_encode($results), true)

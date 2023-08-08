@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>{{env('APP_NAME')}} - Login</title>
+    <title>Login</title>
     @include('includes.head')
     <link href="{{ asset('css/auth.css') }}" rel="stylesheet" />
 </head>

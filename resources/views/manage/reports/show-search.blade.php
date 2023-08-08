@@ -19,7 +19,7 @@
                 </button>
             </div>
             <div class="col-2 text-start">
-                <x-button color="warning">
+                <x-button color="warning" href="{{ route('site.reports.show', $report->uuid) }}">
                     <i data-feather="x"></i>
                     ล้าง
                 </x-button>
