@@ -34,7 +34,8 @@
                         @forelse ($partner->departments as $department)
                             <tr>
                                 <td class="align-middle">
-                                    {!! Image::show($department->id, $department->getTable(), 'logo', [
+                                    {!! Image::show($department->id, $department->getTable(), [
+                                        'id' => 'logo',
                                         'width' => '100px',
                                         'class' => 'img-thumbnail rounded p-1',
                                     ]) !!}

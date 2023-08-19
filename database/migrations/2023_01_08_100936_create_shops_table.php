@@ -17,9 +17,8 @@ class CreateShopsTable extends Migration
             $table->id();
             $table->string('name', 255);
             $table->string('keyword', 3)->unique();
-            $table->enum('has_template', ['yes', 'no']);
             $table->text('tandc')->nullable();
-            $table->enum('status', ["active","inactive"]);
+            $table->enum('status', ["active", "inactive"]);
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');
             $table->timestamps();

@@ -17,7 +17,7 @@
                             <li class="nav-item">
                                 <a class="align-middle nav-link @if (isset($menu['url']) && (Request::is($menu['url']) || str_contains(Request::getRequestUri(), $menu['url']))) active @endif"
                                     href="{{ '/' . $menu['url'] ?? '#' }}">
-                                    <span data-feather="{{ $menu['icon'] ?? 'box' }}"></span>
+                                    <span data-feather="{{ !isset($menu['icon']) || empty($menu['icon']) ? 'box' : $menu['icon'] }}"></span>
                                     {{ $menu['text'] }}
                                 </a>
                             </li>

@@ -17,6 +17,7 @@ class DepartmentController extends Controller
         $type = $model ? 'update' : 'create';
         $fields = [
             'type' => $type,
+            'id' => $model ? $model->id : '',
             'name' => old('name') ?? ($model ? $model->name : ''),
             'keyword' => old('keyword') ?? ($model ? $model->keyword : ''),
         ];

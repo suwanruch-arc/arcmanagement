@@ -10,8 +10,9 @@
     <div class="col">
         <x-file-input label="Logo File" name="logo" />
         <div class="text-center">
-            @isset($partner)
-                {!! Image::show($partner->id, $partner->getTable(), 'logo', [
+            @isset($id)
+                {!! Image::show($id, 'departments', [
+                    'id' => 'logo',
                     'width' => '100px',
                     'class' => 'img-thumbnail rounded p-1',
                 ]) !!}

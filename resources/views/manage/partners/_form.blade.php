@@ -21,7 +21,8 @@
         <x-file-input label="Logo File" name="logo" />
         <div class="text-center">
             @isset($partner)
-                {!! Image::show($partner->id, $partner->getTable(), 'logo', [
+                {!! Image::show($partner->id, $partner->getTable(), [
+                    'id' => 'logo',
                     'width' => '100px',
                     'class' => 'img-thumbnail rounded p-1',
                 ]) !!}

@@ -24,6 +24,11 @@ return [
             'url' => 'manage/reports'
         ],
         [
+            'icon' => 'shopping-bag',
+            'text'=>' Shops',
+            'url' => 'manage/shops'
+        ],
+        [
             'icon' => 'users',
             'text' => 'Partners',
             'url' => 'manage/partners'

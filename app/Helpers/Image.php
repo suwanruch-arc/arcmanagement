@@ -20,17 +20,17 @@ class Image
         return $attribute ?? '';
     }
 
-    public static function show($id, $table, $field = 'image', $attribute = [])
+    public static function show($id, $table, $attribute = ['id' => 'image'])
     {
         $attr = self::setAttribute($attribute);
-        $file = File::firstWhere(['table_id' => $id, 'table_name' => $table, 'table_field' => $field, 'status' => 'active']);
+        $file = File::firstWhere(['table_id' => $id, 'table_name' => $table, 'table_field' => $attribute['id'], 'status' => 'active']);
         if ($file) {
             $image = "{$file->path}/$file->name";
             if (Storage::disk('public')->exists($image)) {
                 $type = $file->type;
                 $source = base64_encode(Storage::disk('public')->get($image));
                 $attr = self::setAttribute($attribute);
-                $response = "<img id='{$field}' {$attr} src='data:{$type};base64,{$source}'/>";
+                $response = "<img {$attr} src='data:{$type};base64,{$source}'/>";
             }
         }
 

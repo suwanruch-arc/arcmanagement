@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\AccountController;
 use App\Http\Controllers\Managements\DepartmentController;
 use App\Http\Controllers\Managements\PartnerController;
+use App\Http\Controllers\Managements\ShopController;
 use App\Http\Controllers\ReportController;
 
 /*
@@ -56,6 +57,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('get-select-form', [ReportController::class, 'getSelectForm'])->name('get-select-form');
             });
             Route::resource('reports', ReportController::class);
+            Route::resource('shops', ShopController::class);
             Route::resource('partners', PartnerController::class);
             Route::resource('partners.departments', DepartmentController::class);
             Route::resource('users', UserController::class);

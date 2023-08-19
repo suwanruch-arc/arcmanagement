@@ -11,7 +11,6 @@ class Partner extends Model
 
     protected $fillable = [
         'name',
-        'keyword',
         'keyword'
     ];
 
@@ -24,6 +23,11 @@ class Partner extends Model
         }
 
         return $partnerList;
+    }
+
+    public function department()
+    {
+        return $this->hasOne(Department::class);
     }
 
     public function departments()
