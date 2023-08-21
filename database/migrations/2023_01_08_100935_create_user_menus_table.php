@@ -14,7 +14,6 @@ class CreateUserMenusTable extends Migration
     public function up()
     {
         Schema::create('user_menus', function (Blueprint $table) {
-            $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('menu_id')->constrained('menus');
             $table->timestamps();

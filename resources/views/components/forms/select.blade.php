@@ -9,11 +9,11 @@
     <select class="form-select @if ($select2) select2 @endif @error($name) is-invalid @enderror"
         @if ($required) required @endif @if ($multiple) multiple @endif
         name="{{ $name }}" id="{{ $id ?? $name }}">
-        <option selected disabled value="">Choose...</option>
+        <option selected disabled value="">กรุณา...</option>
         @if (empty($slot->toHtml()))
             @if (count($src) == count($src, COUNT_RECURSIVE))
                 @foreach ($src as $key => $item)
-                    <option value="{{ $key }}" @if ($key === $value) selected @endif>
+                    <option value="{{ $key }}" @if ($key === intval($value) || $key === $value) selected @endif>
                         {{ $item }}
                     </option>
                 @endforeach
@@ -21,7 +21,7 @@
                 @foreach ($src as $group => $data)
                     <optgroup label="{{ $group }}">
                         @foreach ($data as $key => $item)
-                            <option value="{{ $key }}" @if ($key === $value) selected @endif>
+                            <option value="{{ $key }}" @if ($key === intval($value) || $key === $value) selected @endif>
                                 {{ $item }}
                             </option>
                         @endforeach

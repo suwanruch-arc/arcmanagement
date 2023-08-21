@@ -3,7 +3,7 @@
     <div class="position-sticky sidebar-sticky">
         <ul class="nav flex-column">
             <h5 class="d-flex align-items-center px-3 mt-4">
-                <span>{{ Auth::user()->name }}</span>
+                <span>{{ Auth::user()->name ?? 'User' }}</span>
             </h5>
             <hr class="mx-2">
             @foreach (config('menu') as $menu_header => $item)

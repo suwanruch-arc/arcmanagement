@@ -1,4 +1,4 @@
-<label for="assign_lists" class="form-label">Assign Lists
+<label for="assign_lists" class="form-label">มอบหมาย
     @if ($required)
         <span class="text-danger">*</span>
     @endif

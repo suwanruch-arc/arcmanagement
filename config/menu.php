@@ -8,6 +8,11 @@ return [
             'text' => 'Dashboard',
             'url' => 'dashboard',
         ],
+        [
+            'icon' => 'archive',
+            'text' => 'Campaigns',
+            'url' => 'site/campaigns',
+        ],
     ],
     'reports' => ReportController::getReportList(),
     'account' => [

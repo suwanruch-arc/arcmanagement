@@ -14,7 +14,6 @@ class CreateReportSettingsTable extends Migration
     public function up()
     {
         Schema::create('report_settings', function (Blueprint $table) {
-            $table->id();
             $table->foreignId('report_id')->constrained('reports');
             $table->enum('is_search', ['yes', 'no']);
             $table->string('label', 255);

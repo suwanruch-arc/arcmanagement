@@ -4,5 +4,5 @@
             class="text-bg-primary text-decoration-none rounded-top mx-2 px-3 py-1 fs-6">{{ $button['text'] }}</a>
     @endforeach
     <a href="{{ url()->current() }}/create"
-        class="text-bg-primary text-decoration-none rounded-top mx-2 px-3 py-1 fs-6">Create</a>
+        class="text-bg-primary text-decoration-none rounded-top mx-2 px-3 py-1 fs-6">สร้าง</a>
 </div>

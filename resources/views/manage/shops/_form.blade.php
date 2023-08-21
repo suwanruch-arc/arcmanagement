@@ -3,7 +3,7 @@
         <x-input label="ชื่อร้าน" name="name" :value="$name" required />
     </div>
     <div class="col">
-        <x-input label="คีย์เวิร์ด" name="keyword" :value="$keyword" required />
+        <x-input label="คีย์เวิร์ด" name="keyword" :value="$keyword" required max="3" min="3" />
     </div>
 </div>
 
@@ -17,7 +17,7 @@
         <label for="tandc" class="form-label">
             เงื่อนไขและข้อตกลง
         </label>
-        <textarea name="tandc" id="tandc">{{ $tandc }}</textarea>
+        <textarea name="tandc" class="editor">{{ $tandc }}</textarea>
     </div>
 </div>
 
@@ -41,15 +41,3 @@
         ]) !!}
     </div>
 </div>
-@section('js')
-    <script>
-        var editor = new FroalaEditor('#tandc', {
-            toolbarButtons: [
-                [
-                    'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript',
-                    'clearFormatting', 'fontSize', 'textColor', 'backgroundColor', 'html'
-                ],
-            ]
-        });
-    </script>
-@endsection

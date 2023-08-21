@@ -11,9 +11,8 @@
             <x-datatable sort>
                 <thead>
                     <tr>
-                        <th>Has Template</th>
-                        <th width="15%">Banner</th>
                         <th width="15%">Template</th>
+                        <th width="15%">Banner</th>
                         <th width="15%">Name</th>
                         <th width="15%">Keyword</th>
                         <th width="30%">Terms and Conditions</th>
@@ -23,12 +22,25 @@
                 <tbody>
                     @forelse ($shops as $shop)
                         <tr>
-                            <td>{{ $shop->has_template }}</td>
-                            <td> </td>
-                            <td> </td>
+                            <td class="text-center">
+                                {!! Image::show($shop->id, 'shops', [
+                                    'id' => 'template',
+                                    'width' => '100px',
+                                    'class' => 'img-thumbnail rounded p-1',
+                                ]) !!}
+                            </td>
+                            <td class="text-center">
+                                {!! Image::show($shop->id, 'shops', [
+                                    'id' => 'banner',
+                                    'width' => '100px',
+                                    'class' => 'img-thumbnail rounded p-1',
+                                ]) !!}
+                            </td>
                             <td>{{ $shop->name }}</td>
                             <td>{{ $shop->keyword }}</td>
-                            <td>{{ $shop->tandc }}</td>
+                            <td>
+                                <button class="btn btn-link" onclick="showTandC('{!! $shop->tandc !!}')">แสดง</button>
+                            </td>
                             <td class="text-center">
                                 <x-action-btn route="manage.shops" :params="['shop' => $shop->id]" />
                             </td>

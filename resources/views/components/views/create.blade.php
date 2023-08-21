@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <h3>Create {{ $title }}</h3>
+    <h3>สร้าง {{ $title }}</h3>
 @endsection
 
 @section('content')

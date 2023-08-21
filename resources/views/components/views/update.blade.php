@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <h3>Update : {{ $title }}</h3>
+    <h3>แก้ไข : {{ $title }}</h3>
 @endsection
 
 @section('content')

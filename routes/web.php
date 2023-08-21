@@ -5,9 +5,11 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\AccountController;
+use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\Managements\DepartmentController;
 use App\Http\Controllers\Managements\PartnerController;
 use App\Http\Controllers\Managements\ShopController;
+use App\Http\Controllers\PrivilegeController;
 use App\Http\Controllers\ReportController;
 
 /*
@@ -39,6 +41,7 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
+
     Route::prefix('account')->name('account.')->group(function () { // Change Password Route
         Route::get('change-password', [AccountController::class, 'showChangePasswordForm'])->name('change-password-form');
         Route::post('update-password', [AccountController::class, 'updatePassword'])->name('update-password');
@@ -47,6 +50,12 @@ Route::middleware('auth')->group(function () {
     Route::name('site.')->group(function () {
         Route::prefix('reports')->name('reports.')->group(function () {
             Route::get('{uuid}', [ReportController::class, 'show'])->name('show');
+        });
+
+        Route::prefix('site')->group(function () {
+
+            Route::resource('campaigns', CampaignController::class);
+            Route::resource('campaigns.privileges', PrivilegeController::class);
         });
     });
 

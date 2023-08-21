@@ -10,7 +10,7 @@
         <div class="nav-item text-nowrap">
             <form method="POST" action="{{ route('auth.logout') }}">
                 @csrf
-                <button class="btn nav-link px-3" type="submit">Logout</button>
+                <button class="btn nav-link px-3" type="submit">ออกจากระบบ</button>
             </form>
         </div>
     </div>
