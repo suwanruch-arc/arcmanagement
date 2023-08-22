@@ -38,6 +38,13 @@ class PrivilegeController extends Controller
             'detail' => old('detail') ?? ($model ? $model->detail : ''),
             'has_tandc' => old('has_tandc') ?? ($model ? $model->has_tandc == 'yes' : 0),
             'tandc' => old('tandc') ?? ($model ? $model->tandc : ''),
+            'settings' => (object) [
+                'top' => 0,
+                'left' => 0,
+                'text_top' => 0,
+                'text_left' => 0,
+                'font_size' => 0
+            ]
         ];
 
         return $fields;

@@ -30,7 +30,7 @@ class CreatePrivilegesTable extends Migration
             $table->text('detail')->nullable();
             $table->enum('has_tandc', ['yes', 'no']);
             $table->text('tandc')->nullable();
-            $table->text('setting')->nullable();
+            $table->text('settings')->nullable();
             $table->enum('status', ['active', 'inactive']);
             $table->foreignId('campaign_id')->constrained('campaigns');
             $table->foreignId('shop_id')->constrained('shops');
