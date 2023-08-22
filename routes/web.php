@@ -5,11 +5,11 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\AccountController;
-use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\Managements\DepartmentController;
 use App\Http\Controllers\Managements\PartnerController;
 use App\Http\Controllers\Managements\ShopController;
-use App\Http\Controllers\PrivilegeController;
+use App\Http\Controllers\Site\CampaignController;
+use App\Http\Controllers\Site\PrivilegeController;
 use App\Http\Controllers\ReportController;
 
 /*

@@ -23,7 +23,7 @@ class CreatePrivilegesTable extends Migration
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->enum('has_timer', ['yes', 'no']);
-            $table->integer('timer_value')->nullable();;
+            $table->integer('timer_value')->nullable();
             $table->enum('can_view', ['yes', 'no']);
             $table->enum('default_code', ["qrcode", "barcode", "textcode"]);
             $table->enum('has_detail', ['yes', 'no']);

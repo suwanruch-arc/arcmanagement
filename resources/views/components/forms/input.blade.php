@@ -1,8 +1,8 @@
 @if ($type === 'switch')
-    <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" role="switch" id="{{ $id ?? $name }}" name="{{ $name }}"
-            @if ($value) checked @endif>
-        <label class="form-check-label" for="{{ $id ?? $name }}">{{ $label ?? 'Switch' }}</label>
+    <div class="form-check form-switch {{ $class }}">
+        <input class="form-check-input" type="checkbox" role="switch" id="{{ $id ?? $name }}"
+            name="{{ $name }}" @if ($value) checked @endif>
+        <label class="form-check-label" for="{{ $id ?? $name }}">{{ $label }}</label>
     </div>
 @else
     @if ($label)
@@ -14,16 +14,17 @@
     @endif
     <div class="input-group mb-3  @error($name) was-validated @enderror">
         @if ($type === 'area')
-            <textarea class="form-control" name="{{ $name }}" id="{{ $id ?? $name }}" rows="3">{{ $value }}</textarea>
+            <textarea class="form-control {{ $class }}" name="{{ $name }}" id="{{ $id ?? $name }}" rows="3">{{ $value }}</textarea>
         @else
             @if ($prepend)
                 <span class="input-group-text">{{ $prepend }}</span>
             @endif
 
-            <input @if ($required) required @endif type="{{ $type }}"
+            <input @if ($disabled) disabled @endif @if ($readonly) readonly @endif @if ($required) required @endif type="{{ $type }}"
                 name="{{ $name }}" id="{{ $id ?? $name }}"
-                class="form-control @error($name) is-invalid @enderror" value="{{ $value }}"
-                placeholder="{{ $placeholder }}" minlength="{{ $min }}" maxlength="{{ $max }}">
+                class="form-control @error($name) is-invalid @enderror @if ($readonly) readonly @endif {{ $class }}" value="{{ $value }}"
+                placeholder="{{ $placeholder }}" min="{{ $min }}" minlength="{{ $min }}"
+                max="{{ $max }}" maxlength="{{ $max }}">
 
             @if ($append)
                 <span class="input-group-text">{{ $append }}</span>

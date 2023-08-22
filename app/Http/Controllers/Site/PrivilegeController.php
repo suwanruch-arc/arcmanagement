@@ -1,30 +1,39 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Site;
 
+use App\Models\Shop;
 use App\Models\Campaign;
 use App\Models\Privilege;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class PrivilegeController extends Controller
 {
+    public function getShopLists()
+    {
+        $shop_lists = Shop::where('status', 'active')->pluck('name', 'id')->toArray();
+
+        return $shop_lists ?? [];
+    }
+
     public function fields($campaign, $model = null)
     {
         $type = $model ? 'update' : 'create';
         $fields = [
             'type' => $type,
             'campaign' => $campaign,
-            'shop_id' => old('shop_id') ?? ($model ? $model->shop_id : ''),
-            // 'shop_list' => $this->getShopLists(),
             'title' => old('title') ?? ($model ? $model->title : ''),
-            'description' => old('description') ?? ($model ? $model->description : ''),
-            'value' => old('value') ?? ($model ? $model->value : ''),
-            'start_date' => old('start_date') ?? ($model ? $model->start_date : ''),
-            'end_date' => old('end_date') ?? ($model ? $model->end_date : ''),
-            'has_timer' => old('has_timer') ?? ($model ? $model->has_timer == 'yes' : 0),
-            'timer_value' => old('timer_value') ?? ($model ? $model->timer_value : ''),
-            'can_view' => old('can_view') ?? ($model ? $model->can_view == 'yes' : 0),
+            'value' => old('value') ?? ($model ? $model->value : 0),
             'default_code' => old('default_code') ?? ($model ? $model->default_code : 'qrcode'),
+            'shop_id' => old('shop_id') ?? ($model ? $model->shop_id : ''),
+            'shop_lists' => $this->getShopLists(),
+            'start_date' => old('start_date') ?? ($model ? $model->start_date : $campaign->start_date),
+            'end_date' => old('end_date') ?? ($model ? $model->end_date : $campaign->end_date),
+            'has_timer' => old('has_timer') ?? ($model ? $model->has_timer == 'yes' : 'no'),
+            'timer_value' => old('timer_value') ?? ($model ? $model->timer_value : 60),
+            'can_view' => old('can_view') ?? ($model ? $model->can_view == 'yes' : 0),
+            'description' => old('description') ?? ($model ? $model->description : ''),
             'has_detail' => old('has_detail') ?? ($model ? $model->has_detail == 'yes' : 0),
             'detail' => old('detail') ?? ($model ? $model->detail : ''),
             'has_tandc' => old('has_tandc') ?? ($model ? $model->has_tandc == 'yes' : 0),
@@ -54,6 +63,7 @@ class PrivilegeController extends Controller
     public function create(Campaign $campaign)
     {
         return view('components.views.create', [
+            'cols' => '8',
             'params' => ['campaign' => $campaign->id],
             'title' => 'Privilege',
             'route' => 'site.campaigns.privileges',
