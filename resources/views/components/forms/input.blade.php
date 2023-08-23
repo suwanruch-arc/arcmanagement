@@ -12,9 +12,9 @@
             @endif
         </label>
     @endif
-    <div class="input-group mb-3  @error($name) was-validated @enderror">
+    <div class="input-group mb-3">
         @if ($type === 'area')
-            <textarea class="form-control {{ $class }}" name="{{ $name }}" id="{{ $id ?? $name }}" rows="3">{{ $value }}</textarea>
+            <textarea class="form-control {{ $class }}  @error($name) is-invalid @enderror" name="{{ $name }}" id="{{ $id ?? $name }}" rows="3">{{ $value }}</textarea>
         @else
             @if ($prepend)
                 <span class="input-group-text">{{ $prepend }}</span>

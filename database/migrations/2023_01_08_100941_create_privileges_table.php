@@ -16,8 +16,8 @@ class CreatePrivilegesTable extends Migration
         Schema::create('privileges', function (Blueprint $table) {
             $table->id();
             $table->string('title', 255);
-            $table->text('description');
-            $table->string('keyword', 5)->unique();
+            $table->text('description')->nullable();
+            $table->string('keyword', 9)->unique();
             $table->integer('value');
             $table->integer('lot');
             $table->dateTime('start_date');

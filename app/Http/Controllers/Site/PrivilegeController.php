@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Site;
 use App\Models\Shop;
 use App\Models\Campaign;
 use App\Models\Privilege;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class PrivilegeController extends Controller
 {
@@ -38,12 +41,16 @@ class PrivilegeController extends Controller
             'detail' => old('detail') ?? ($model ? $model->detail : ''),
             'has_tandc' => old('has_tandc') ?? ($model ? $model->has_tandc == 'yes' : 0),
             'tandc' => old('tandc') ?? ($model ? $model->tandc : ''),
+            'status' => old('status') ?? ($model ? $model->status : 'active'),
             'settings' => (object) [
+                'font-size' => 0,
                 'top' => 0,
                 'left' => 0,
-                'text_top' => 0,
-                'text_left' => 0,
-                'font_size' => 0
+                'row-1' => 0,
+                'row-2' => 0,
+                'col-1' => 0,
+                'col-2' => 0,
+                'col-3' => 0,
             ]
         ];
 
@@ -84,9 +91,51 @@ class PrivilegeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Campaign $campaign)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'value' => 'required|integer',
+            'start_date' => 'required|date|date_format:Y-m-d H:i:s',
+            'end_date' => 'required|date|after:start_date|date_format:Y-m-d H:i:s|unique:privileges,value,' . $request->value,
+            'default_code' => 'required|in:qrcode,barcode,textcode',
+            'has_detail' => 'nullable',
+            'detail' => 'required_if:has_detail,on',
+            'has_tandc' => 'nullable',
+            'tandc' => 'required_if:has_tandc,on',
+            'shop_id' => 'required|exists:shops,id',
+            'has_timer' => 'nullable',
+            'timer_value' => 'required_if:has_timer,on',
+            'can_view' => 'nullable',
+            'settings' => 'array'
+        ]);
+        DB::transaction(function () use ($validated, $request, $campaign, &$privilege) {
+            $settings = json_encode($request->settings);
+
+            $campaign_keyword = $campaign->keyword;
+            $shop_keyword = Shop::whereId($request->shop_id)->value('keyword');
+            $keyword = "{$campaign_keyword}{$shop_keyword}";
+
+            $privilege = new Privilege;
+            $privilege->fill($validated);
+            $privilege->has_detail = $request->has_detail ? 'yes' : 'no';
+            $privilege->has_tandc = $request->has_tandc ? 'yes' : 'no';
+            $privilege->has_timer = $request->has_timer ? 'yes' : 'no';
+            $privilege->can_view = $request->can_view ? 'yes' : 'no';
+            $privilege->campaign_id = $campaign->id;
+            $privilege->keyword = $this->getKeyword($keyword);
+            $privilege->lot = $this->getLot($validated);
+            $privilege->settings = $settings ?? null;
+            $privilege->created_by = Auth::id();
+            $privilege->updated_by = Auth::id();
+            $privilege->save();
+        });
+
+        $name = $privilege->name;
+
+        return redirect()->route('site.campaigns.privileges.index', ['campaign' => $campaign->id])
+            ->with('success', __('message.created', ['name' => $name]));
     }
 
     /**
@@ -106,9 +155,15 @@ class PrivilegeController extends Controller
      * @param  \App\Models\Privilege  $privilege
      * @return \Illuminate\Http\Response
      */
-    public function edit(Privilege $privilege)
+    public function edit(Campaign $campaign, Privilege $privilege)
     {
-        //
+        return view('components.views.update', [
+            'cols' => '8',
+            'params' => ['campaign' => $campaign->id, 'privilege' => $privilege->id],
+            'title' => $privilege->title,
+            'route' => 'site.campaigns.privileges',
+            'fields' => $this->fields($campaign, $privilege),
+        ])->with(compact('privilege'));
     }
 
     /**
@@ -132,5 +187,24 @@ class PrivilegeController extends Controller
     public function destroy(Privilege $privilege)
     {
         //
+    }
+
+    // $campaign, $validated
+    public function getKeyword($keyword)
+    {
+        $length = 3;
+        $unique_keyword = Str::random($length);
+        $f_keyword = Str::lower("{$keyword}{$unique_keyword}");
+        if (Privilege::whereKeyword($f_keyword)->count() > 0) {
+            $this->getKeyword($keyword);
+        }
+        return $f_keyword;
+    }
+
+    public function getLot($validated)
+    {
+        $input = (object) $validated;
+        $lot = Privilege::where(['shop_id' => $input->shop_id, 'value' => $input->value])->max('lot');
+        return $lot + 1;
     }
 }

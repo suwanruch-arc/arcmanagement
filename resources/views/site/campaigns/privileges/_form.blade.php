@@ -41,6 +41,7 @@
         <x-input type="area" label="คำอธิบาย" name="description" :value="$description" />
     </div>
 </div>
+
 @switch($campaign->template_type)
     @case('STD')
         @include('site.campaigns.privileges._std')
@@ -50,7 +51,6 @@
         @include('site.campaigns.privileges._ctm', ['settings' => $settings])
     @break
 @endswitch
-
 @section('js')
     <script>
         $(function() {

@@ -37,4 +37,9 @@ class Privilege extends Model
     {
         return $this->belongsTo(Campaign::class);
     }
+
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class);
+    }
 }
