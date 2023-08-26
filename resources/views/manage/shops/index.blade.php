@@ -11,6 +11,7 @@
             <x-datatable sort>
                 <thead>
                     <tr>
+                        <th>Status</th>
                         <th width="15%">Template</th>
                         <th width="15%">Banner</th>
                         <th width="15%">Name</th>
@@ -22,6 +23,9 @@
                 <tbody>
                     @forelse ($shops as $shop)
                         <tr>
+                            <td class="text-center align-middle">
+                                {!! Status::show($shop->status) !!}
+                            </td>
                             <td class="text-center">
                                 {!! Image::show($shop->id, 'shops', [
                                     'id' => 'template',
@@ -42,7 +46,7 @@
                                 <button class="btn btn-link" onclick="showTandC('{!! $shop->tandc !!}')">แสดง</button>
                             </td>
                             <td class="text-center">
-                                <x-action-btn route="manage.shops" :params="['shop' => $shop->id]" />
+                                <x-action-btn :disable="$shop->status" route="manage.shops" :params="['shop' => $shop->id]" />
                             </td>
                         </tr>
                     @empty

@@ -38,7 +38,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::orderBy('status')->orderBy('name')->get();
 
         return view('manage.users.index', compact('users'));
     }
@@ -156,10 +156,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(Request $request, User $user)
     {
+
         $name = $user->name;
-        $user->delete();
+        $user->update([
+            'status' => 'inactive'
+        ]);
 
         return redirect()->route("manage.users.index")->with('success', __('message.deleted', ['name' => $name]));
     }

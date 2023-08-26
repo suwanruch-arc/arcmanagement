@@ -18,6 +18,7 @@ class DepartmentController extends Controller
         $fields = [
             'type' => $type,
             'id' => $model ? $model->id : '',
+            'status' => old('status') ?? ($model ? $model->status : ''),
             'name' => old('name') ?? ($model ? $model->name : ''),
             'keyword' => old('keyword') ?? ($model ? $model->keyword : ''),
         ];
@@ -60,6 +61,7 @@ class DepartmentController extends Controller
         $validated = $request->validate([
             'name' => 'required|max:255',
             'keyword' => 'required|max:5|unique:departments,keyword',
+            'status' => 'required|in:active,inactive',
         ]);
 
         DB::transaction(function () use ($validated, $request, &$partner, &$department) {
@@ -124,6 +126,7 @@ class DepartmentController extends Controller
         $validated = $request->validate([
             'name' => 'required|max:255',
             'keyword' => 'required|max:5|unique:departments,id,' . $department->id,
+            'status' => 'required|in:active,inactive',
         ]);
 
         DB::transaction(function () use ($validated, $request, &$partner, &$department) {
@@ -156,8 +159,8 @@ class DepartmentController extends Controller
     {
         $name = $partner->name;
 
-        File::where(['table_name' => $department->getTable(), 'table_id' => $department->id, 'table_field' => 'logo'])->delete();
-        $department->delete();
+        File::where(['table_name' => $department->getTable(), 'table_id' => $department->id, 'table_field' => 'logo'])->update(['status' => 'inactive']);
+        $department->update(['status' => 'inactive']);
 
         return redirect()->route("manage.partners.index")->with('success', __('message.deleted', ['name' => $name]));
     }

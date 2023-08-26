@@ -5,6 +5,9 @@
     <div class="col">
         <x-input label="Keyword" name="keyword" :value="$keyword" required />
     </div>
+    <div class="col">
+        <x-select label="Status" name="status" :src="['active' => 'ใช้งาน', 'inactive' => 'ไม่ใช้งาน']" :value="$status" required />
+    </div>
 </div>
 <div class="row">
     <div class="col">

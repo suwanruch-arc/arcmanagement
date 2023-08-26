@@ -41,7 +41,6 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-
     Route::prefix('account')->name('account.')->group(function () { // Change Password Route
         Route::get('change-password', [AccountController::class, 'showChangePasswordForm'])->name('change-password-form');
         Route::post('update-password', [AccountController::class, 'updatePassword'])->name('update-password');
@@ -53,7 +52,6 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::prefix('site')->group(function () {
-
             Route::resource('campaigns', CampaignController::class);
             Route::resource('campaigns.privileges', PrivilegeController::class);
         });

@@ -24,7 +24,7 @@ class CreateFilesTable extends Migration
             $table->bigInteger('table_id')->index();
             $table->string('table_name', 255)->index();
             $table->string('table_field')->index();
-            $table->enum('status', ["active","inactive","delete"]);
+            $table->enum('status', ["active","inactive"]);
             $table->timestamps();
         });
     }

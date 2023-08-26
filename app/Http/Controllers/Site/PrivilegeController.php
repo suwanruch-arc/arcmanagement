@@ -98,7 +98,7 @@ class PrivilegeController extends Controller
             'description' => 'nullable|string',
             'value' => 'required|integer',
             'start_date' => 'required|date|date_format:Y-m-d H:i:s',
-            'end_date' => 'required|date|after:start_date|date_format:Y-m-d H:i:s|unique:privileges,value,' . $request->value,
+            'end_date' => 'required|date|after:start_date|date_format:Y-m-d H:i:s',
             'default_code' => 'required|in:qrcode,barcode,textcode',
             'has_detail' => 'nullable',
             'detail' => 'required_if:has_detail,on',
@@ -173,9 +173,25 @@ class PrivilegeController extends Controller
      * @param  \App\Models\Privilege  $privilege
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Privilege $privilege)
+    public function update(Request $request, Campaign $campaign, Privilege $privilege)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'value' => 'required|integer',
+            'start_date' => 'required|date|date_format:Y-m-d H:i:s',
+            'end_date' => 'required|date|after:start_date|date_format:Y-m-d H:i:s', 
+            'default_code' => 'required|in:qrcode,barcode,textcode',
+            'has_detail' => 'nullable',
+            'detail' => 'required_if:has_detail,on',
+            'has_tandc' => 'nullable',
+            'tandc' => 'required_if:has_tandc,on',
+            'shop_id' => 'required|exists:shops,id',
+            'has_timer' => 'nullable',
+            'timer_value' => 'required_if:has_timer,on',
+            'can_view' => 'nullable',
+            'settings' => 'array'
+        ]);
     }
 
     /**

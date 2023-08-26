@@ -19,6 +19,7 @@ class PartnerController extends Controller
         $fields = [
             'type' => $type,
             'id' => $model ? $model->id : '',
+            'status' => old('status') ?? ($model ? $model->status : ''),
             'name' => old('name') ?? ($model ? $model->name : ''),
             'keyword' => old('keyword') ?? ($model ? $model->keyword : ''),
             'department_name' => old('department_name') ?? '',
@@ -65,6 +66,7 @@ class PartnerController extends Controller
             'keyword' => 'required|max:5|unique:partners',
             'department_name' => 'nullable|max:255',
             'department_keyword' => 'nullable|max:5|unique:departments,keyword',
+            'status' => 'required|in:active,inactive',
         ]);
 
         DB::transaction(function () use ($validated, $request, &$partner) {
@@ -136,6 +138,7 @@ class PartnerController extends Controller
         $validated = $request->validate([
             'name' => 'required|max:255',
             'keyword' => 'required|max:5|unique:partners,id,' . $partner->id,
+            'status' => 'required|in:active,inactive',
         ]);
 
         DB::transaction(function () use ($validated, $request, &$partner) {
@@ -170,17 +173,13 @@ class PartnerController extends Controller
     public function destroy(Partner $partner)
     {
         $name = $partner->name;
-        $path = "partner/{$partner->keyword}";
 
-        foreach ($partner->departments as $department) {
-            File::where(['table_name' => $department->getTable(), 'table_id' => $department->id, 'table_field' => 'logo'])->delete();
-            $department->delete();
-        }
+        $arr_dep_id = $partner->departments->pluck('id')->toArray();
 
-        $partner->delete();
+        $partner->departments()->update(['status' => 'inactive']);
 
-        Storage::disk('public')->deleteDirectory($path);
+        File::where(['table_name' => 'departments', 'table_field' => 'logo'])->whereIn('table_id', $arr_dep_id)->update(['status' => 'inactive']);
 
-        return redirect()->route("manage.partners.index")->with('success', __('message.deleted', ['name' => $name]));
+        return redirect()->route("manage.partners.index")->with('success', __('message.disabled', ['name' => $name]));
     }
 }

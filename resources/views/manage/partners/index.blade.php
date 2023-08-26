@@ -24,7 +24,7 @@
                                 <b>{{ $partner->name }}</b>
                             </td>
                             <td class="text-center align-middle bg-light">
-                                <x-action-btn route="manage.partners" :params="['partner' => $partner->id]">
+                                <x-action-btn :disable="$partner->status" route="manage.partners" :params="['partner' => $partner->id]">
                                     <x-button :href="route('manage.partners.departments.create', ['partner' => $partner->id])">
                                         <b data-feather="plus"></b>
                                     </x-button>
@@ -42,7 +42,7 @@
                                     {{ $department->name }}
                                 </td>
                                 <td class="text-center">
-                                    <x-action-btn route="manage.partners.departments" :params="['partner' => $partner->id, 'department' => $department->id]" />
+                                    <x-action-btn :disable="$department->status" route="manage.partners.departments" :params="['partner' => $partner->id, 'department' => $department->id]" />
                                 </td>
                             </tr>
                         @empty
