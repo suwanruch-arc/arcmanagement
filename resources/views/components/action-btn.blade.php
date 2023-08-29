@@ -1,4 +1,4 @@
-<div class="d-grid gap-5 d-md-block">
+<div class="hstack">
     {{ $slot }}
     @can('update')
         <a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" class="btn btn-warning m-1" type="button"

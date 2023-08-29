@@ -13,7 +13,7 @@
                     <tr>
                         <th>UUID</th>
                         <th>Name</th>
-                        <th width="15%">Action</th>
+                        <th class="no-search" width="15%">Action</th>
                     </tr>
                 </thead>
                 <tbody>

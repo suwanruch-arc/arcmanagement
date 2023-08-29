@@ -160,10 +160,8 @@ class UserController extends Controller
     {
 
         $name = $user->name;
-        $user->update([
-            'status' => 'inactive'
-        ]);
+        $user->update(['status' => 'inactive']);
 
-        return redirect()->route("manage.users.index")->with('success', __('message.deleted', ['name' => $name]));
+        return redirect()->route("manage.users.index")->with('success', __('message.disabled', ['name' => $name]));
     }
 }

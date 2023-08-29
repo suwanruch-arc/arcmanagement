@@ -21,6 +21,7 @@ class CreateCampaignsTable extends Migration
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->text('description')->nullable();
+            $table->enum('status', ['active', 'inactive']);
             $table->foreignId('owner_id')->constrained('departments');
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');

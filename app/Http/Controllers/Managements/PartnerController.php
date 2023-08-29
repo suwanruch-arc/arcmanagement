@@ -173,12 +173,8 @@ class PartnerController extends Controller
     public function destroy(Partner $partner)
     {
         $name = $partner->name;
-
-        $arr_dep_id = $partner->departments->pluck('id')->toArray();
-
         $partner->departments()->update(['status' => 'inactive']);
-
-        File::where(['table_name' => 'departments', 'table_field' => 'logo'])->whereIn('table_id', $arr_dep_id)->update(['status' => 'inactive']);
+        $partner->update(['status' => 'inactive']);
 
         return redirect()->route("manage.partners.index")->with('success', __('message.disabled', ['name' => $name]));
     }

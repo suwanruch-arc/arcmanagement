@@ -8,9 +8,10 @@ use App\Http\Controllers\Auth\AccountController;
 use App\Http\Controllers\Managements\DepartmentController;
 use App\Http\Controllers\Managements\PartnerController;
 use App\Http\Controllers\Managements\ShopController;
-use App\Http\Controllers\Site\CampaignController;
-use App\Http\Controllers\Site\PrivilegeController;
+use App\Http\Controllers\Sites\CampaignController;
+use App\Http\Controllers\Sites\PrivilegeController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Sites\WarehouseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,6 +55,10 @@ Route::middleware('auth')->group(function () {
         Route::prefix('site')->group(function () {
             Route::resource('campaigns', CampaignController::class);
             Route::resource('campaigns.privileges', PrivilegeController::class);
+            Route::controller(WarehouseController::class)->prefix('/campaigns/{campaign}/warehouse')->name('warehouse.')->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/import', 'import')->name('import');
+            });
         });
     });
 

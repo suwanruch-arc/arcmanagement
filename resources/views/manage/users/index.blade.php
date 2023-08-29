@@ -11,7 +11,6 @@
             <x-datatable sort>
                 <thead>
                     <tr>
-                        <th>Status</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Username</th>
@@ -21,15 +20,13 @@
                         <th>Position</th>
                         <th>Role</th>
                         <th>From</th>
-                        <th width="10%">Action</th>
+                        <th class="no-search" width="1%">Status</th>
+                        <th class="no-search" width="10%">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($users as $user)
                         <tr>
-                            <td class="text-center align-middle">
-                                {!! Status::show($user->status) !!}
-                            </td>
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->username }}</td>
@@ -39,6 +36,9 @@
                             <td>{{ $user->position }}</td>
                             <td>{{ $user->role }}</td>
                             <td>{{ $user->from }}</td>
+                            <td class="text-center align-middle">
+                                {!! Status::show($user->status) !!}
+                            </td>
                             <td class="text-center">
                                 <x-action-btn :disable="$user->status" route="manage.users" :params="['user' => $user->id]" />
                             </td>

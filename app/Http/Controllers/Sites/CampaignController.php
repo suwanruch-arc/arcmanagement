@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Site;
+namespace App\Http\Controllers\Sites;
 
 use App\Models\Campaign;
 use App\Models\Department;
@@ -17,16 +17,16 @@ class CampaignController extends Controller
         $position = Auth::user()->position;
         switch ($position) {
             case 'leader':
-                $deps = Department::where(['partner_id' => Auth::user()->partner_id])->get();
+                $deps = Department::where(['partner_id' => Auth::user()->partner_id, 'status' => 'active'])->get();
                 break;
             default:
-                $deps = Department::all();
+                $deps = Department::where(['status' => 'active'])->get();
                 break;
         }
         foreach ($deps as $dep) {
             $departments[$dep->partner->name][$dep->id] = $dep->name;
         }
-        return $departments;
+        return $departments ?? [];
     }
 
     public function fields($model = null)
@@ -46,6 +46,7 @@ class CampaignController extends Controller
             'owner_id'      => old('owner_id') ?? ($model ? $model->owner_id : ''),
             'assign_users' => old('assign_lists') ?? ($assign_users ?? []),
             'owner_lists'   => $this->getOwnerLists(),
+            'status' => old('status') ?? ($model ? $model->status : 'active'),
         ];
         return $fields;
     }
@@ -91,6 +92,7 @@ class CampaignController extends Controller
             'start_date' => 'required|date|date_format:Y-m-d H:i:s',
             'end_date' => 'required|date|after:start_date|date_format:Y-m-d H:i:s',
             'owner_id' => 'required|exists:departments,id',
+            'status' => 'required|in:active,inactive'
         ]);
 
         DB::transaction(function () use ($validated, $request, &$campaign) {
@@ -161,6 +163,7 @@ class CampaignController extends Controller
             'start_date' => 'required|date|date_format:Y-m-d H:i:s',
             'end_date' => 'required|date|after:start_date|date_format:Y-m-d H:i:s',
             'owner_id' => 'required|exists:departments,id',
+            'status' => 'required|in:active,inactive'
         ]);
 
         DB::transaction(function () use ($validated, $request, &$campaign) {
@@ -192,8 +195,12 @@ class CampaignController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, Campaign $campaign)
     {
-        //
+        $name = $campaign->name;
+        $campaign->departments()->update(['status' => 'inactive']);
+        $campaign->update(['status' => 'inactive']);
+
+        return redirect()->route("site.campaigns.index")->with('success', __('message.disabled', ['name' => $name]));
     }
 }

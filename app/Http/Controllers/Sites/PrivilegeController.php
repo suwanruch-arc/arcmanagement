@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Site;
+namespace App\Http\Controllers\Sites;
 
 use App\Models\Shop;
 use App\Models\Campaign;
@@ -108,7 +108,8 @@ class PrivilegeController extends Controller
             'has_timer' => 'nullable',
             'timer_value' => 'required_if:has_timer,on',
             'can_view' => 'nullable',
-            'settings' => 'array'
+            'settings' => 'array',
+            'status' => 'required|in:active,inactive'
         ]);
         DB::transaction(function () use ($validated, $request, $campaign, &$privilege) {
             $settings = json_encode($request->settings);
@@ -132,7 +133,7 @@ class PrivilegeController extends Controller
             $privilege->save();
         });
 
-        $name = $privilege->name;
+        $name = $privilege->title;
 
         return redirect()->route('site.campaigns.privileges.index', ['campaign' => $campaign->id])
             ->with('success', __('message.created', ['name' => $name]));
@@ -180,7 +181,7 @@ class PrivilegeController extends Controller
             'description' => 'nullable|string',
             'value' => 'required|integer',
             'start_date' => 'required|date|date_format:Y-m-d H:i:s',
-            'end_date' => 'required|date|after:start_date|date_format:Y-m-d H:i:s', 
+            'end_date' => 'required|date|after:start_date|date_format:Y-m-d H:i:s',
             'default_code' => 'required|in:qrcode,barcode,textcode',
             'has_detail' => 'nullable',
             'detail' => 'required_if:has_detail,on',
@@ -190,8 +191,27 @@ class PrivilegeController extends Controller
             'has_timer' => 'nullable',
             'timer_value' => 'required_if:has_timer,on',
             'can_view' => 'nullable',
-            'settings' => 'array'
+            'settings' => 'array',
+            'status' => 'required|in:active,inactive'
         ]);
+
+        DB::transaction(function () use ($validated, $request, &$privilege) {
+            $settings = json_encode($request->settings);
+
+            $privilege->fill($validated);
+            $privilege->has_detail = $request->has_detail ? 'yes' : 'no';
+            $privilege->has_tandc = $request->has_tandc ? 'yes' : 'no';
+            $privilege->has_timer = $request->has_timer ? 'yes' : 'no';
+            $privilege->can_view = $request->can_view ? 'yes' : 'no';
+            $privilege->settings = $settings ?? null;
+            $privilege->updated_by = Auth::id();
+            $privilege->save();
+        });
+
+        $name = $privilege->title;
+
+        return redirect()->route('site.campaigns.privileges.index', ['campaign' => $campaign->id])
+            ->with('success', __('message.updated', ['name' => $name]));
     }
 
     /**
@@ -200,9 +220,12 @@ class PrivilegeController extends Controller
      * @param  \App\Models\Privilege  $privilege
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Privilege $privilege)
+    public function destroy(Campaign $campaign, Privilege $privilege)
     {
-        //
+        $name = $campaign->name;
+        $privilege->update(['status' => 'inactive']);
+
+        return redirect()->route("site.campaigns.privileges.index", $campaign->id)->with('success', __('message.disabled', ['name' => $name]));
     }
 
     // $campaign, $validated

@@ -10,9 +10,11 @@
     <div class="col">
         <x-input label="ชื่อแคมเปญ" name="name" :value="$name" required />
     </div>
-    <div class="col">
-        <x-input label="คีย์เวิร์ด" name="keyword" :value="$keyword" required max="3" min="3" />
-    </div>
+    @if ($type === 'create')
+        <div class="col">
+            <x-input label="คีย์เวิร์ด" name="keyword" :value="$keyword" required max="3" min="3" />
+        </div>
+    @endif
 </div>
 <div class="row row-cols-1">
     <div class="col">
@@ -38,6 +40,11 @@
     </div>
 </div>
 
+<div class="row row-cols-1 row-cols-md-2">
+    <div class="col">
+        <x-select label="สถานะ" name="status" :src="['active' => 'ใช้งาน', 'inactive' => 'ไม่ใช้งาน']" :value="$status" required />
+    </div>
+</div>
 @section('js')
     <script>
         $('#start_date').datetimepicker({

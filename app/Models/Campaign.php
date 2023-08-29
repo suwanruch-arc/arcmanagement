@@ -26,6 +26,11 @@ class Campaign extends Model
         return $this->belongsTo(Department::class);
     }
 
+    public function uniques()
+    {
+        return $this->belongsTo(Uniques::class);
+    }
+
     public function assign_lists()
     {
         return $this->hasMany(CampaignUser::class);

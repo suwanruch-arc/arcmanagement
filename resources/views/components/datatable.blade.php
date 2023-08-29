@@ -52,8 +52,7 @@
                             $(api.column(colIdx).header()).index()
                         );
                         var title = $(cell).text();
-                        $(cell).html('<input class="form-control" type="text" placeholder="' +
-                            title + '" />');
+                        $(cell).html('<input class="form-control" type="text" />');
 
                         // On every keypress in this input
                         $('input', $('.filters th').eq($(api.column(colIdx).header()).index()))
@@ -92,5 +91,6 @@
                 });
             },
         });
+
     });
 </script>

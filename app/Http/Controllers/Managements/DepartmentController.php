@@ -159,7 +159,6 @@ class DepartmentController extends Controller
     {
         $name = $partner->name;
 
-        File::where(['table_name' => $department->getTable(), 'table_id' => $department->id, 'table_field' => 'logo'])->update(['status' => 'inactive']);
         $department->update(['status' => 'inactive']);
 
         return redirect()->route("manage.partners.index")->with('success', __('message.deleted', ['name' => $name]));

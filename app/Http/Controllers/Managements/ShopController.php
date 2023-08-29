@@ -141,12 +141,9 @@ class ShopController extends Controller
     public function destroy(Shop $shop)
     {
         $name = $shop->name;
-        $path = "shop/{$shop->keyword}";
 
-        $shop->delete();
+        $shop->update(['status' => 'inactive']);
 
-        Storage::disk('public')->deleteDirectory($path);
-
-        return redirect()->route("manage.shops.index")->with('success', __('message.deleted', ['name' => $name]));
+        return redirect()->route("manage.shops.index")->with('success', __('message.disabled', ['name' => $name]));
     }
 }
