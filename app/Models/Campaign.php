@@ -35,4 +35,9 @@ class Campaign extends Model
     {
         return $this->hasMany(CampaignUser::class);
     }
+
+    public function privileges()
+    {
+        return $this->hasMany(Privilege::class);
+    }
 }

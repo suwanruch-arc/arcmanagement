@@ -58,6 +58,7 @@ Route::middleware('auth')->group(function () {
             Route::controller(WarehouseController::class)->prefix('/campaigns/{campaign}/warehouse')->name('warehouse.')->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/import', 'import')->name('import');
+                Route::post('/check-format', 'checkFormat')->name('check-format');
             });
         });
     });

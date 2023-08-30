@@ -7,6 +7,7 @@ use App\Models\Campaign;
 use App\Models\Privilege;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -98,7 +99,12 @@ class PrivilegeController extends Controller
             'description' => 'nullable|string',
             'value' => 'required|integer',
             'start_date' => 'required|date|date_format:Y-m-d H:i:s',
-            'end_date' => 'required|date|after:start_date|date_format:Y-m-d H:i:s',
+            'end_date' => [
+                'required', 'date', 'after:start_date', 'date_format:Y-m-d H:i:s',
+                Rule::unique('privileges')->where(function ($query) {
+                    return $query->where('value', request()->input('value'));
+                }),
+            ],
             'default_code' => 'required|in:qrcode,barcode,textcode',
             'has_detail' => 'nullable',
             'detail' => 'required_if:has_detail,on',
@@ -181,7 +187,12 @@ class PrivilegeController extends Controller
             'description' => 'nullable|string',
             'value' => 'required|integer',
             'start_date' => 'required|date|date_format:Y-m-d H:i:s',
-            'end_date' => 'required|date|after:start_date|date_format:Y-m-d H:i:s',
+            'end_date' => [
+                'required', 'date', 'after:start_date', 'date_format:Y-m-d H:i:s',
+                Rule::unique('privileges')->where(function ($query) use ($privilege) {
+                    return $query->where('value', request()->input('value'))->where('id', '<>', $privilege->id);
+                }),
+            ],
             'default_code' => 'required|in:qrcode,barcode,textcode',
             'has_detail' => 'nullable',
             'detail' => 'required_if:has_detail,on',

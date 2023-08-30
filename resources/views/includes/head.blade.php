@@ -8,3 +8,4 @@
 <link href="{{ asset('css/select2-bs5.min.css') }}" rel="stylesheet" />
 <link href="{{ asset('css/froala_editor.min.css') }}" rel="stylesheet" />
 <link href="{{ asset('css/jquery.datetimepicker.min.css') }}" rel="stylesheet" />
+<link href="{{ asset('css/filepond.css') }}" rel="stylesheet" />

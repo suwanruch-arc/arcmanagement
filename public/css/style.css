@@ -47,7 +47,8 @@ body {
 }
 
 .fr-logo,
-#fr-logo {
+#fr-logo,
+.filepond--credits {
     display: none;
 }
 
@@ -82,3 +83,4 @@ table tbody tr:last-child td:last-child {
 .no-search input {
     display: none;
 }
+

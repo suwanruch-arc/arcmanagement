@@ -6,6 +6,8 @@
 <script type="text/javascript" src="{{ asset('js/feather.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/sweetalert2.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/filepond.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/filepond.jquery.js') }}"></script>
 
 <script>
     feather.replace({
