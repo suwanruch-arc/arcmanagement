@@ -158,7 +158,6 @@ class CampaignController extends Controller
         $validated = $request->validate([
             'name' => 'required',
             'template_type' => 'required',
-            'keyword' => 'required|min:3|max:3|unique:campaigns,id,' . $campaign->id,
             'description' => 'nullable',
             'start_date' => 'required|date|date_format:Y-m-d H:i:s',
             'end_date' => 'required|date|after:start_date|date_format:Y-m-d H:i:s',

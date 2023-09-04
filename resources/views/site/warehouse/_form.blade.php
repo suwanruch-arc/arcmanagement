@@ -60,9 +60,11 @@
                                         </div>
                                     @endforeach
                                 </div>
+                                <hr>
                                 <input type="file" name="filepond" id="filepond" class="my-pond" />
+                                <hr>
                                 <p class="text-center">
-                                    Mobile | Code | Shop | Value | Expire
+                                    Mobile | Code | Keyword | Value | Expire
                                 </p>
                             </form>
                         </div>
@@ -72,7 +74,7 @@
                                     <ul id="result"></ul>
                                 </div>
                                 <div id="card_footer" class="card-footer">
-                                    Choose file...
+                                    <small>Status : <span id="status">Choose file</span></small>
                                 </div>
                             </div>
                         </div>
@@ -97,20 +99,31 @@
         const pond = FilePond.create(inputElement, {
             instantUpload: false
         });
+        var pond_ids = [];
 
+        if (pond.getFiles().length != 0) { // "pond" is an object, created by FilePond.create
+            pond.getFiles().forEach(function(file) {
+                pond_ids.push(file.id);
+            });
+        }
         pond.on('addfile', (e) => {
-            $('#btn-format').show();
-            $('#btn-upload').hide();
+            $('#btn-format').show().prop('disabled', false);
+            $('#btn-upload').hide().prop('disabled', false);
         });
 
         pond.on('removefile', (e) => {
-            $('#btn-format').hide();
-            $('#btn-upload').hide();
+            $('#btn-format').hide().prop('disabled', false);
+            $('#btn-upload').hide().prop('disabled', false);
         });
+
+
 
         $('#btn-format').on('click', function() {
             const files = pond.getFiles();
             if (files.length > 0) {
+                $('#btn-format').removeClass('wave').prop('disabled', true);
+                $('#status').html('File loaded');
+
                 const file = files[0]; // Assuming you only want to upload the first file
 
                 const formData = new FormData();
@@ -126,19 +139,70 @@
                     contentType: false,
                     dataType: 'JSON',
                     success: function(res) {
-                        console.log(JSON.parse(res));
-                        if (Array.isArray(res.error)) {
-                            $.each(res.error, function(line, data) {
-                                $('#result').append("<li>Line <b>" + line + "</b> : " + data +
-                                    "</li>");
-                            });
+                        clr('#result');
+                        if (res.error) {
+                            if (typeof res.error === 'object') {
+                                $.each(res.error, function(line, data) {
+                                    showConsole("Line <b>" + line + "</b> : " +
+                                        data, 'danger');
+                                });
+                            } else {
+                                showConsole(res.error, 'danger');
+                            }
+                            $('#btn-format').hide().prop('disabled', false);
+                            pond.removeFiles(pond_ids);
+                        } else {
+                            if (res.status === 'ok') {
+                                showConsole(res.msg, 'success');
+                                $('#status').html('Ok');
+                                $('#btn-format').hide();
+                                $('#btn-upload').show();
+                            }
                         }
+
                     },
                     error: function(xhr, status, error) {
-                        console.error('Upload failed:', error);
+                        $('#btn-format').prop('disabled', false);
                     }
                 });
             }
+        });
+
+        $('#btn-upload').on('click', function() {
+            $(this).html('Uploading...')
+                .removeClass('wave').prop('disabled', true);
+
+            const formData = new FormData();
+            formData.append('_token', '{{ csrf_token() }}');
+            formData.append('type_split_data', $('[name=type_split_data]:checked').val());
+
+            $.ajax({
+                url: "{{ route('site.warehouse.upload', $campaign->id) }}",
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'JSON',
+                success: function(res) {
+                    clr('#result');
+                    console.log(res);
+                },
+                error: function(xhr, status, error) {
+                    $('#btn-upload').addClass('wave').prop('disabled', false);
+                }
+            });
+        });
+
+        function clr(id) {
+            $(id).empty();
+        }
+
+        function showConsole(msg, color) {
+            $('#result').append("<li><span class='text-" + color + "'>" + msg + "</span></li>");
+        }
+
+        $(document).ajaxStart(function() {
+            $("#status").html('Loading...');
         });
     </script>
 @endsection

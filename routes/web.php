@@ -59,6 +59,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/import', 'import')->name('import');
                 Route::post('/check-format', 'checkFormat')->name('check-format');
+                Route::post('/upload', 'upload')->name('upload');
             });
         });
     });

@@ -10,6 +10,7 @@ use App\Models\Warehouse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Crypt;
 
 class WarehouseController extends Controller
 {
@@ -25,6 +26,15 @@ class WarehouseController extends Controller
         return view('site.warehouse.index', compact('campaign'))->with(compact('uniques'));
     }
 
+    public function getShopList($id)
+    {
+        return Shop::whereIn('id', function ($query) use ($id) {
+            $query->select('shop_id')
+                ->from('privileges')
+                ->where('campaign_id', $id);
+        })->get(['id', 'name', 'keyword']);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -32,33 +42,60 @@ class WarehouseController extends Controller
      */
     public function import(Campaign $campaign)
     {
-        $shop_lists = Shop::whereIn('id', function ($query) use ($campaign) {
-            $query->select('shop_id')
-                ->from('privileges')
-                ->where('campaign_id', $campaign->id);
-        })->get(['id', 'name', 'keyword']);
+        $shop_lists = $this->getShopList($campaign->id);
 
         return view('site.warehouse._form', compact('campaign'))->with('shop_lists', $shop_lists);
     }
 
-    public function checkFormat(Request $request)
+    public function checkFormat(Request $request, Campaign $campaign)
     {
+        $uuid = base64_encode(auth()->id());
         $type = $request->type_split_data;
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $data_file =  explode("\n", File::get($file->getPathname()));
-            foreach ($data_file as $key => $data) {
+
+            $temp_path = storage_path("temp_file/{$campaign->keyword}/");
+            $temp_name = "file_{$uuid}.tmp";
+            $temp_path_file = $temp_path . $temp_name;
+
+            $file->move($temp_path, $temp_name);
+
+            $temp_file_content = File::get($temp_path_file);
+            $contents = explode("\n",  $temp_file_content);
+
+            foreach ($contents as $key => $data) {
                 $line = $key + 1;
                 $split_data = explode($type, $data);
                 if (count($split_data) < 5) {
                     $res['error'][$line] = 'Format ไฟล์ไม่ถูกต้อง';
                 } else {
-                    // list($mobile, $code, $shop, $value, $expire) = $split_data;
+                    list($mobile, $code, $keyword, $value, $expire) = $split_data;
+                    if (!preg_match('/^([0]{1}|[66]{2})(6|7|8|9){1}[0-9]{8}$/', $mobile)) {
+                        $res['error'][$line] = 'เบอร์โทรศัพท์ไม่ถูกต้อง ' . $mobile;
+                        continue;
+                    }
+
+                    $has_data = $campaign->privileges()->where('keyword', 'LIKE', $campaign->keyword . $keyword . '%')
+                        ->where('value', $value)->whereDate('end_date', '=', $expire)->count();
+
+                    if (!$has_data) {
+                        $res['error'][$line] = "ไม่พบข้อมูล - {$keyword}{$type}{$value}{$type}{$expire}";
+                        continue;
+                    }
                 }
+            }
+            if (!isset($res['error'])) {
+                $encrypt_content = Crypt::encrypt($temp_file_content);
+                File::put($temp_path_file, $encrypt_content);
+
+                $res['msg'] = 'Format ถูกต้องสามารถอัพโหลดไฟล์ได้';
             }
         } else {
             $res['error'] = 'ไม่พบไฟล์';
         }
+
+        $res['status'] = isset($res['error']) ? 'error' : 'ok';
+
         return response()->json($res);
     }
 
@@ -68,9 +105,14 @@ class WarehouseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function upload(Request $request, Campaign $campaign)
     {
-        //
+        $uuid = base64_encode(auth()->id());
+        $temp_file = storage_path("temp_file/{$campaign->keyword}/file_{$uuid}.tmp");
+        $temp_file_content = File::get($temp_file);
+        $data_file = Crypt::decrypt($temp_file_content);
+        $contents = explode("\r\n",  $data_file);
+        var_dump($contents);
     }
 
     /**
