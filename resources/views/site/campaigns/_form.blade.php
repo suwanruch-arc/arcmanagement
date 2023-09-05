@@ -1,6 +1,6 @@
 <div class="row row-cols-1 row-cols-md-2">
     <div class="col">
-        <x-select label="ประเภท" name="template_type" :src="['STD' => 'Standard Redeem']" :value="$template_type" required />
+        <x-select label="ประเภท" name="template_type" :src="['STD' => 'Standard Template','CTM' => 'Custom Template']" :value="$template_type" required />
     </div>
     <div class="col">
         <x-select label="Owner" name="owner_id" :src="$owner_lists" :value="$owner_id" required />

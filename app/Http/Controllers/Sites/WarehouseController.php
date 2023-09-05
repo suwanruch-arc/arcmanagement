@@ -26,14 +26,6 @@ class WarehouseController extends Controller
         return view('site.warehouse.index', compact('campaign'))->with(compact('uniques'));
     }
 
-    public function getShopList($id)
-    {
-        return Shop::whereIn('id', function ($query) use ($id) {
-            $query->select('shop_id')
-                ->from('privileges')
-                ->where('campaign_id', $id);
-        })->get(['id', 'name', 'keyword']);
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -42,9 +34,19 @@ class WarehouseController extends Controller
      */
     public function import(Campaign $campaign)
     {
-        $shop_lists = $this->getShopList($campaign->id);
+        $privileges = $campaign->privileges;
+        $privilege_list = [];
+        foreach ($privileges as $key => $privilege) {
+            $end_date = date('Y-m-d', strtotime($privilege->end_date));
+            $privilege_list[$privilege->shop->keyword]['title'] = $privilege->shop->name;
+            $privilege_list[$privilege->shop->keyword]['list'][$end_date][$privilege->value] = $privilege->keyword;
+        }
+        echo '<pre>';
+        print_r($privilege_list);
+        echo '</pre>';
+        die;
 
-        return view('site.warehouse._form', compact('campaign'))->with('shop_lists', $shop_lists);
+        return view('site.warehouse._form', compact('campaign'))->with('privileges', $privileges);
     }
 
     public function checkFormat(Request $request, Campaign $campaign)
@@ -66,6 +68,7 @@ class WarehouseController extends Controller
             foreach ($contents as $key => $data) {
                 $line = $key + 1;
                 $split_data = explode($type, $data);
+
                 if (count($split_data) < 5) {
                     $res['error'][$line] = 'Format ไฟล์ไม่ถูกต้อง';
                 } else {
@@ -107,12 +110,12 @@ class WarehouseController extends Controller
      */
     public function upload(Request $request, Campaign $campaign)
     {
-        $uuid = base64_encode(auth()->id());
-        $temp_file = storage_path("temp_file/{$campaign->keyword}/file_{$uuid}.tmp");
-        $temp_file_content = File::get($temp_file);
-        $data_file = Crypt::decrypt($temp_file_content);
-        $contents = explode("\r\n",  $data_file);
-        var_dump($contents);
+        // $uuid = base64_encode(auth()->id());
+        // $temp_file = storage_path("temp_file/{$campaign->keyword}/file_{$uuid}.tmp");
+        // $temp_file_content = File::get($temp_file);
+        // $data_file = Crypt::decrypt($temp_file_content);
+        // $contents = explode("\r\n",  $data_file);
+        var_dump($request->all());
     }
 
     /**

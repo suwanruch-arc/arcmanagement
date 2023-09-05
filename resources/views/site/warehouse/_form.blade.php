@@ -21,20 +21,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($shop_lists as $shop)
-                                <tr>
-                                    <td>
-                                        {{ $shop->name }}
-                                    </td>
-                                    <td>
-                                        {{ $shop->keyword }}
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="2">ไม่พบร้านค้า Privilege ที่ตั้งค่าไว้</td>
-                                </tr>
-                            @endforelse
+
                         </tbody>
                     </table>
                 </div>
@@ -83,8 +70,8 @@
                 <div class="card-footer">
                     <button type="button" class="btn btn-info wave" id="btn-format" style="display: none;">
                         <span data-feather="search"></span> Check format</button>
-                    <button type="button" class="btn btn-primary wave" id="btn-upload" style="display: none;">
-                        <span data-feather="upload"></span> Upload
+                    <button type="button" class="btn btn-primary wave" id="btn-generate" style="display: none;">
+                        <span data-feather="upload"></span> Generate
                     </button>
 
                 </div>
@@ -97,7 +84,13 @@
     <script>
         const inputElement = document.getElementById('filepond');
         const pond = FilePond.create(inputElement, {
-            instantUpload: false
+            server: "{{ route('site.warehouse.upload', $campaign->id) }}",
+            process: {
+                headers: {
+                    "X-CSRF-Token": '{{csrf_token()}}',
+                }
+            },
+            instantUpload: true
         });
         var pond_ids = [];
 
@@ -106,9 +99,10 @@
                 pond_ids.push(file.id);
             });
         }
-        pond.on('addfile', (e) => {
-            $('#btn-format').show().prop('disabled', false);
-            $('#btn-upload').hide().prop('disabled', false);
+        pond.on('processfile', (e) => {
+            console.log(e);
+            // $('#btn-format').show().prop('disabled', false);
+            // $('#btn-upload').hide().prop('disabled', false);
         });
 
         pond.on('removefile', (e) => {
@@ -168,7 +162,7 @@
             }
         });
 
-        $('#btn-upload').on('click', function() {
+        $('#btn-generate').on('click', function() {
             $(this).html('Uploading...')
                 .removeClass('wave').prop('disabled', true);
 

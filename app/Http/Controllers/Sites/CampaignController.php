@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Sites;
 
 use App\Models\Campaign;
 use App\Models\Department;
+use Illuminate\Support\Str;
 use App\Models\CampaignUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 
 class CampaignController extends Controller
 {
@@ -95,12 +98,38 @@ class CampaignController extends Controller
             'status' => 'required|in:active,inactive'
         ]);
 
+
         DB::transaction(function () use ($validated, $request, &$campaign) {
             $campaign = new Campaign;
             $campaign->fill($validated);
             $campaign->created_by = Auth::id();
             $campaign->updated_by = Auth::id();
             $campaign->save();
+
+            $template_type = Str::lower($campaign->template_type);
+            $keyword = Str::lower($campaign->keyword);
+            $table_name = "tb_{$template_type}_{$keyword}";
+
+            if (!Schema::connection('storage_code')->hasTable($table_name)) {
+                Schema::connection('storage_code')->create($table_name, function (Blueprint $table) {
+                    $table->id();
+                    $table->integer('lot');
+                    $table->string('refid');
+                    $table->string('privilege_keyword', 5)->index();
+                    $table->string('shop_keyword', 2)->index();
+                    $table->string('secret_code', 12)->unique();
+                    $table->string('unique_code', 20)->unique();
+                    $table->string('msisdn', 11)->nullable();
+                    $table->string('code');
+                    $table->dateTime('import_date');
+                    $table->dateTime('first_view_date')->nullable();
+                    $table->dateTime('redeem_date')->nullable();
+                    $table->dateTime('expire_date')->nullable();
+                    $table->text('info');
+                    $table->enum('flag', ["ok", "cancel", "deviate"]);
+                    $table->enum('is_use', ["yes", "no"]);
+                });
+            }
 
             if ($campaign->id && isset($request->assign_lists) && count($request->assign_lists)) {
                 foreach ($request->assign_lists as $user_id) {
