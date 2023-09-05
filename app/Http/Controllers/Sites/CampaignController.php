@@ -106,9 +106,7 @@ class CampaignController extends Controller
             $campaign->updated_by = Auth::id();
             $campaign->save();
 
-            $template_type = Str::lower($campaign->template_type);
-            $keyword = Str::lower($campaign->keyword);
-            $table_name = "tb_{$template_type}_{$keyword}";
+            $table_name = Str::lower("tb_{$campaign->template_type}_{$campaign->keyword}");
 
             if (!Schema::connection('storage_code')->hasTable($table_name)) {
                 Schema::connection('storage_code')->create($table_name, function (Blueprint $table) {

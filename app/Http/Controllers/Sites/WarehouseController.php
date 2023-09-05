@@ -39,14 +39,10 @@ class WarehouseController extends Controller
         foreach ($privileges as $key => $privilege) {
             $end_date = date('Y-m-d', strtotime($privilege->end_date));
             $privilege_list[$privilege->shop->keyword]['title'] = $privilege->shop->name;
-            $privilege_list[$privilege->shop->keyword]['list'][$end_date][$privilege->value] = $privilege->keyword;
+            $privilege_list[$privilege->shop->keyword]['list'][$end_date][] = $privilege->value;
         }
-        echo '<pre>';
-        print_r($privilege_list);
-        echo '</pre>';
-        die;
 
-        return view('site.warehouse._form', compact('campaign'))->with('privileges', $privileges);
+        return view('site.warehouse._form', compact('campaign'))->with('privileges', $privilege_list);
     }
 
     public function checkFormat(Request $request, Campaign $campaign)

@@ -11,17 +11,17 @@
             <x-datatable sort>
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Username</th>
-                        <th>Contact Number</th>
-                        <th>Partner</th>
-                        <th>Department</th>
-                        <th>Position</th>
-                        <th>Role</th>
-                        <th>From</th>
-                        <th class="no-search" width="1%">Status</th>
-                        <th class="no-search" width="10%">Action</th>
+                        <th class="search">Name</th>
+                        <th class="search">Email</th>
+                        <th class="search">Username</th>
+                        <th class="search">Contact Number</th>
+                        <th class="search">Partner</th>
+                        <th class="search">Department</th>
+                        <th class="search">Position</th>
+                        <th class="search">Role</th>
+                        <th class="search">From</th>
+                        <th width="1%">Status</th>
+                        <th width="10%">Action</th>
                     </tr>
                 </thead>
                 <tbody>

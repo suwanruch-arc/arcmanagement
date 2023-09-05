@@ -102,7 +102,7 @@ class PrivilegeController extends Controller
             'end_date' => [
                 'required', 'date', 'after:start_date', 'date_format:Y-m-d H:i:s',
                 Rule::unique('privileges')->where(function ($query) {
-                    return $query->where('value', request()->input('value'));
+                    return $query->where('value', request()->input('value'))->where('shop_id', request()->input('shop_id'));
                 }),
             ],
             'default_code' => 'required|in:qrcode,barcode,textcode',
@@ -190,7 +190,7 @@ class PrivilegeController extends Controller
             'end_date' => [
                 'required', 'date', 'after:start_date', 'date_format:Y-m-d H:i:s',
                 Rule::unique('privileges')->where(function ($query) use ($privilege) {
-                    return $query->where('value', request()->input('value'))->where('id', '<>', $privilege->id);
+                    return $query->where('value', request()->input('value'))->where('shop_id', request()->input('shop_id'))->where('id', '<>', $privilege->id);
                 }),
             ],
             'default_code' => 'required|in:qrcode,barcode,textcode',

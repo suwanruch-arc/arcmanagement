@@ -15,16 +15,16 @@
             <x-datatable sort>
                 <thead>
                     <tr>
-                        <th width="1%">Default Code</th>
-                        <th width="25%">Shop</th>
-                        <th width="25%">Title</th>
-                        <th width="1%">Value</th>
-                        <th width="15%">Start Date</th>
-                        <th width="15%">End Date</th>
-                        <th width="3%">Lot</th>
-                        <th width="1%">Keyword</th>
-                        <th class="no-search" width="1%">Status</th>
-                        <th class="no-search" width="1%">Action</th>
+                        <th class="search" width="1%">Default Code</th>
+                        <th class="search" width="25%">Shop</th>
+                        <th class="search" width="25%">Title</th>
+                        <th class="search" width="1%">Value</th>
+                        <th class="search" width="15%">Start Date</th>
+                        <th class="search" width="15%">End Date</th>
+                        <th class="search" width="3%">Lot</th>
+                        <th class="search" width="1%">Keyword</th>
+                        <th width="1%">Status</th>
+                        <th width="1%">Action</th>
                     </tr>
                 </thead>
                 <tbody>

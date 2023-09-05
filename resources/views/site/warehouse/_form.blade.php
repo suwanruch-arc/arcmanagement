@@ -9,21 +9,28 @@
         <div class="col-md-2">
             <div class="card">
                 <div class="card-body">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>
-                                    ชื่อร้านค้า
-                                </th>
-                                <th>
-                                    คีย์เวิร์ด
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                    </table>
+                    <h6>ร้านค้าที่ใช้งาน</h6>
+                    <ul class="list-group">
+                        @foreach ($privileges as $shop_keyword => $privilege)
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">{{ $privilege['title'] }} :
+                                        <span class="fw-normal">{{ $shop_keyword }}</span>
+                                    </div>
+                                    <ul>
+                                        @foreach ($privilege['list'] as $expire => $item)
+                                            <li>{{ $expire }}</li>
+                                            <ul>
+                                                @foreach ($item as $value)
+                                                    <li>{{ $value }}฿</li>
+                                                @endforeach
+                                            </ul>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
             </div>
         </div>
@@ -87,7 +94,7 @@
             server: "{{ route('site.warehouse.upload', $campaign->id) }}",
             process: {
                 headers: {
-                    "X-CSRF-Token": '{{csrf_token()}}',
+                    "X-CSRF-Token": '{{ csrf_token() }}',
                 }
             },
             instantUpload: true

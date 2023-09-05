@@ -11,12 +11,12 @@
             <x-datatable sort>
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Keyword</th>
-                        <th>Template Type</th>
-                        <th>Owner</th>
-                        <th class="no-search" width="1%">Status</th>
-                        <th class="no-search" width="1%">Action</th>
+                        <th class="search">Name</th>
+                        <th class="search">Keyword</th>
+                        <th class="search">Template Type</th>
+                        <th class="search">Owner</th>
+                        <th width="1%">Status</th>
+                        <th width="1%">Action</th>
                     </tr>
                 </thead>
                 <tbody>
