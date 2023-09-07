@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="row justify-content-center">
-        <div class="col-md-2">
+        <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
                     <h6>ร้านค้าที่ใช้งาน</h6>
@@ -22,7 +22,7 @@
                                             <li>{{ $expire }}</li>
                                             <ul>
                                                 @foreach ($item as $value)
-                                                    <li>{{ $value }}฿</li>
+                                                    <li>{{ $value }} ฿</li>
                                                 @endforeach
                                             </ul>
                                         @endforeach
@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-9">
             <div class="card">
                 <div class="card-body">
                     <div class="row" style="max-height: 215px;">
@@ -76,11 +76,25 @@
                 </div>
                 <div class="card-footer">
                     <button type="button" class="btn btn-info wave" id="btn-format" style="display: none;">
-                        <span data-feather="search"></span> Check format</button>
-                    <button type="button" class="btn btn-primary wave" id="btn-generate" style="display: none;">
-                        <span data-feather="upload"></span> Generate
+                        Check format
                     </button>
+                    <button type="button" class="btn btn-primary wave" id="btn-generate" style="display: none;">
+                        Generate
+                    </button>
+                    <button type="button" class="btn btn-warning wave" id="btn-insert" style="display: none;">
+                        Insert Data
+                    </button>
+                </div>
+            </div>
+            <div class="card mt-3">
+                <div class="card-body">
+                    <div class="row">
+                        <table class="table ">
+                            <tbody id="table-generate">
 
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -89,16 +103,24 @@
 
 @section('js')
     <script>
+        const formData = new FormData();
+        formData.append('_token', '{{ csrf_token() }}');
+        formData.append('type_split_data', $('[name=type_split_data]:checked').val());
         const inputElement = document.getElementById('filepond');
         const pond = FilePond.create(inputElement, {
-            server: "{{ route('site.warehouse.upload', $campaign->id) }}",
-            process: {
-                headers: {
-                    "X-CSRF-Token": '{{ csrf_token() }}',
-                }
+            server: {
+                url: "{{ route('site.warehouse.upload', $campaign->id) }}",
+                process: {
+                    method: 'POST',
+                    ondata: (formData) => {
+                        formData.append('_token', '{{ csrf_token() }}');
+                        return formData;
+                    },
+                },
             },
             instantUpload: true
         });
+
         var pond_ids = [];
 
         if (pond.getFiles().length != 0) { // "pond" is an object, created by FilePond.create
@@ -106,79 +128,25 @@
                 pond_ids.push(file.id);
             });
         }
-        pond.on('processfile', (e) => {
-            console.log(e);
-            // $('#btn-format').show().prop('disabled', false);
-            // $('#btn-upload').hide().prop('disabled', false);
-        });
 
-        pond.on('removefile', (e) => {
-            $('#btn-format').hide().prop('disabled', false);
-            $('#btn-upload').hide().prop('disabled', false);
-        });
-
-
-
-        $('#btn-format').on('click', function() {
-            const files = pond.getFiles();
-            if (files.length > 0) {
-                $('#btn-format').removeClass('wave').prop('disabled', true);
-                $('#status').html('File loaded');
-
-                const file = files[0]; // Assuming you only want to upload the first file
-
-                const formData = new FormData();
-                formData.append('_token', '{{ csrf_token() }}');
-                formData.append('file', file.file);
-                formData.append('type_split_data', $('[name=type_split_data]:checked').val());
-
-                $.ajax({
-                    url: "{{ route('site.warehouse.check-format', $campaign->id) }}",
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    dataType: 'JSON',
-                    success: function(res) {
-                        clr('#result');
-                        if (res.error) {
-                            if (typeof res.error === 'object') {
-                                $.each(res.error, function(line, data) {
-                                    showConsole("Line <b>" + line + "</b> : " +
-                                        data, 'danger');
-                                });
-                            } else {
-                                showConsole(res.error, 'danger');
-                            }
-                            $('#btn-format').hide().prop('disabled', false);
-                            pond.removeFiles(pond_ids);
-                        } else {
-                            if (res.status === 'ok') {
-                                showConsole(res.msg, 'success');
-                                $('#status').html('Ok');
-                                $('#btn-format').hide();
-                                $('#btn-upload').show();
-                            }
-                        }
-
-                    },
-                    error: function(xhr, status, error) {
-                        $('#btn-format').prop('disabled', false);
-                    }
-                });
+        pond.on('processfile', (error) => {
+            if (!error) {
+                $('#btn-format').show().prop('disabled', false);
+                $('#btn-generate').hide().prop('disabled', false);
             }
         });
 
-        $('#btn-generate').on('click', function() {
-            $(this).html('Uploading...')
-                .removeClass('wave').prop('disabled', true);
+        pond.on('updatefiles', (e) => {
+            $('#btn-format').hide().prop('disabled', false);
+            $('#btn-generate').hide().prop('disabled', false);
+        });
 
-            const formData = new FormData();
-            formData.append('_token', '{{ csrf_token() }}');
-            formData.append('type_split_data', $('[name=type_split_data]:checked').val());
+        $('#btn-format').on('click', function() {
+            $('#btn-format').removeClass('wave').html('Checking...').prop('disabled', true);
+            $('#status').html('File loaded');
 
             $.ajax({
-                url: "{{ route('site.warehouse.upload', $campaign->id) }}",
+                url: "{{ route('site.warehouse.check-format', $campaign->id) }}",
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -186,10 +154,66 @@
                 dataType: 'JSON',
                 success: function(res) {
                     clr('#result');
-                    console.log(res);
+                    if (res.error) {
+                        if (typeof res.error === 'object') {
+                            $.each(res.error, function(line, data) {
+                                showConsole("Line <b>" + line + "</b> : " +
+                                    data, 'danger');
+                            });
+                        } else {
+                            showConsole(res.error, 'danger');
+                        }
+                        $('#btn-format').hide().prop('disabled', false);
+                        pond.removeFiles(pond_ids);
+                    } else {
+                        if (res.status === 'ok') {
+                            showConsole(res.msg, 'success');
+                            $('#status').html('Ok');
+                            $('#btn-format').hide().addClass('wave').prop('disabled', false);
+                            $('#btn-generate').show();
+                        }
+                    }
+
                 },
                 error: function(xhr, status, error) {
-                    $('#btn-upload').addClass('wave').prop('disabled', false);
+                    $('#btn-format').addClass('wave').prop('disabled', false);
+                },
+                complete: function() {
+                    $('#btn-format').html('Check format')
+                }
+            });
+        });
+
+        $('#btn-generate').on('click', function() {
+            $(this).html('Generating...')
+                .removeClass('wave').prop('disabled', true);
+
+            $.ajax({
+                url: "{{ route('site.warehouse.generate', $campaign->id) }}",
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'JSON',
+                success: function(res) {
+                    clr('#result');
+                    $('#table-generate').empty();
+                    $.each(res, function(indexInArray, data) {
+                        let row = '<tr>';
+                        row += '<td>' + data.mobile + '</td>';
+                        row += '<td>' + data.code + '</td>';
+                        row += '<td>' + data.unique + '</td>';
+                        row += '<td>' + data.secret_code + '</td>';
+                        row += '</tr>';
+                        $('#table-generate').append(row);
+
+                    });
+                },
+                error: function(xhr, status, error) {
+                    $('#btn-generate').addClass('wave').prop('disabled', false);
+                },
+                complete: function() {
+                    $('#btn-generate').html('Generate')
                 }
             });
         });

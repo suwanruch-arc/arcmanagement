@@ -10,6 +10,7 @@ class Campaign extends Model
     use HasFactory;
 
     protected $fillable = [
+        'table_name',
         'name',
         'keyword',
         'template_type',

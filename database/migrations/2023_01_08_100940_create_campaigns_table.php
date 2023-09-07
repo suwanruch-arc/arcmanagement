@@ -15,9 +15,10 @@ class CreateCampaignsTable extends Migration
     {
         Schema::create('campaigns', function (Blueprint $table) {
             $table->id();
+            $table->string('table_name');
             $table->string('name');
             $table->string('keyword', 3)->unique();
-            $table->enum('template_type', ["STD","CTM"]);
+            $table->enum('template_type', ["STD", "CTM"]);
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->text('description')->nullable();

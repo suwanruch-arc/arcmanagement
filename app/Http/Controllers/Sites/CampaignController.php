@@ -102,11 +102,12 @@ class CampaignController extends Controller
         DB::transaction(function () use ($validated, $request, &$campaign) {
             $campaign = new Campaign;
             $campaign->fill($validated);
+            $table_name = Str::lower("tb_{$campaign->template_type}_{$campaign->keyword}");
+            $campaign->table_name = $table_name;
             $campaign->created_by = Auth::id();
             $campaign->updated_by = Auth::id();
             $campaign->save();
 
-            $table_name = Str::lower("tb_{$campaign->template_type}_{$campaign->keyword}");
 
             if (!Schema::connection('storage_code')->hasTable($table_name)) {
                 Schema::connection('storage_code')->create($table_name, function (Blueprint $table) {

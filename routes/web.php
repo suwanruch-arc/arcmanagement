@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('/import', 'import')->name('import');
                 Route::post('/check-format', 'checkFormat')->name('check-format');
                 Route::post('/upload', 'upload')->name('upload');
+                Route::post('/generate', 'generate')->name('generate');
             });
         });
     });
