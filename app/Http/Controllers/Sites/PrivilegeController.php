@@ -25,6 +25,7 @@ class PrivilegeController extends Controller
     {
         $type = $model ? 'update' : 'create';
         $fields = [
+            'id' => ($model ? $model->id : ''),
             'type' => $type,
             'campaign' => $campaign,
             'title' => old('title') ?? ($model ? $model->title : ''),

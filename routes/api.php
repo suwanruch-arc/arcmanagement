@@ -15,6 +15,6 @@ use App\Http\Controllers\Api\ImageController;
 |
 */
 
-Route::prefix('image/')->group(function () {
+Route::group(function () {
     Route::get('logo/{partner}', [ImageController::class, 'getImage']);
 });

@@ -8,3 +8,13 @@
         <x-input type="area" class="editor" name="tandc" :value="$tandc" />
     </div>
 </div>
+<div class="row row-cols-1 row-cols-md-2">
+    <div class="col">
+        <x-file-input label="Banner" name="banner" />
+        {!! Image::show($id, 'privileges', [
+            'id' => 'banner',
+            'width' => '100px',
+            'class' => 'img-thumbnail rounded p-1',
+        ]) !!}
+    </div>
+</div>

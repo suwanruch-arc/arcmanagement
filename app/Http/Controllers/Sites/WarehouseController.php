@@ -155,26 +155,81 @@ class WarehouseController extends Controller
 
         $result = [];
         if ($temp_file_content) {
+            $unique_data = DB::connection('storage_code')->table($campaign->table_name)->where(['flag' => ['ok', 'deviate']])->pluck('unique_code', 'secret_code');
+            $already_secret = $unique_data->keys();
+            $already_unique = $unique_data->values();
             $contents = explode("\r\n",  $temp_file_content);
+            $sql = "INSERT INTO `tb_std_wdl` SET ";
             foreach ($contents as $key => $content) {
+                $insert = [];
                 list($mobile, $code, $keyword, $value, $expire) = explode($type, $content);
+
                 $mobile = Str::padLeft(Str::substr($mobile, -9), 11, '66');
                 $expire = date('Y-m-d 23:59:59', strtotime($expire));
 
-                $unique = $this->getUnique();
-                $secret_code =  $this->getSecretCode();
+                $unique = $this->getUnique($already_secret);
+                $secret_code =  $this->getSecretCode($campaign->keyword, $already_unique);
                 $result[$key]['mobile'] = $mobile;
                 $result[$key]['code'] = $code;
                 $result[$key]['unique'] = $unique;
                 $result[$key]['secret_code'] = $secret_code;
+
+                $insert['lot'] = '';
+                $insert['refid'] = '';
+                $insert['campaign_keyword'] = '';
+                $insert['shop_keyword'] = '';
+                $insert['secret_code'] = '';
+                $insert['unique_code'] = '';
+                $insert['msisdn'] = '';
+                $insert['code'] = '';
+                $insert['import_date'] = '';
+                $insert['expire_date'] = '';
+                $insert['info'] = '';
+                $insert['flag'] = '';
+                $insert['is_use'] = '';
             }
         }
 
         return response()->json($result);
     }
 
-    public function getUnique()
+    public function getUnique($arr)
     {
-        
+        $unique = Str::random(16);
+        $has_data = $arr->contains($unique);
+        if ($has_data) {
+            $this->getUnique($arr);
+        }
+        return $unique;
+    }
+    public function getSecretCode($keyword, $arr)
+    {
+
+        $secret_code = $this->genSecrectCode($keyword);
+        $has_data = $arr->contains($secret_code);
+        if ($has_data) {
+            $this->getSecretCode($keyword, $arr);
+        }
+        return $secret_code;
+    }
+
+    public function genSecrectCode($keyword, $length = 9)
+    {
+        $length = $length - strlen($keyword);
+        $alphabets = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+        $numbers = '23456789';
+        $characters = $alphabets . $numbers;
+        $randomString = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            if ($i % 2 == 0) {
+                $randomString .= $alphabets[rand(0, strlen($alphabets) - 1)];
+            } else {
+                $randomString .= $numbers[rand(0, strlen($numbers) - 1)];
+            }
+        }
+        $shuffledString = str_shuffle($randomString);
+
+        return $keyword . $shuffledString;
     }
 }

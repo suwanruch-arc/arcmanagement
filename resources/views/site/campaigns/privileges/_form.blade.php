@@ -41,11 +41,6 @@
         <x-input type="area" label="คำอธิบาย" name="description" :value="$description" />
     </div>
 </div>
-<div class="row row-cols-1 row-cols-md-2">
-    <div class="col">
-        <x-select label="สถานะ" name="status" :src="['active' => 'ใช้งาน', 'inactive' => 'ไม่ใช้งาน']" :value="$status" required />
-    </div>
-</div>
 
 @switch($campaign->template_type)
     @case('STD')
@@ -56,6 +51,12 @@
         @include('site.campaigns.privileges._ctm', ['settings' => $settings])
     @break
 @endswitch
+
+<div class="row row-cols-1 row-cols-md-2">
+    <div class="col">
+        <x-select label="สถานะ" name="status" :src="['active' => 'ใช้งาน', 'inactive' => 'ไม่ใช้งาน']" :value="$status" required />
+    </div>
+</div>
 @section('js')
     <script>
         $(function() {
