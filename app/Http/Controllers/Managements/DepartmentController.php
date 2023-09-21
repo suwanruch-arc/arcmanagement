@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Managements;
 use App\Models\File;
 use App\Models\Partner;
 use App\Models\Department;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -67,6 +68,7 @@ class DepartmentController extends Controller
         DB::transaction(function () use ($validated, $request, &$partner, &$department) {
             $department = new Department;
             $department->fill($validated);
+            $department->keyword = Str::upper($department->keyword);
             $department->partner_id = $partner->id;
             $department->is_main = 'no';
             $department->save();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Managements;
 
 use App\Models\Shop;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -56,6 +57,7 @@ class ShopController extends Controller
         DB::transaction(function () use ($validated, $request, &$shop) {
             $shop = new Shop;
             $shop->fill($validated);
+            $shop->keyword = Str::upper($shop->keyword);
             $shop->created_by = Auth::id();
             $shop->updated_by = Auth::id();
             $shop->save();
@@ -108,6 +110,7 @@ class ShopController extends Controller
 
         DB::transaction(function () use ($validated, $request, &$shop) {
             $shop->fill($validated);
+            $shop->keyword = Str::upper($shop->keyword);
             $shop->updated_by = Auth::id();
             $shop->save();
 

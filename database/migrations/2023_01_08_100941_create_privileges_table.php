@@ -17,13 +17,14 @@ class CreatePrivilegesTable extends Migration
             $table->id();
             $table->string('title', 255);
             $table->text('description')->nullable();
-            $table->string('keyword', 9)->unique();
+            $table->string('keyword', 10)->unique();
             $table->integer('value');
             $table->integer('lot');
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->enum('has_timer', ['yes', 'no']);
             $table->integer('timer_value')->nullable();
+            $table->enum('skip_confirm', ['no', 'yes']);
             $table->enum('can_view', ['yes', 'no']);
             $table->enum('default_code', ["qrcode", "barcode", "textcode"]);
             $table->enum('has_detail', ['yes', 'no']);

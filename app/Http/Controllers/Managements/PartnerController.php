@@ -72,13 +72,13 @@ class PartnerController extends Controller
         DB::transaction(function () use ($validated, $request, &$partner) {
             $partner = new Partner;
             $partner->name = $validated['name'];
-            $partner->keyword = $validated['keyword'];
+            $partner->keyword = Str::upper($validated['keyword']);
             $partner->save();
 
             $department = new Department;
             $department->partner_id = $partner->id;
             $department->name = $validated['department_name'] ?? "{$partner->name}-main";
-            $department->keyword = $validated['department_keyword'] ?? $partner->keyword;
+            $department->keyword = Str::upper($validated['department_keyword'] ?? $partner->keyword);
             $department->is_main = 'yes';
             $department->save();
 
@@ -143,6 +143,7 @@ class PartnerController extends Controller
 
         DB::transaction(function () use ($validated, $request, &$partner) {
             $partner->fill($validated);
+            $partner->keyword = Str::upper($partner->keyword);
             $partner->save();
 
             if ($request->hasFile('logo')) {

@@ -5,7 +5,12 @@
     </div>
 @endif
 <div class="fs-4" id="loading">
-    กำลังโหลดข้อมูล...
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>&nbsp;
+        กำลังโหลดข้อมูล...
+    </div>
 </div>
 <div id="dataTableArea" style="display: none">
     <table class="table table-bordered" id="dataTable" width="100%">

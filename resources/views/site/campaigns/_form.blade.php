@@ -12,7 +12,7 @@
     </div>
     @if ($type === 'create')
         <div class="col">
-            <x-input label="คีย์เวิร์ด" name="keyword" :value="$keyword" required max="3" min="3" />
+            <x-input label="คีย์เวิร์ด" name="keyword" :value="$keyword" required max="3" min="3" class="uppercase"/>
         </div>
     @endif
 </div>

@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ImageController;
+use App\Http\Controllers\Api\RedeemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,6 @@ use App\Http\Controllers\Api\ImageController;
 |
 */
 
-Route::group(function () {
-    Route::get('logo/{partner}', [ImageController::class, 'getImage']);
+Route::controller(RedeemController::class)->group(function () {
+    Route::get('get-detail','getDetail');
 });

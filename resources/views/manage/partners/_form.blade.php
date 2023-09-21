@@ -3,7 +3,7 @@
         <x-input label="Name" name="name" :value="$name" required />
     </div>
     <div class="col">
-        <x-input label="Keyword" name="keyword" :value="$keyword" required />
+        <x-input label="Keyword" name="keyword" :value="$keyword" required class="uppercase" />
     </div>
     <div class="col">
         <x-select label="Status" name="status" :src="['active' => 'ใช้งาน', 'inactive' => 'ไม่ใช้งาน']" :value="$status" required />

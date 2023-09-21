@@ -102,7 +102,8 @@ class CampaignController extends Controller
         DB::transaction(function () use ($validated, $request, &$campaign) {
             $campaign = new Campaign;
             $campaign->fill($validated);
-            $table_name = Str::lower("tb_{$campaign->template_type}_{$campaign->keyword}");
+            $campaign->keyword = Str::upper($campaign->keyword);
+            $table_name = Str::lower("tb_{$campaign->owner->keyword}_{$campaign->keyword}");
             $campaign->table_name = $table_name;
             $campaign->created_by = Auth::id();
             $campaign->updated_by = Auth::id();
@@ -110,21 +111,23 @@ class CampaignController extends Controller
 
 
             if (!Schema::connection('storage_code')->hasTable($table_name)) {
-                Schema::connection('storage_code')->create($table_name, function (Blueprint $table) {
+                Schema::connection('storage_code')->create($table_name, function (Blueprint $table) use ($campaign) {
                     $table->id();
-                    $table->integer('lot');
                     $table->string('refid');
-                    $table->string('privilege_keyword', 5)->index();
-                    $table->string('shop_keyword', 2)->index();
+                    $table->integer('f_id')->comment('File id in file table on arcmanagement');
+                    $table->string('partner_keyword', 10)->index();
+                    $table->string('shop_keyword', 10)->index();
+                    $table->string('privilege_keyword', 10)->index();
                     $table->string('secret_code', 12)->unique();
                     $table->string('unique_code', 20)->unique();
                     $table->string('msisdn', 11)->nullable();
                     $table->string('code');
+                    $table->string('value',5);
                     $table->dateTime('import_date');
-                    $table->dateTime('first_view_date')->nullable();
                     $table->dateTime('redeem_date')->nullable();
+                    $table->dateTime('first_view_date')->nullable();
                     $table->dateTime('expire_date')->nullable();
-                    $table->text('info');
+                    $table->text('info')->nullable();
                     $table->enum('flag', ["ok", "cancel", "deviate"]);
                     $table->enum('is_use', ["yes", "no"]);
                 });

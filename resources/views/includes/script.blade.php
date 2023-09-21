@@ -16,6 +16,10 @@
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     $(document).ready(function() {
+        $('.uppercase').keyup(function(e) {
+            const value = this.value.toUpperCase()
+            $(this).val(value);
+        });
         $('.select2').select2({
             theme: "bootstrap-5",
             dropdownAutoWidth: 'true'

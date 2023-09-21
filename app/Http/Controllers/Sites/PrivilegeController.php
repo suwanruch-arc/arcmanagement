@@ -11,6 +11,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Providers\FileServiceProvider;
 
 class PrivilegeController extends Controller
 {
@@ -35,13 +36,14 @@ class PrivilegeController extends Controller
             'shop_lists' => $this->getShopLists(),
             'start_date' => old('start_date') ?? ($model ? $model->start_date : $campaign->start_date),
             'end_date' => old('end_date') ?? ($model ? $model->end_date : $campaign->end_date),
-            'has_timer' => old('has_timer') ?? ($model ? $model->has_timer == 'yes' : 'no'),
+            'has_timer' => old('has_timer') ?? ($model ? $model->has_timer == 'yes' : false),
             'timer_value' => old('timer_value') ?? ($model ? $model->timer_value : 60),
-            'can_view' => old('can_view') ?? ($model ? $model->can_view == 'yes' : 0),
+            'skip_confirm' => old('skip_confirm') ?? ($model ? $model->skip_confirm == 'no' : false),
+            'can_view' => old('can_view') ?? ($model ? $model->can_view == 'yes' : false),
             'description' => old('description') ?? ($model ? $model->description : ''),
-            'has_detail' => old('has_detail') ?? ($model ? $model->has_detail == 'yes' : 0),
+            'has_detail' => old('has_detail') ?? ($model ? $model->has_detail == 'yes' : false),
             'detail' => old('detail') ?? ($model ? $model->detail : ''),
-            'has_tandc' => old('has_tandc') ?? ($model ? $model->has_tandc == 'yes' : 0),
+            'has_tandc' => old('has_tandc') ?? ($model ? $model->has_tandc == 'yes' : false),
             'tandc' => old('tandc') ?? ($model ? $model->tandc : ''),
             'status' => old('status') ?? ($model ? $model->status : 'active'),
             'settings' => (object) [
@@ -66,7 +68,7 @@ class PrivilegeController extends Controller
      */
     public function index(Campaign $campaign)
     {
-        $privileges = Privilege::all();
+        $privileges = $campaign->privileges;
 
         return view('site.campaigns.privileges.index', compact('privileges'))->with(compact('campaign'));
     }
@@ -96,14 +98,14 @@ class PrivilegeController extends Controller
     public function store(Request $request, Campaign $campaign)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required_if:template_type,STD|string|max:255',
             'description' => 'nullable|string',
             'value' => 'required|integer',
             'start_date' => 'required|date|date_format:Y-m-d H:i:s',
             'end_date' => [
                 'required', 'date', 'after:start_date', 'date_format:Y-m-d H:i:s',
-                Rule::unique('privileges')->where(function ($query) {
-                    return $query->where('value', request()->input('value'))->where('shop_id', request()->input('shop_id'));
+                Rule::unique('privileges')->where(function ($query) use ($campaign) {
+                    return $query->where('value', request()->input('value'))->where('shop_id', request()->input('shop_id'))->where('campaign_id', $campaign->id);
                 }),
             ],
             'default_code' => 'required|in:qrcode,barcode,textcode',
@@ -115,6 +117,7 @@ class PrivilegeController extends Controller
             'has_timer' => 'nullable',
             'timer_value' => 'required_if:has_timer,on',
             'can_view' => 'nullable',
+            'skip_confirm' => 'nullable',
             'settings' => 'array',
             'status' => 'required|in:active,inactive'
         ]);
@@ -127,6 +130,7 @@ class PrivilegeController extends Controller
 
             $privilege = new Privilege;
             $privilege->fill($validated);
+            $privilege->title = $privilege->title ?? "{$shop_keyword}_{$privilege->value}";
             $privilege->has_detail = $request->has_detail ? 'yes' : 'no';
             $privilege->has_tandc = $request->has_tandc ? 'yes' : 'no';
             $privilege->has_timer = $request->has_timer ? 'yes' : 'no';
@@ -138,6 +142,26 @@ class PrivilegeController extends Controller
             $privilege->created_by = Auth::id();
             $privilege->updated_by = Auth::id();
             $privilege->save();
+
+            $id = $privilege->id;
+            $table = $privilege->getTable();
+            $path_privilege = "privilege/{$privilege->keyword}";
+
+            if ($request->hasFile('banner')) {
+                $file_banner = $request->file('banner');
+                $field_banner = 'banner';
+
+                $path_banner = "{$path_privilege}/banner";
+                FileServiceProvider::store($file_banner, $path_banner, $id, $table,  $field_banner);
+            }
+
+            if ($request->hasFile('template')) {
+                $file_template = $request->file('template');
+                $field_template = 'template';
+
+                $path_template = "{$path_privilege}/template";
+                FileServiceProvider::store($file_template, $path_template, $id, $table,  $field_template);
+            }
         });
 
         $name = $privilege->title;
@@ -184,14 +208,14 @@ class PrivilegeController extends Controller
     public function update(Request $request, Campaign $campaign, Privilege $privilege)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required_if:template_type,STD|string|max:255',
             'description' => 'nullable|string',
             'value' => 'required|integer',
             'start_date' => 'required|date|date_format:Y-m-d H:i:s',
             'end_date' => [
                 'required', 'date', 'after:start_date', 'date_format:Y-m-d H:i:s',
-                Rule::unique('privileges')->where(function ($query) use ($privilege) {
-                    return $query->where('value', request()->input('value'))->where('shop_id', request()->input('shop_id'))->where('id', '<>', $privilege->id);
+                Rule::unique('privileges')->where(function ($query) use ($campaign, $privilege) {
+                    return $query->where('campaign_id', $campaign->id)->where('value', request()->input('value'))->where('shop_id', request()->input('shop_id'))->where('id', '<>', $privilege->id);
                 }),
             ],
             'default_code' => 'required|in:qrcode,barcode,textcode',
@@ -203,6 +227,7 @@ class PrivilegeController extends Controller
             'has_timer' => 'nullable',
             'timer_value' => 'required_if:has_timer,on',
             'can_view' => 'nullable',
+            'skip_confirm' => 'nullable',
             'settings' => 'array',
             'status' => 'required|in:active,inactive'
         ]);
@@ -211,6 +236,7 @@ class PrivilegeController extends Controller
             $settings = json_encode($request->settings);
 
             $privilege->fill($validated);
+            $privilege->title = $privilege->title ?? "{$shop_keyword}_{$privilege->value}";
             $privilege->has_detail = $request->has_detail ? 'yes' : 'no';
             $privilege->has_tandc = $request->has_tandc ? 'yes' : 'no';
             $privilege->has_timer = $request->has_timer ? 'yes' : 'no';
@@ -218,6 +244,26 @@ class PrivilegeController extends Controller
             $privilege->settings = $settings ?? null;
             $privilege->updated_by = Auth::id();
             $privilege->save();
+
+            $id = $privilege->id;
+            $table = $privilege->getTable();
+            $path_privilege = "privilege/{$privilege->keyword}";
+
+            if ($request->hasFile('banner')) {
+                $file_banner = $request->file('banner');
+                $field_banner = 'banner';
+
+                $path_banner = "{$path_privilege}/banner";
+                FileServiceProvider::update($file_banner, $path_banner, $id, $table,  $field_banner);
+            }
+
+            if ($request->hasFile('template')) {
+                $file_template = $request->file('template');
+                $field_template = 'template';
+
+                $path_template = "{$path_privilege}/template";
+                FileServiceProvider::update($file_template, $path_template, $id, $table,  $field_template);
+            }
         });
 
         $name = $privilege->title;
@@ -243,9 +289,9 @@ class PrivilegeController extends Controller
     // $campaign, $validated
     public function getKeyword($keyword)
     {
-        $length = 3;
+        $length = 4;
         $unique_keyword = Str::random($length);
-        $f_keyword = Str::lower("{$keyword}{$unique_keyword}");
+        $f_keyword = Str::upper("{$keyword}{$unique_keyword}");
         if (Privilege::whereKeyword($f_keyword)->count() > 0) {
             $this->getKeyword($keyword);
         }

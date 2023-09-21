@@ -29,10 +29,7 @@
                                                         @foreach ($item as $value)
                                                             <li>{{ $value }} ฿ <span data-bs-toggle="tooltip"
                                                                     data-bs-title="Value" class="text-black-50"
-                                                                    data-feather="alert-circle"></span>&nbsp;<span role="button"
-                                                                    class="text-primary" data-feather="copy"
-                                                                    onclick="copyKeyword('{{ $shop_keyword }}','{{ $value }}','{{ $expire }}')"></span>
-                                                            </li>
+                                                                    data-feather="alert-circle"></span></li>
                                                         @endforeach
                                                     </ul>
                                                 @endforeach
@@ -41,9 +38,6 @@
                                     </li>
                                 @endforeach
                             </ul>
-                            <p class="text-center mt-3">
-                                Mobile | Code | Keyword | Value | Expire
-                            </p>
                         @break
 
                         @case('CTM')
@@ -66,9 +60,6 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <p class="text-center mt-3">
-                                Mobile | Code | Template
-                            </p>
                         @break
                     @endswitch
                 </div>
@@ -81,8 +72,6 @@
                         <div class="col">
                             <form method="post" action="./upload" enctype="multipart/form-data">
                                 @csrf
-                                <input type="file" name="filepond" id="filepond" class="my-pond" />
-                                <hr>
                                 <div class="form-group">
                                     <label class="form-label">ประเภทการคั่นข้อมูล : </label>
                                     @php($type_split_data = ['|', '-', ':', ';', ',', '.', '\'', '"'])
@@ -96,41 +85,52 @@
                                         </div>
                                     @endforeach
                                 </div>
+                                <hr>
+                                <input type="file" name="filepond" id="filepond" class="my-pond" />
+                                <hr>
+                                <p class="text-center">
+                                    @switch($campaign->template_type)
+                                        @case('STD')
+                                            Mobile | Code | Keyword | Value | Expire
+                                        @break
+
+                                        @case('CTM')
+                                            Mobile | Code | Template
+                                        @break
+                                    @endswitch
+                                </p>
                             </form>
                         </div>
                         <div class="col">
                             <div class="card bg-light border shadow-none" style="height: 215px">
                                 <div class="card-body text-monospace p-2 overflow-auto" id="console_log">
-                                    <ul id="result" class="hide-dot"></ul>
+                                    <ul id="result"></ul>
+                                </div>
+                                <div id="card_footer" class="card-footer">
+                                    <small>Status : <span id="status">Choose file</span></small>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="button" class="btn btn-info" id="btn-format" onclick="checkFormat()"
-                        style="display:none">
-                        <span data-feather="search"></span> Check format
+                    <button type="button" class="btn btn-info" id="btn-format" >
+                        Check format
                     </button>
-                    <button type="button" class="btn btn-primary" id="btn-generate" onclick="generate()"
-                        style="display:none">
-                        <span data-feather="terminal"></span> Generate
+                    <button type="button" class="btn btn-primary" id="btn-generate" >
+                        Generate
                     </button>
-                    <button type="button" class="btn btn-outline-success" id="btn-copy-data" onclick="copyData()"
-                        style="display:none">
-                        <span data-feather="copy"></span> Copy Data
+                    <button type="button" class="btn btn-outline-secondary" id="btn-copy-data" >
+                        Copy Data
                     </button>
-                    <button type="button" class="btn btn-outline-warning text-orange" id="btn-copy-sql" onclick="copySql()"
-                        style="display:none">
-                        <span data-feather="copy"></span> Copy SQL
+                    <button type="button" class="btn btn-outline-secondary" id="btn-copy-sql" >
+                        Copy SQL
                     </button>
-                    <button type="button" class="btn btn-success" id="btn-export-data" onclick="exportData()"
-                        style="display:none">
-                        <span data-feather="share"></span> Export Data
+                    <button type="button" class="btn btn-primary" id="btn-export-data" >
+                        Export Data
                     </button>
-                    <button type="button" class="btn btn-warning" id="btn-export-sql" onclick="exportSql()"
-                        style="display:none">
-                        <span data-feather="share"></span> Export SQL
+                    <button type="button" class="btn btn-warning" id="btn-export-sql" >
+                        Export SQL
                     </button>
                 </div>
             </div>
@@ -150,18 +150,10 @@
                             </li>
                         </ul>
                         <div class="tab-content" id="myTabContent">
-                            <div class="py-3 tab-pane fade show active" id="data-tab-pane" role="tabpanel"
+                            <div class="tab-pane fade show active" id="data-tab-pane" role="tabpanel"
                                 aria-labelledby="data-tab" tabindex="0">
-                                <table class="table table-bordered" id="table-generate">
-                                    <thead>
-                                        <tr>
-                                            <th>Mobile</th>
-                                            <th>Code</th>
-                                            <th>Secret code</th>
-                                            <th>Unique code</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                <table class="table ">
+                                    <tbody id="table-generate">
 
                                     </tbody>
                                 </table>
@@ -187,17 +179,11 @@
             responsive: true,
             paging: false
         });
-
-        $('#table-generate').dataTable({
-            dom: 'ft',
-            ordering: false,
-            paging: false
-        });
-
         const formData = new FormData();
         formData.append('_token', '{{ csrf_token() }}');
         formData.append('type_split_data', $('[name=type_split_data]:checked').val());
-        const pond = FilePond.create(document.getElementById('filepond'), {
+        const inputElement = document.getElementById('filepond');
+        const pond = FilePond.create(inputElement, {
             server: {
                 url: "{{ route('site.warehouse.upload', $campaign->id) }}",
                 process: {
@@ -207,40 +193,53 @@
                         return formData;
                     },
                 },
-                revert: null,
             },
             instantUpload: true
         });
 
-        pond.on('addfilestart', (error) => {
-            clr('#result');
-            showConsole('กำลังอ่านไฟล์...')
-        });
+        var pond_ids = [];
 
-        pond.on('processfilestart', (error) => {
-            showConsole('กำลังอัพโหลดไฟล์...')
-        });
+        if (pond.getFiles().length != 0) { // "pond" is an object, created by FilePond.create
+            pond.getFiles().forEach(function(file) {
+                pond_ids.push(file.id);
+            });
+        }
 
         pond.on('processfile', (error) => {
             if (!error) {
-                showConsole('อัพโหลดไฟล์เสร็จสิ้น')
-                $('#btn-format').show()
+                $('#table-generate').empty();
+                $('#sql-result').empty();
+                $('#btn-format').show().prop('disabled', false);
+                $('#btn-generate').hide().prop('disabled', false);
+                $('#btn-export-data').hide();
+                $('#btn-export-sql').hide();
+                $('#btn-copy-data').hide();
+                $('#btn-copy-sql').hide();
             }
         });
 
-        pond.on('removefile', () => {
-            clr('#result');
+        pond.on('updatefiles', (e) => {
+            $('#table-generate').empty();
+            $('#sql-result').empty();
+            $('#btn-format').hide().prop('disabled', false);
+            $('#btn-generate').hide().prop('disabled', false);
+            $('#btn-export-data').hide();
+            $('#btn-export-sql').hide();
+            $('#btn-copy-data').hide();
+            $('#btn-copy-sql').hide();
         });
 
-        function checkFormat() {
-            showConsole('กำลังตรวจสอบไฟล์...')
+        $('#btn-format').on('click', function() {
+            $('#btn-format').removeClass('wave').html('Checking...').prop('disabled', true);
+            $('#status').html('File loaded');
+
             $.ajax({
                 url: "{{ route('site.warehouse.check-format', $campaign->id) }}",
                 type: 'POST',
                 data: formData,
                 processData: false,
                 contentType: false,
-                dataType: "JSON",
+                dataType: 'JSON',
                 success: function(res) {
                     clr('#result');
                     if (res.error) {
@@ -252,67 +251,155 @@
                         } else {
                             showConsole(res.error, 'danger');
                         }
+                        $('#btn-format').hide().prop('disabled', false);
+                        pond.removeFiles(pond_ids);
                     } else {
-                        if (res.status) {
+                        if (res.status === 'ok') {
                             showConsole(res.msg, 'success');
+                            $('#status').html('Ok');
+                            $('#btn-format').hide().addClass('wave').prop('disabled', false);
+                            $('#btn-generate').show();
                         }
                     }
+
+                },
+                error: function(xhr, status, error) {
+                    $('#btn-format').addClass('wave').prop('disabled', false);
+                },
+                complete: function() {
+                    $('#btn-format').html('Check format')
                 }
             });
-        }
+        });
 
-        function generate() {
-            showConsole('กำลังสร้างข้อมูล...')
+        $('#btn-generate').on('click', function() {
+            $(this).html('Generating...')
+                .removeClass('wave').prop('disabled', true);
+
             $.ajax({
                 url: "{{ route('site.warehouse.generate', $campaign->id) }}",
                 type: 'POST',
                 data: formData,
                 processData: false,
                 contentType: false,
-                dataType: "JSON",
+                dataType: 'JSON',
                 success: function(res) {
                     clr('#result');
-                    $('#table-generate tbody').empty();
+                    $('#table-generate').empty();
                     $('#sql-result').empty();
-                    $.each(res.data, function(indexInArray, data) {
+                    $.each(res, function(indexInArray, data) {
                         let row = '<tr>';
                         row += '<td>' + data.mobile + '</td>';
                         row += '<td>' + data.code + '</td>';
                         row += '<td>' + data.secret_code + '</td>';
-                        row += '<td>' + data.unique_code + '</td>';
+                        row += '<td>' + data.unique + '</td>';
                         row += '</tr>';
                         $('#table-generate').append(row);
                         $('#sql-result').append(data.sql + '<br>');
                     });
+                    $('#btn-generate').hide().prop('disabled', false);
+                    $('#btn-export-data').show();
+                    $('#btn-export-sql').show();
+                    $('#btn-copy-data').show();
+                    $('#btn-copy-sql').show();
+                },
+                error: function(xhr, status, error) {
+                    $('#btn-generate').addClass('wave').prop('disabled', false);
+                },
+                complete: function() {
+                    $('#btn-generate').html('Generate').addClass('wave').prop('disabled', false);
                 }
             });
-        }
+        });
 
-        function copyKeyword(keyword, value, expire) {
-            let type = $('[name=type_split_data]:checked').val()
-            let text = keyword + type + value + type + expire
-            var $tempInput = $("<input>");
-            $("body").append($tempInput);
-            $tempInput.val(text).select();
-            document.execCommand("copy");
-            $tempInput.remove();
-        }
+        $('#btn-copy-data').click(function() {
+            var table = $("#table-generate")[0];
+
+            // Create a range to select the table
+            var range = document.createRange();
+            range.selectNode(table);
+
+            // Select the range
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+
+            // Copy the selected content to clipboard
+            try {
+                document.execCommand("copy");
+                alert("Table copied to clipboard!");
+            } catch (err) {
+                console.error("Unable to copy table to clipboard: ", err);
+            }
+
+            // Deselect the range
+            window.getSelection().removeAllRanges();
+        })
+
+        $('#btn-copy-sql').click(function() {
+            var preElement = $("#sql-result");
+            preElement.select();
+
+            // Copy the selected text to clipboard
+            try {
+                document.execCommand("copy");
+                alert("Text copied to clipboard!");
+            } catch (err) {
+                console.error("Unable to copy text to clipboard: ", err);
+            }
+
+            // Deselect the text
+            window.getSelection().removeAllRanges();
+        })
 
         function clr(id) {
             $(id).empty();
         }
 
-        function showConsole(msg, color = "secondary") {
+        function showConsole(msg, color) {
             $('#result').append("<li><span class='text-" + color + "'>" + msg + "</span></li>");
         }
+
+        $(document).ajaxStart(function() {
+            $("#status").html('Loading...');
+        });
     </script>
 @endsection
 
 @section('css')
     <style>
-        .hide-dot {
-            list-style-type: none;
-            padding-left: 0px;
+        .wave {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wave::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -3px;
+            right: -3px;
+            bottom: -1px;
+            border: 3px solid #ffffff;
+            border-radius: 10px;
+            opacity: 0;
+            transform-origin: center;
+            animation: wave-animation 1s linear infinite;
+        }
+
+        @keyframes wave-animation {
+            0% {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
         }
     </style>
 @endsection

@@ -36,4 +36,9 @@ class Department extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function campaigns()
+    {
+        return $this->hasMany(Campaign::class,'owner_id');
+    }
 }

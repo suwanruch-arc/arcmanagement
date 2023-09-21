@@ -83,3 +83,11 @@ table tbody tr:last-child td:last-child {
 #dataTable > thead > tr.filters > th:not(.search) > input.form-control {
     display: none;
 }
+
+.img-preview:hover {
+    transform: scale(5);
+    transform-origin: left;
+    z-index: 16 !important;
+    position: fixed;
+    left: 22rem;
+}

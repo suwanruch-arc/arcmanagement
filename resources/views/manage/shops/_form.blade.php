@@ -2,12 +2,10 @@
     <div class="col">
         <x-input label="ชื่อร้าน" name="name" :value="$name" required />
     </div>
-    <div class="col">
-        <x-input label="คีย์เวิร์ด" name="keyword" :value="$keyword" required max="3" min="3" />
-    </div>
-</div>
 
-<div class="row row-cols-1 row-cols-md-2">
+    <div class="col">
+        <x-input label="คีย์เวิร์ด" name="keyword" :value="$keyword" required max="3" min="3" class="uppercase"/>
+    </div>
     <div class="col">
         <x-select label="สถานะ" name="status" :src="['active' => 'ใช้งาน', 'inactive' => 'ไม่ใช้งาน']" :value="$status" required />
     </div>

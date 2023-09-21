@@ -10,6 +10,7 @@ use App\Models\Warehouse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\File as FileModel;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
@@ -17,11 +18,6 @@ use Illuminate\Support\Facades\Crypt;
 
 class WarehouseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Campaign $campaign)
     {
         $uniques = $campaign->uniques ?? [];
@@ -29,32 +25,33 @@ class WarehouseController extends Controller
         return view('site.warehouse.index', compact('campaign'))->with(compact('uniques'));
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function import(Campaign $campaign)
     {
-        $privileges = $campaign->privileges;
         $privilege_list = [];
-        foreach ($privileges as $key => $privilege) {
-            $end_date = date('Y-m-d', strtotime($privilege->end_date));
-            $privilege_list[$privilege->shop->keyword]['title'] = $privilege->shop->name;
-            $privilege_list[$privilege->shop->keyword]['list'][$end_date][] = $privilege->value;
+        $templates = [];
+        $privileges = $campaign->privileges;
+        switch ($campaign->template_type) {
+            case 'STD':
+                foreach ($privileges as $key => $privilege) {
+                    $end_date = date('Y-m-d', strtotime($privilege->end_date));
+                    $privilege_list[$privilege->shop->keyword]['title'] = $privilege->shop->name;
+                    $privilege_list[$privilege->shop->keyword]['list'][$end_date][] = $privilege->value;
+                }
+                break;
+
+            case 'CTM':
+                foreach ($privileges as $key => $privilege) {
+                    $templates[$privilege->id]['expire'] = date('Y-m-d', strtotime($privilege->end_date));
+                    $templates[$privilege->id]['value'] = $privilege->value;
+                    $templates[$privilege->id]['template'] = FileModel::where('table_id', $privilege->id)->where('table_name', 'privileges')->value('origin_name');
+                }
+                break;
         }
 
-        return view('site.warehouse._form', compact('campaign'))->with('privileges', $privilege_list);
+
+        return view('site.warehouse._form', compact('campaign'))->with('privileges', $privilege_list)->with('templates', $templates);
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function upload(Request $request, Campaign $campaign)
     {
         $uuid = base64_encode(auth()->id());
@@ -78,127 +75,228 @@ class WarehouseController extends Controller
 
     public function checkFormat(Request $request, Campaign $campaign)
     {
-        $uuid = base64_encode(auth()->id());
+        $res['status'] = true;
         $type = $request->type_split_data;
-        $temp_path_file = storage_path("temp_file/{$campaign->keyword}/file_{$uuid}.tmp");
-        $temp_file_encrypt = File::get($temp_path_file);
-        $temp_file_content = Crypt::decrypt($temp_file_encrypt);
-
-        $privilege_list = [];
-        if ($campaign->privileges) {
-            foreach ($campaign->privileges as $privilege) {
-                $end_date = date('Y-m-d', strtotime($privilege->end_date));
-                $privilege_list[$privilege->shop->keyword][$end_date][] = $privilege->value;
-            }
-        }
-
-        $db_code = DB::connection('storage_code')->table($campaign->table_name)->where(['flag' => ['ok', 'deviate']])->pluck('code')->toArray();
-        $already_code = [];
+        $temp_file_content = $this->getFileTemp($campaign->keyword);
         if ($temp_file_content) {
             $contents = explode("\r\n",  $temp_file_content);
-            foreach ($contents as $key => $data) {
-                $line = $key + 1;
-                $split_data = explode($type, $data);
+            $db_code = DB::connection('storage_code')->table($campaign->table_name)->where(['flag' => ['ok', 'deviate']])->pluck('code')->toArray();
+            list($total, $already_code) = [0, []];
+            switch ($campaign->template_type) {
+                case 'STD':
+                    $privilege_list = $this->getPrivilegeList($campaign);
+                    foreach ($contents as $key => $data) {
+                        $line = $key + 1;
+                        $split_data = explode($type, $data);
 
-                if (count($split_data) < 5) {
-                    $res['error'][$line] = 'Format ไฟล์ไม่ถูกต้อง';
-                } else {
-                    list($mobile, $code, $keyword, $value, $expire) = $split_data;
-                    $expire = date('Y-m-d', strtotime($expire));
-                    if (!preg_match('/^([0]{1}|[66]{2})(6|7|8|9){1}[0-9]{8}$/', $mobile)) {
-                        $res['error'][$line] = "เบอร์โทรศัพท์ไม่ถูกต้อง ~ {$mobile}";
-                        continue;
-                    }
+                        if (count($split_data) < 5 || count($split_data) > 5) {
+                            $res['error'][$line] = 'Format ไฟล์ไม่ถูกต้อง';
+                        } else {
+                            $total++;
+                            list($mobile, $code, $keyword, $value, $expire) = $split_data;
+                            $expire = date('Y-m-d', strtotime($expire));
 
-                    if (in_array($code, $already_code)) {
-                        $res['error'][$line] = "โค้ดซ้ำในไฟล์ที่นำเข้า ~ {$code}";
-                        continue;
-                    }
+                            if (!preg_match('/^([0]{1}|[66]{2})(6|7|8|9){1}[0-9]{8}$/', $mobile)) {
+                                $res['error'][$line] = "เบอร์โทรศัพท์ไม่ถูกต้อง ~ {$mobile}";
+                                continue;
+                            }
 
-                    if (in_array($code, $db_code)) {
-                        $res['error'][$line] = "โค้ดซ้ำในในระบบ ~ {$code}";
-                        continue;
-                    }
+                            if (in_array($code, $already_code)) {
+                                $res['error'][$line] = "โค้ดซ้ำในไฟล์ที่นำเข้า ~ {$code}";
+                                continue;
+                            }
 
-                    if (!isset($privilege_list[$keyword][$expire]) || !in_array($value, $privilege_list[$keyword][$expire])) {
-                        $res['error'][$line] = "ไม่พบข้อมูล ~ {$keyword}{$type}{$value}{$type}{$expire}";
-                        continue;
+                            if (in_array($code, $db_code)) {
+                                $res['error'][$line] = "โค้ดซ้ำในในระบบ ~ {$code}";
+                                continue;
+                            }
+
+                            if (!isset($privilege_list[$keyword][$expire]) || !isset($privilege_list[$keyword][$expire][$value])) {
+                                $res['error'][$line] = "ไม่พบข้อมูล ~ {$keyword}{$type}{$value}{$type}{$expire}";
+                                continue;
+                            }
+                            array_push($already_code, $code);
+                        }
                     }
-                }
-                array_push($already_code, $code);
+                    break;
+                case 'CTM':
+                    $template_list = $this->getTemplateList($campaign);
+                    foreach ($contents as $key => $data) {
+                        $line = $key + 1;
+                        $split_data = explode($type, $data);
+
+                        if (count($split_data) < 3 || count($split_data) > 3) {
+                            $res['error'][$line] = 'Format ไฟล์ไม่ถูกต้อง';
+                        } else {
+                            $total++;
+                            list($mobile, $code, $template) = $split_data;
+                            if (!preg_match('/^([0]{1}|[66]{2})(6|7|8|9){1}[0-9]{8}$/', $mobile)) {
+                                $res['error'][$line] = "เบอร์โทรศัพท์ไม่ถูกต้อง ~ {$mobile}";
+                                continue;
+                            }
+
+                            if (in_array($code, $already_code)) {
+                                $res['error'][$line] = "โค้ดซ้ำในไฟล์ที่นำเข้า ~ {$code}";
+                                continue;
+                            }
+
+                            if (in_array($code, $db_code)) {
+                                $res['error'][$line] = "โค้ดซ้ำในในระบบ ~ {$code}";
+                                continue;
+                            }
+
+                            if (!collect($template_list)->contains('template', $template)) {
+                                $res['error'][$line] = "ไม่พบข้อมูล - {$template}";
+                                continue;
+                            }
+                            array_push($already_code, $code);
+                        }
+                    }
+                    break;
             }
             if (!isset($res['error'])) {
-                $res['msg'] = 'Format ถูกต้องสามารถอัพโหลดไฟล์ได้';
+                $total_text = number_format($total, 0);
+                $res['msg'] = "{$total_text} รายการที่สามารถ Generate ได้";
             }
         } else {
-            $res['error'] = 'ไม่พบไฟล์';
+            $res['status'] = false;
         }
-
-        $res['status'] = isset($res['error']) ? 'error' : 'ok';
 
         return response()->json($res);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Warehouse  $warehouse
-     * @return \Illuminate\Http\Response
-     */
     public function generate(Request $request, Campaign $campaign)
     {
-        $uuid = base64_encode(auth()->id());
+        $res['status'] = true;
+
+        $now = date('YmdHis');
         $type = $request->type_split_data;
-        $temp_path_file = storage_path("temp_file/{$campaign->keyword}/file_{$uuid}.tmp");
-        $temp_file_encrypt = File::get($temp_path_file);
-        $temp_file_content = Crypt::decrypt($temp_file_encrypt);
-
-        $result = [];
+        $refid = "{$campaign->keyword}@{$now}";
+        $temp_file_content = $this->getFileTemp($campaign->keyword);
         if ($temp_file_content) {
-            $unique_data = DB::connection('storage_code')->table($campaign->table_name)->where(['flag' => ['ok', 'deviate']])->pluck('unique_code', 'secret_code');
-            $already_secret = $unique_data->keys();
-            $already_unique = $unique_data->values();
+            $unique_data = DB::connection('storage_code')->table($campaign->table_name)->where(['flag' => ['ok', 'deviate']])->pluck('unique_code', 'secret_code')->toArray();
+            [$already_secret, $already_unique] = Arr::divide($unique_data);
+            $privilege_list = $this->getPrivilegeList($campaign);
+            $template_list = $this->getTemplateList($campaign);
             $contents = explode("\r\n",  $temp_file_content);
-            $sql = "INSERT INTO `tb_std_wdl` SET ";
-            foreach ($contents as $key => $content) {
-                $insert = [];
-                list($mobile, $code, $keyword, $value, $expire) = explode($type, $content);
 
-                $mobile = Str::padLeft(Str::substr($mobile, -9), 11, '66');
-                $expire = date('Y-m-d 23:59:59', strtotime($expire));
-
-                $unique = $this->getUnique($already_secret);
+            foreach ($contents as $key => $data) {
+                $split_data = explode($type, $data);
+                switch ($campaign->template_type) {
+                    case 'STD':
+                        list($mobile, $code, $shop_keyword, $value, $expire) = $split_data;
+                        $privilege_keyword = $privilege_list[$shop_keyword][$expire][$value];
+                        break;
+                    case 'CTM':
+                        list($mobile, $code, $template) = $split_data;
+                        $templates = collect($template_list)->firstWhere('template', $template);
+                        $f_id = $templates['f_id'];
+                        $privilege_keyword = $templates['privilege_keyword'];
+                        $shop_keyword = $templates['shop_keyword'];
+                        $value = $templates['value'];
+                        $expire = $templates['expire'];
+                        break;
+                }
+                $unique_keyword = $this->randomUpperLower($shop_keyword . Str::substr($privilege_keyword, -4));
                 $secret_code =  $this->getSecretCode($campaign->keyword, $already_unique);
-                $result[$key]['mobile'] = $mobile;
-                $result[$key]['code'] = $code;
-                $result[$key]['unique'] = $unique;
-                $result[$key]['secret_code'] = $secret_code;
+                $unique = $this->getUnique($unique_keyword, $already_secret);
 
-                $insert['lot'] = '';
-                $insert['refid'] = '';
-                $insert['campaign_keyword'] = '';
-                $insert['shop_keyword'] = '';
-                $insert['secret_code'] = '';
-                $insert['unique_code'] = '';
-                $insert['msisdn'] = '';
-                $insert['code'] = '';
-                $insert['import_date'] = '';
-                $insert['expire_date'] = '';
-                $insert['info'] = '';
-                $insert['flag'] = '';
-                $insert['is_use'] = '';
+                $res['data'][$key]['mobile'] = $mobile;
+                $res['data'][$key]['code'] = $code;
+                $res['data'][$key]['secret_code'] = $secret_code;
+                $res['data'][$key]['unique_code'] = $this->getPathRedeem($campaign->owner->keyword, $campaign->keyword, $unique);
+
+                $insert = [
+                    'f_id'              => $f_id ?? 0,
+                    'refid'             => "'$refid'",
+                    'partner_keyword'   => "'{$campaign->owner->keyword}'",
+                    'privilege_keyword' => "'{$privilege_keyword}'",
+                    'shop_keyword'      => "'{$shop_keyword}'",
+                    'secret_code'       => "'{$secret_code}'",
+                    'unique_code'       => "'{$unique}'",
+                    'msisdn'            => "'{$mobile}'",
+                    'code'              => "'{$code}'",
+                    'value'             => "'{$value}'",
+                    'import_date'       => "now()",
+                    'expire_date'       => "'{$expire}'",
+                    'flag'              => "'ok'",
+                    'is_use'            => "'no'",
+                ];
+
+                $condition = implode(', ', array_map(function ($key, $value) {
+                    return "$key = $value";
+                }, array_keys($insert), $insert));
+
+                $res['data'][$key]['sql'] = "INSERT INTO `{$campaign->table_name}` SET {$condition};";
             }
+        } else {
+            $res['status'] = false;
         }
-
-        return response()->json($result);
+        return response()->json($res);
     }
 
-    public function getUnique($arr)
+    public function randomUpperLower($string)
     {
-        $unique = Str::random(16);
-        $has_data = $arr->contains($unique);
+        $text = '';
+        foreach (str_split($string) as $char) {
+            if (rand(0, 1)) {
+                $text .= strtoupper($char);
+            } else {
+                $text .= strtolower($char);
+            }
+        }
+        return $text;
+    }
+
+    public function getPrivilegeList($campaign)
+    {
+        foreach ($campaign->privileges as $privilege) {
+            $end_date = date('Y-m-d', strtotime($privilege->end_date));
+            $privilege_list[$privilege->shop->keyword][$end_date][$privilege->value] = $privilege->keyword;
+        }
+
+        return $privilege_list ?? [];
+    }
+
+    public function getTemplateList($campaign)
+    {
+        $campaign->privileges->map(function ($privilege, $key) use (&$templates) {
+            $template_file = FileModel::where(['table_id' => $privilege->id, 'table_name' => 'privileges', 'status' => 'active'])->pluck('origin_name', 'id')->toArray();
+            [$keys, $values] = Arr::divide($template_file);
+            $templates[$privilege->id] = [
+                'f_id' => $keys[0],
+                'p_id' => $privilege->id,
+                'privilege_keyword' => $privilege->keyword,
+                'shop_keyword' => $privilege->shop->keyword,
+                'template' => $values[0],
+                'value' => $privilege->value,
+                'expire' => date('Y-m-d', strtotime($privilege->end_date))
+            ];
+            return $privilege;
+        });
+
+        return $templates ?? [];
+    }
+
+    public function getFileTemp($keyword)
+    {
+        $uuid = base64_encode(auth()->id());
+        $temp_path_file = storage_path("temp_file/{$keyword}/file_{$uuid}.tmp");
+        $temp_file_encrypt = File::get($temp_path_file);
+        return Crypt::decrypt($temp_file_encrypt);
+    }
+
+    public function getPathRedeem($owner_keyword, $campaign_keyword, $unique_code)
+    {
+        return env('APP_URL_REDEEM') . Str::lower("{$owner_keyword}/{$campaign_keyword}/") . $unique_code;
+    }
+
+    public function getUnique($keyword, $arr)
+    {
+        $unique = $keyword . Str::random(7);
+        $has_data = collect($arr)->contains($unique);
         if ($has_data) {
-            $this->getUnique($arr);
+            $this->getUnique($keyword, $arr);
         }
         return $unique;
     }
@@ -206,7 +304,7 @@ class WarehouseController extends Controller
     {
 
         $secret_code = $this->genSecrectCode($keyword);
-        $has_data = $arr->contains($secret_code);
+        $has_data = collect($arr)->contains($secret_code);
         if ($has_data) {
             $this->getSecretCode($keyword, $arr);
         }

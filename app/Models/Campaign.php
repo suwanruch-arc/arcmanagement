@@ -41,4 +41,5 @@ class Campaign extends Model
     {
         return $this->hasMany(Privilege::class);
     }
+
 }

@@ -13,6 +13,7 @@
                     <tr>
                         <th class="search">Name</th>
                         <th class="search">Keyword</th>
+                        <th class="search">Table Name</th>
                         <th class="search">Template Type</th>
                         <th class="search">Owner</th>
                         <th width="1%">Status</th>
@@ -24,6 +25,7 @@
                         <tr>
                             <td>{{ $campaign->name }}</td>
                             <td>{{ $campaign->keyword }}</td>
+                            <td>{{ $campaign->table_name }}</td>
                             <td>{{ $campaign->template_type }}</td>
                             <td>{{ $campaign->owner->name }}</td>
                             <td class="text-center align-middle">
