@@ -116,19 +116,19 @@
                         style="display:none">
                         <span data-feather="terminal"></span> Generate
                     </button>
-                    <button type="button" class="btn btn-outline-success" id="btn-copy-data" onclick="copyData()"
+                    <button type="button" class="btn btn-outline-success btn-copy" id="btn-copy-data" onclick="copyData()"
                         style="display:none">
                         <span data-feather="copy"></span> Copy Data
                     </button>
-                    <button type="button" class="btn btn-outline-warning text-orange" id="btn-copy-sql" onclick="copySql()"
-                        style="display:none">
+                    <button type="button" class="btn btn-outline-warning text-orange btn-copy" id="btn-copy-sql"
+                        onclick="copySql()" style="display:none">
                         <span data-feather="copy"></span> Copy SQL
                     </button>
-                    <button type="button" class="btn btn-success" id="btn-export-data" onclick="exportData()"
+                    <button type="button" class="btn btn-success btn-export" id="btn-export-data" onclick="exportData()"
                         style="display:none">
                         <span data-feather="share"></span> Export Data
                     </button>
-                    <button type="button" class="btn btn-warning" id="btn-export-sql" onclick="exportSql()"
+                    <button type="button" class="btn btn-warning btn-export" id="btn-export-sql" onclick="exportSql()"
                         style="display:none">
                         <span data-feather="share"></span> Export SQL
                     </button>
@@ -215,6 +215,12 @@
         pond.on('addfilestart', (error) => {
             clr('#result');
             showConsole('กำลังอ่านไฟล์...')
+            $('#btn-format').hide().attr('disabled', false)
+            $('#btn-generate').hide().attr('disabled', false)
+            $('.btn-copy').hide()
+            $('.btn-export').hide()
+            $('#table-generate tbody').empty();
+            $('#sql-result').empty();
         });
 
         pond.on('processfilestart', (error) => {
@@ -230,10 +236,17 @@
 
         pond.on('removefile', () => {
             clr('#result');
+            $('#btn-format').hide().attr('disabled', false)
+            $('#btn-generate').hide().attr('disabled', false)
+            $('.btn-copy').hide()
+            $('.btn-export').hide()
+            $('#table-generate tbody').empty();
+            $('#sql-result').empty();
         });
 
         function checkFormat() {
             showConsole('กำลังตรวจสอบไฟล์...')
+            $('#btn-format').attr('disabled', true)
             $.ajax({
                 url: "{{ route('site.warehouse.check-format', $campaign->id) }}",
                 type: 'POST',
@@ -252,9 +265,13 @@
                         } else {
                             showConsole(res.error, 'danger');
                         }
+                        $('#btn-format').hide().attr('disabled', false)
+                        $('#btn-generate').hide().attr('disabled', false)
                     } else {
                         if (res.status) {
                             showConsole(res.msg, 'success');
+                            $('#btn-format').hide().attr('disabled', false)
+                            $('#btn-generate').show()
                         }
                     }
                 }
@@ -263,6 +280,7 @@
 
         function generate() {
             showConsole('กำลังสร้างข้อมูล...')
+            $('#btn-generate').attr('disabled', true)
             $.ajax({
                 url: "{{ route('site.warehouse.generate', $campaign->id) }}",
                 type: 'POST',
@@ -272,6 +290,9 @@
                 dataType: "JSON",
                 success: function(res) {
                     clr('#result');
+                    $('#btn-generate').hide().attr('disabled', false)
+                    $('.btn-copy').show()
+                    $('.btn-export').show()
                     $('#table-generate tbody').empty();
                     $('#sql-result').empty();
                     $.each(res.data, function(indexInArray, data) {

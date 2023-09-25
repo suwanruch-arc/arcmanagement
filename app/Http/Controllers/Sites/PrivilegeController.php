@@ -48,8 +48,8 @@ class PrivilegeController extends Controller
             'status' => old('status') ?? ($model ? $model->status : 'active'),
             'settings' => (object) [
                 'font-size' => 0,
-                'top' => 0,
-                'left' => 0,
+                'w' => 0,
+                'h' => 0,
                 'row-1' => 0,
                 'row-2' => 0,
                 'col-1' => 0,
@@ -122,7 +122,7 @@ class PrivilegeController extends Controller
             'status' => 'required|in:active,inactive'
         ]);
         DB::transaction(function () use ($validated, $request, $campaign, &$privilege) {
-            $settings = json_encode($request->settings);
+            $settings = json_encode($request->settings ?? []);
 
             $campaign_keyword = $campaign->keyword;
             $shop_keyword = Shop::whereId($request->shop_id)->value('keyword');
@@ -138,7 +138,7 @@ class PrivilegeController extends Controller
             $privilege->campaign_id = $campaign->id;
             $privilege->keyword = $this->getKeyword($keyword);
             $privilege->lot = $this->getLot($validated);
-            $privilege->settings = $settings ?? null;
+            $privilege->settings = $settings;
             $privilege->created_by = Auth::id();
             $privilege->updated_by = Auth::id();
             $privilege->save();
@@ -233,7 +233,7 @@ class PrivilegeController extends Controller
         ]);
 
         DB::transaction(function () use ($validated, $request, &$privilege) {
-            $settings = json_encode($request->settings);
+            $settings = json_encode($request->settings ?? []);
 
             $privilege->fill($validated);
             $privilege->title = $privilege->title ?? "{$shop_keyword}_{$privilege->value}";
@@ -241,7 +241,7 @@ class PrivilegeController extends Controller
             $privilege->has_tandc = $request->has_tandc ? 'yes' : 'no';
             $privilege->has_timer = $request->has_timer ? 'yes' : 'no';
             $privilege->can_view = $request->can_view ? 'yes' : 'no';
-            $privilege->settings = $settings ?? null;
+            $privilege->settings = $settings;
             $privilege->updated_by = Auth::id();
             $privilege->save();
 

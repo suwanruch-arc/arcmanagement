@@ -218,7 +218,7 @@ class WarehouseController extends Controller
                     'code'              => "'{$code}'",
                     'value'             => "'{$value}'",
                     'import_date'       => "now()",
-                    'expire_date'       => "'{$expire}'",
+                    'expire_date'       => "'{$expire} 23:59:59'",
                     'flag'              => "'ok'",
                     'is_use'            => "'no'",
                 ];
