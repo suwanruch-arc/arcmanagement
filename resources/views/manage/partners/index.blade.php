@@ -14,6 +14,7 @@
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Keyword</th>
                         <th class="no-search" width="25%">Action</th>
                     </tr>
                 </thead>
@@ -22,6 +23,9 @@
                         <tr>
                             <td class="align-middle bg-light">
                                 <b>{{ $partner->name }}</b>
+                            </td>
+                            <td class="align-middle bg-light">
+                                {{ $partner->keyword }}
                             </td>
                             <td class="text-center align-middle bg-light">
                                 <x-action-btn :disable="$partner->status" route="manage.partners" :params="['partner' => $partner->id]">
@@ -40,6 +44,9 @@
                                         'class' => 'img-thumbnail rounded p-1',
                                     ]) !!}
                                     {{ $department->name }}
+                                </td>
+                                <td class="align-middle">
+                                    {{ $department->keyword }}
                                 </td>
                                 <td class="text-center">
                                     <x-action-btn :disable="$department->status" route="manage.partners.departments" :params="['partner' => $partner->id, 'department' => $department->id]" />

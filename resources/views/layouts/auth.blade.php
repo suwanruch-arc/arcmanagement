@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Login</title>
     @include('includes.head')
     <link href="{{ asset('css/auth.css') }}" rel="stylesheet" />

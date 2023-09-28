@@ -236,7 +236,6 @@ class PrivilegeController extends Controller
             $settings = json_encode($request->settings ?? []);
 
             $privilege->fill($validated);
-            $privilege->title = $privilege->title ?? "{$shop_keyword}_{$privilege->value}";
             $privilege->has_detail = $request->has_detail ? 'yes' : 'no';
             $privilege->has_tandc = $request->has_tandc ? 'yes' : 'no';
             $privilege->has_timer = $request->has_timer ? 'yes' : 'no';

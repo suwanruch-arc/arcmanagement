@@ -20,6 +20,13 @@ class Image
         return $attribute ?? '';
     }
 
+    public static function getName($id, $table, $field)
+    {
+        $file = File::firstWhere(['table_id' => $id, 'table_name' => $table, 'table_field' => $field, 'status' => 'active']);
+
+        return $file->origin_name ?? null;
+    }
+
     public static function get($id, $table, $field)
     {
         $file = File::firstWhere(['table_id' => $id, 'table_name' => $table, 'table_field' => $field, 'status' => 'active']);
@@ -32,7 +39,7 @@ class Image
             }
         }
 
-        return $response ?? '';
+        return $response ?? null;
     }
 
     public static function show($id, $table, $attribute = ['id' => 'image'])

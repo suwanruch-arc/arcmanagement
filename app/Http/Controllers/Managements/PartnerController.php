@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Managements;
 
+use App\Models\File;
 use App\Models\Partner;
 use App\Models\Department;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\File;
 use App\Providers\FileServiceProvider;
 use Illuminate\Support\Facades\Storage;
 

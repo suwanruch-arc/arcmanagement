@@ -62,6 +62,8 @@ Route::middleware('auth')->group(function () {
                 Route::post('/upload', 'upload')->name('upload');
                 Route::post('/generate', 'generate')->name('generate');
                 Route::delete('/upload', 'delete')->name('delete');
+                Route::get('change-privilege', 'changePrivilege')->name('change-privilege');
+                Route::post('change-privilege', 'storeChange')->name('save-change');
             });
         });
     });

@@ -20,7 +20,7 @@ class WarehouseController extends Controller
 {
     public function index(Campaign $campaign)
     {
-        $uniques = $campaign->uniques ?? [];
+        $uniques = DB::connection('storage_code')->table($campaign->table_name)->get();
 
         return view('site.warehouse.index', compact('campaign'))->with(compact('uniques'));
     }
@@ -207,7 +207,6 @@ class WarehouseController extends Controller
                 $res['data'][$key]['unique_code'] = $this->getPathRedeem($campaign->owner->keyword, $campaign->keyword, $unique);
 
                 $insert = [
-                    'f_id'              => $f_id ?? 0,
                     'refid'             => "'$refid'",
                     'partner_keyword'   => "'{$campaign->owner->keyword}'",
                     'privilege_keyword' => "'{$privilege_keyword}'",
@@ -264,7 +263,6 @@ class WarehouseController extends Controller
             $template_file = FileModel::where(['table_id' => $privilege->id, 'table_name' => 'privileges', 'status' => 'active'])->pluck('origin_name', 'id')->toArray();
             [$keys, $values] = Arr::divide($template_file);
             $templates[$privilege->id] = [
-                'f_id' => $keys[0],
                 'p_id' => $privilege->id,
                 'privilege_keyword' => $privilege->keyword,
                 'shop_keyword' => $privilege->shop->keyword,
@@ -329,5 +327,29 @@ class WarehouseController extends Controller
         $shuffledString = str_shuffle($randomString);
 
         return $keyword . $shuffledString;
+    }
+
+    public function changePrivilege(Request $request, Campaign $campaign)
+    {
+        $privileges = $campaign->privileges;
+        $id = $request->id;
+        return view('site.warehouse._change-privilege', [
+            'id' => json_encode($id)
+        ])->with(compact('privileges'))->with(compact('campaign'));
+    }
+
+    public function storeChange(Request $request, Campaign $campaign)
+    {
+        $privilege = $campaign->privileges()->find($request->select);
+        $unique_id = json_decode($request->id);
+        DB::connection('storage_code')->table($campaign->table_name)
+            ->whereIn('id', $unique_id)
+            ->update([
+                'shop_keyword' => $privilege->shop->keyword,
+                'privilege_keyword' => $privilege->keyword,
+                'value' => $privilege->value,
+                'expire_date' => $privilege->end_date
+            ]);
+        echo '<script>window.close();</script>';
     }
 }

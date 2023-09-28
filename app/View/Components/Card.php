@@ -6,11 +6,13 @@ use Illuminate\View\Component;
 
 class Card extends Component
 {
+    public $class;
     public $color;
     public $outline;
 
-    public function __construct($color = null, $outline = false)
+    public function __construct($class = '', $color = null, $outline = false)
     {
+        $this->class = $class;
         $this->color = $color;
         $this->outline = $outline;
     }

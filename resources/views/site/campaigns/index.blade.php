@@ -36,7 +36,7 @@
                                     <x-button color="secondary"
                                         href="{{ route('site.warehouse.index', $campaign->id) }}"
                                         class="m-1 text-nowrap">
-                                        <span data-feather="upload"></span>&nbsp;นำเข้าข้อมูล
+                                        <span data-feather="archive"></span>&nbsp;คลังข้อมูล
                                     </x-button>
                                     <x-button color="info" class="m-1 text-nowrap"
                                         href="{{ route('site.campaigns.privileges.index', $campaign->id) }}">

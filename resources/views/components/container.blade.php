@@ -1,4 +1,4 @@
-<div class="{{ $fluid ? 'container-fluid' : 'container' }}">
+<div class="{{ $fluid ? 'container-fluid' : 'container' }} {{ $class }}">
     @if ($cols)
         <div class="row justify-content-center">
             <div

@@ -5,14 +5,18 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Department;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
+use Image;
 
 class ImageController extends Controller
 {
-    public function getImage($partner)
+    public function getPartner($partner)
     {
         $partner = Str::lower($partner);
-        $path = public_path("imgs/logo/{$partner}.png");
-        return Response::download($path);
+        $department = Department::where('keyword', $partner)->value('id');
+        $res = Image::get($department, 'departments', 'logo') ?? "https://a.yllo.in/assets/img/logo/{$partner}.png?" . time();
+        return  response()->json($res);
     }
 }

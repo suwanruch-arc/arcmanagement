@@ -113,16 +113,17 @@ class CampaignController extends Controller
             if (!Schema::connection('storage_code')->hasTable($table_name)) {
                 Schema::connection('storage_code')->create($table_name, function (Blueprint $table) use ($campaign) {
                     $table->id();
+                    $table->integer('lot');
                     $table->string('refid');
-                    $table->integer('f_id')->comment('File id in file table on arcmanagement');
                     $table->string('partner_keyword', 10)->index();
                     $table->string('shop_keyword', 10)->index();
+                    $table->integer('privilege_id')->index();
                     $table->string('privilege_keyword', 10)->index();
                     $table->string('secret_code', 12)->unique();
                     $table->string('unique_code', 20)->unique();
                     $table->string('msisdn', 11)->nullable();
                     $table->string('code');
-                    $table->string('value',5);
+                    $table->string('value', 5);
                     $table->dateTime('import_date');
                     $table->dateTime('redeem_date')->nullable();
                     $table->dateTime('first_view_date')->nullable();

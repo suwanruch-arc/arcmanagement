@@ -17,5 +17,9 @@ use App\Http\Controllers\Api\RedeemController;
 */
 
 Route::controller(RedeemController::class)->group(function () {
-    Route::get('get-detail','getDetail');
+    Route::get('detail','getDetail');
+});
+
+Route::prefix('img')->controller(ImageController::class)->group(function(){
+    Route::get('{partner}','getPartner');
 });

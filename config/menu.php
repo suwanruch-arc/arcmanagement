@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Sites\CampaignController;
 
 return [
     'menus' => [
@@ -12,9 +13,10 @@ return [
             'icon' => 'archive',
             'text' => 'Campaigns',
             'url' => 'site/campaigns',
+            'child' => 'privileges',
         ],
     ],
-    'reports' => ReportController::getReportList(),
+    'reports' => 'reports',
     'account' => [
         [
             'icon' => 'lock',
@@ -30,7 +32,7 @@ return [
         ],
         [
             'icon' => 'shopping-bag',
-            'text'=>' Shops',
+            'text' => ' Shops',
             'url' => 'manage/shops'
         ],
         [
