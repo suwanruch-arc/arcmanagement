@@ -175,6 +175,8 @@ class WarehouseController extends Controller
         $temp_file_content = $this->getFileTemp($campaign->keyword);
         if ($temp_file_content) {
             $unique_data = DB::connection('storage_code')->table($campaign->table_name)->where(['flag' => ['ok', 'deviate']])->pluck('unique_code', 'secret_code')->toArray();
+            $lot = DB::connection('storage_code')->table($campaign->table_name)->where(['flag' => ['ok', 'deviate']])->max('lot');
+            $lot = $lot + 1;
             [$already_secret, $already_unique] = Arr::divide($unique_data);
             $privilege_list = $this->getPrivilegeList($campaign);
             $template_list = $this->getTemplateList($campaign);
@@ -185,21 +187,21 @@ class WarehouseController extends Controller
                 switch ($campaign->template_type) {
                     case 'STD':
                         list($mobile, $code, $shop_keyword, $value, $expire) = $split_data;
-                        $privilege_keyword = $privilege_list[$shop_keyword][$expire][$value];
+                        $privilege_id = $privilege_list[$shop_keyword][$expire][$value]['id'];
+                        $privilege_keyword = $privilege_list[$shop_keyword][$expire][$value]['keyword'];
                         break;
                     case 'CTM':
                         list($mobile, $code, $template) = $split_data;
                         $templates = collect($template_list)->firstWhere('template', $template);
-                        $f_id = $templates['f_id'];
+                        $privilege_id = $templates['privilege_id'];
                         $privilege_keyword = $templates['privilege_keyword'];
                         $shop_keyword = $templates['shop_keyword'];
                         $value = $templates['value'];
                         $expire = $templates['expire'];
                         break;
                 }
-                $unique_keyword = $this->randomUpperLower($shop_keyword . Str::substr($privilege_keyword, -4));
-                $secret_code =  $this->getSecretCode($campaign->keyword, $already_unique);
-                $unique = $this->getUnique($unique_keyword, $already_secret);
+                $secret_code =  $this->getSecretCode($campaign->keyword, $already_secret);
+                $unique = $this->getUnique($already_unique);
 
                 $res['data'][$key]['mobile'] = $mobile;
                 $res['data'][$key]['code'] = $code;
@@ -207,8 +209,10 @@ class WarehouseController extends Controller
                 $res['data'][$key]['unique_code'] = $this->getPathRedeem($campaign->owner->keyword, $campaign->keyword, $unique);
 
                 $insert = [
-                    'refid'             => "'$refid'",
+                    'refid'             => "'{$refid}'",
+                    'lot'               => "'{$lot}'",
                     'partner_keyword'   => "'{$campaign->owner->keyword}'",
+                    'privilege_id'      => "'{$privilege_id}'",
                     'privilege_keyword' => "'{$privilege_keyword}'",
                     'shop_keyword'      => "'{$shop_keyword}'",
                     'secret_code'       => "'{$secret_code}'",
@@ -251,7 +255,8 @@ class WarehouseController extends Controller
     {
         foreach ($campaign->privileges as $privilege) {
             $end_date = date('Y-m-d', strtotime($privilege->end_date));
-            $privilege_list[$privilege->shop->keyword][$end_date][$privilege->value] = $privilege->keyword;
+            $privilege_list[$privilege->shop->keyword][$end_date][$privilege->value]['id'] = $privilege->id;
+            $privilege_list[$privilege->shop->keyword][$end_date][$privilege->value]['keyword'] = $privilege->keyword;
         }
 
         return $privilege_list ?? [];
@@ -264,6 +269,7 @@ class WarehouseController extends Controller
             [$keys, $values] = Arr::divide($template_file);
             $templates[$privilege->id] = [
                 'p_id' => $privilege->id,
+                'privilege_id' => $privilege->id,
                 'privilege_keyword' => $privilege->keyword,
                 'shop_keyword' => $privilege->shop->keyword,
                 'template' => $values[0],
@@ -289,12 +295,12 @@ class WarehouseController extends Controller
         return env('APP_URL_REDEEM') . Str::lower("{$owner_keyword}/{$campaign_keyword}/") . $unique_code;
     }
 
-    public function getUnique($keyword, $arr)
+    public function getUnique($arr)
     {
-        $unique = $keyword . Str::random(7);
+        $unique = Str::random(16);
         $has_data = collect($arr)->contains($unique);
         if ($has_data) {
-            $this->getUnique($keyword, $arr);
+            $this->getUnique($arr);
         }
         return $unique;
     }

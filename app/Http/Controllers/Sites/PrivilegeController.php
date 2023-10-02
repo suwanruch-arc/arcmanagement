@@ -105,7 +105,7 @@ class PrivilegeController extends Controller
             'end_date' => [
                 'required', 'date', 'after:start_date', 'date_format:Y-m-d H:i:s',
                 Rule::unique('privileges')->where(function ($query) use ($campaign) {
-                    return $query->where('value', request()->input('value'))->where('shop_id', request()->input('shop_id'))->where('campaign_id', $campaign->id);
+                    return $campaign->template_type === 'STD' && $query->where('value', request()->input('value'))->where('shop_id', request()->input('shop_id'))->where('campaign_id', $campaign->id);
                 }),
             ],
             'default_code' => 'required|in:qrcode,barcode,textcode',
@@ -215,7 +215,7 @@ class PrivilegeController extends Controller
             'end_date' => [
                 'required', 'date', 'after:start_date', 'date_format:Y-m-d H:i:s',
                 Rule::unique('privileges')->where(function ($query) use ($campaign, $privilege) {
-                    return $query->where('campaign_id', $campaign->id)->where('value', request()->input('value'))->where('shop_id', request()->input('shop_id'))->where('id', '<>', $privilege->id);
+                    return $campaign->template_type === 'STD' &&  $query->where('campaign_id', $campaign->id)->where('value', request()->input('value'))->where('shop_id', request()->input('shop_id'))->where('id', '<>', $privilege->id);
                 }),
             ],
             'default_code' => 'required|in:qrcode,barcode,textcode',

@@ -116,6 +116,7 @@ class CampaignController extends Controller
                     $table->integer('lot');
                     $table->string('refid');
                     $table->string('partner_keyword', 10)->index();
+                    $table->integer('shop_id')->index();
                     $table->string('shop_keyword', 10)->index();
                     $table->integer('privilege_id')->index();
                     $table->string('privilege_keyword', 10)->index();

@@ -22,16 +22,18 @@ class RedeemController extends Controller
         $campaign_keyword = Str::upper($request->c);
         $partner_keyword = Str::upper($request->p);
         $unique_code = $request->u;
-        $privilege_keyword = $campaign_keyword . Str::upper(Str::substr($unique_code, 0, 7));
-        $shop_keyword = Str::substr($unique_code, 0, 3);
 
-        $shop = Shop::select('name')->where(['keyword' => $shop_keyword])->first();
         $campaign = Campaign::select('id', 'name', 'template_type', 'table_name')->where(['keyword' => $campaign_keyword, 'status' => 'active'])->first();
-        $privilege = $campaign->privileges()->where(['keyword' => $privilege_keyword])->first();
-        $user = DB::connection('storage_code')->table($campaign->table_name)->select(['code','is_use', 'expire_date', 'first_view_date'])->where(['partner_keyword' => $partner_keyword, 'flag' => 'ok'])->where(DB::raw('BINARY unique_code'), '=', $unique_code)->first();
+        $user = DB::connection('storage_code')
+            ->table($campaign->table_name)->select(['code', 'is_use', 'expire_date', 'first_view_date','shop_id','privilege_id'])
+            ->where(['partner_keyword' => $partner_keyword, 'flag' => 'ok'])
+            ->where(DB::raw('BINARY unique_code'), '=', $unique_code)
+            ->first();
+        $privilege = $campaign->privileges()->find($user->privilege_id);
+        $shop = $privilege->shop()->value('name');
 
-        $banner = Image::get($privilege->id, 'privileges', 'banner');
-        $template = Image::get($privilege->id, 'privileges', 'template');
+        $banner = Image::getUrl($privilege->id, 'privileges', 'banner');
+        $template = Image::getUrl($privilege->id, 'privileges', 'template');
 
         $campaign->makeHidden('id', 'table_name');
         $privilege->makeHidden('id', 'keyword', 'campaign_id', 'shop_id', 'created_by', 'updated_by', 'created_at', 'updated_at', 'status');

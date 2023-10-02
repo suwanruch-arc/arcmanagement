@@ -8,6 +8,7 @@
 <script type="text/javascript" src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/filepond.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/filepond.jquery.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
 <script>
     feather.replace({
@@ -34,6 +35,11 @@
                 return false;
 
         });
+
+        $('.editor').summernote({
+
+            height: 250
+        });
     });
 
     function showTandC(html) {
@@ -43,16 +49,16 @@
         })
     }
 
-    var editor = new FroalaEditor('.editor', {
-        heightMin: 200,
-        toolbarInline: false,
-        quickInsertEnabled: false,
-        toolbarButtons: [
-            [
-                'bold', 'italic', 'underline', 'superscript', 'formatOL',
-                'formatUL',
-                'clearFormatting', 'fontSize', 'textColor', 'backgroundColor', 'html'
-            ],
-        ]
-    });
+    // var editor = new FroalaEditor('.editor', {
+    //     heightMin: 200,
+    //     toolbarInline: false,
+    //     quickInsertEnabled: false,
+    //     toolbarButtons: [
+    //         [
+    //             'bold', 'italic', 'underline', 'superscript', 'formatOL',
+    //             'formatUL',
+    //             'clearFormatting', 'fontSize', 'textColor', 'backgroundColor', 'html'
+    //         ],
+    //     ]
+    // });
 </script>

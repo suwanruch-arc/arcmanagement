@@ -42,6 +42,20 @@ class Image
         return $response ?? null;
     }
 
+    public static function getUrl($id, $table, $field)
+    {
+        $file = File::firstWhere(['table_id' => $id, 'table_name' => $table, 'table_field' => $field, 'status' => 'active']);
+        if ($file) {
+            $image = "{$file->path}/$file->name";
+            if (Storage::disk('public')->exists($image)) {
+                $type = $file->type;
+                $response = Storage::disk('public')->url($image);
+            }
+        }
+
+        return $response ?? null;
+    }
+
     public static function show($id, $table, $attribute = ['id' => 'image'])
     {
         $attr = self::setAttribute($attribute);
