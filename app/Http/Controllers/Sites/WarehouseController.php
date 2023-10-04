@@ -170,9 +170,11 @@ class WarehouseController extends Controller
         $res['status'] = true;
 
         $now = date('YmdHis');
+        $date_now = date('Y-m-d H:i:s');
         $type = $request->type_split_data;
         $refid = "{$campaign->keyword}@{$now}";
         $temp_file_content = $this->getFileTemp($campaign->keyword);
+        $start_date = $request->start_date;
         if ($temp_file_content) {
             $unique_data = DB::connection('storage_code')->table($campaign->table_name)->where(['flag' => ['ok', 'deviate']])->pluck('unique_code', 'secret_code')->toArray();
             $lot = DB::connection('storage_code')->table($campaign->table_name)->where(['flag' => ['ok', 'deviate']])->max('lot');
@@ -189,12 +191,14 @@ class WarehouseController extends Controller
                         list($mobile, $code, $shop_keyword, $value, $expire) = $split_data;
                         $privilege_id = $privilege_list[$shop_keyword][$expire][$value]['id'];
                         $privilege_keyword = $privilege_list[$shop_keyword][$expire][$value]['keyword'];
+                        $shop_id = $privilege_list[$shop_keyword][$expire][$value]['shop_id'];
                         break;
                     case 'CTM':
                         list($mobile, $code, $template) = $split_data;
                         $templates = collect($template_list)->firstWhere('template', $template);
                         $privilege_id = $templates['privilege_id'];
                         $privilege_keyword = $templates['privilege_keyword'];
+                        $shop_id = $templates['shop_id'];
                         $shop_keyword = $templates['shop_keyword'];
                         $value = $templates['value'];
                         $expire = $templates['expire'];
@@ -214,13 +218,15 @@ class WarehouseController extends Controller
                     'partner_keyword'   => "'{$campaign->owner->keyword}'",
                     'privilege_id'      => "'{$privilege_id}'",
                     'privilege_keyword' => "'{$privilege_keyword}'",
+                    'shop_id'           => "'{$shop_id}'",
                     'shop_keyword'      => "'{$shop_keyword}'",
                     'secret_code'       => "'{$secret_code}'",
                     'unique_code'       => "'{$unique}'",
                     'msisdn'            => "'{$mobile}'",
                     'code'              => "'{$code}'",
                     'value'             => "'{$value}'",
-                    'import_date'       => "now()",
+                    'start_date'        => "'{$start_date}'",
+                    'import_date'       => "'{$date_now}'",
                     'expire_date'       => "'{$expire} 23:59:59'",
                     'flag'              => "'ok'",
                     'is_use'            => "'no'",
@@ -257,6 +263,7 @@ class WarehouseController extends Controller
             $end_date = date('Y-m-d', strtotime($privilege->end_date));
             $privilege_list[$privilege->shop->keyword][$end_date][$privilege->value]['id'] = $privilege->id;
             $privilege_list[$privilege->shop->keyword][$end_date][$privilege->value]['keyword'] = $privilege->keyword;
+            $privilege_list[$privilege->shop->keyword][$end_date][$privilege->value]['shop_id'] = $privilege->shop->id;
         }
 
         return $privilege_list ?? [];
@@ -271,6 +278,7 @@ class WarehouseController extends Controller
                 'p_id' => $privilege->id,
                 'privilege_id' => $privilege->id,
                 'privilege_keyword' => $privilege->keyword,
+                'shop_id' => $privilege->shop->id,
                 'shop_keyword' => $privilege->shop->keyword,
                 'template' => $values[0],
                 'value' => $privilege->value,

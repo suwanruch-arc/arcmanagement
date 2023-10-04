@@ -23,54 +23,88 @@ class RedeemController extends Controller
         $partner_keyword = Str::upper($request->p);
         $unique_code = $request->u;
 
-        $campaign = Campaign::select('id', 'name', 'template_type', 'table_name')->where(['keyword' => $campaign_keyword, 'status' => 'active'])->first();
+        $campaign = Campaign::where(['keyword' => $campaign_keyword, 'status' => 'active'])->first();
         $user = DB::connection('storage_code')
-            ->table($campaign->table_name)->select(['code', 'is_use', 'expire_date', 'first_view_date','shop_id','privilege_id'])
+            ->table($campaign->table_name)->select(['code', 'is_use', 'expire_date', 'start_date', 'first_view_date', 'shop_id', 'privilege_id'])
             ->where(['partner_keyword' => $partner_keyword, 'flag' => 'ok'])
             ->where(DB::raw('BINARY unique_code'), '=', $unique_code)
             ->first();
-        $privilege = $campaign->privileges()->find($user->privilege_id);
-        $shop = $privilege->shop()->value('name');
 
-        $banner = Image::getUrl($privilege->id, 'privileges', 'banner');
-        $template = Image::getUrl($privilege->id, 'privileges', 'template');
-
-        $campaign->makeHidden('id', 'table_name');
-        $privilege->makeHidden('id', 'keyword', 'campaign_id', 'shop_id', 'created_by', 'updated_by', 'created_at', 'updated_at', 'status');
-        if ($now <= $user->expire_date) {
-            $res['status'] = true;
-            $res['template_type'] = $campaign->template_type;
-            $res['code_type'] = $privilege->default_code;
-
+        if ($user && $now >= $user->start_date) {
+            $privilege = $campaign->privileges()->find($user->privilege_id);
             switch ($campaign->template_type) {
                 case 'STD':
-                    $res['banner'] = $banner;
-                    $res['campaign'] = $campaign;
-                    $res['user'] = $user;
-                    $res['shop'] = $shop;
-                    $res['privilege'] = $privilege;
-                    if ($privilege->can_view === 'yes') {
-                        if ($user->is_use === 'yes') {
-                            $res['flag'] = 'view';
-                        } elseif ($now >= $user->expire_date) {
-                            $res['flag'] = 'expire';
-                        } else {
-                            $res['flag'] = 'ok';
+                    $banner = Image::getUrl($privilege->id, 'privileges', 'banner');
+                    $shop = $privilege->shop;
+                    if ($now <= $user->expire_date) {
+                        if ($privilege->can_view === 'yes' && $privilege->skip_confirm === 'yes') {
+                            $flag = 'view';
+                        } elseif ($privilege->can_view === 'yes' && $privilege->skip_confirm === 'no') {
+                            if ($user->is_use === 'yes') {
+                                $flag = 'already';
+                            } else {
+                                $flag = 'ok';
+                            }
+                        } elseif ($privilege->can_view === 'no' && $privilege->skip_confirm === 'yes') {
+                            if ($user->is_use === 'yes') {
+                                $flag = 'already';
+                            } else {
+                                $flag = 'view';
+                            }
+                        } elseif ($privilege->can_view === 'no' && $privilege->skip_confirm === 'no') {
+                            if ($user->is_use === 'yes') {
+                                $flag = 'already';
+                            } else {
+                                $flag = 'ok';
+                            }
                         }
+
                     } else {
-                        if ($user->is_use === 'yes') {
-                            $res['flag'] = 'already';
-                        } elseif ($now >= $user->expire_date) {
-                            $res['flag'] = 'expire';
-                        } else {
-                            $res['flag'] = 'ok';
-                        }
+                        $flag = 'expire';
                     }
+                    $res = [
+                        'banner' => $banner,
+                        'btn'    => $campaign->getButton($flag),
+                        'config' => [
+                            'alert' => [
+                                'title' => $campaign->title_alert,
+                                'desc'  => $campaign->desc_alert
+                            ],
+                            'themes' => [
+                                'main'      => $campaign->main_color,
+                                'secondary' => $campaign->secondary_color,
+                            ]
+                        ],
+                        'flag'      => $flag,
+                        'code_type' => $privilege->default_code,
+                        'status'    => true,
+                        'shop'      => [
+                            'name' => $shop->name
+                        ],
+                        'privilege' => [
+                            'title'       => $privilege->title,
+                            'description' => $privilege->description,
+                            'has_detail'  => $privilege->has_detail,
+                            'detail'      => $privilege->detail,
+                            'has_tandc'   => $privilege->has_tandc,
+                            'tandc'       => $privilege->tandc,
+                        ],
+                        'user' => [
+                            'expire_date' => $user->expire_date
+                        ],
+                        'template_type' => $campaign->template_type,
+                    ];
                     break;
                 case 'CTM':
-                    $res['template'] = $template;
-                    $res['code'] = $user->code;
-                    $res['settings'] = $privilege->settings;
+                    $template = Image::getUrl($privilege->id, 'privileges', 'template');
+                    $res = [
+                        'code' => $user->code,
+                        'code_type' => $privilege->default_code,
+                        'settings' => $privilege->settings,
+                        'status' => true,
+                        'template' => $template,
+                        'template_type' => $campaign->template_type,
+                    ];
                     break;
             }
         } else {

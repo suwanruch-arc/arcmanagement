@@ -47,9 +47,21 @@ class CampaignController extends Controller
             'start_date'    => old('start_date') ?? ($model ? $model->start_date : date('Y-m-d H:00:00')),
             'end_date'      => old('end_date') ?? ($model ? $model->end_date :  date('Y-m-t 23:59:59')),
             'owner_id'      => old('owner_id') ?? ($model ? $model->owner_id : ''),
-            'assign_users' => old('assign_lists') ?? ($assign_users ?? []),
+            'assign_users'  => old('assign_lists') ?? ($assign_users ?? []),
             'owner_lists'   => $this->getOwnerLists(),
-            'status' => old('status') ?? ($model ? $model->status : 'active'),
+            'status'        => old('status') ?? ($model ? $model->status : 'active'),
+            'title_alert'   => old('title_alert') ?? ($model ? $model->title_alert : 'ยืนยันรับสิทธิ์'),
+            'desc_alert'    => old('desc_alert') ?? ($model ? $model->desc_alert : 'ถ้ากดรับสิทธิ์จะไม่สามารถแก้ไขหรือยกเลิกได้'),
+            'main_color'      => old('main_color') ?? ($model ? $model->main_color : 'white'),
+            'secondary_color' => old('secondary_color') ?? ($model ? $model->secondary_color : 'blue'),
+            'redeem_color'    => old('redeem_color') ?? ($model ? $model->redeem_color : 'light-green'),
+            'redeem_btn'      => old('redeem_btn') ?? ($model ? $model->redeem_btn : 'กดรับสิทธิ์'),
+            'view_color'      => old('view_color') ?? ($model ? $model->view_color : 'amber'),
+            'view_btn'        => old('view_btn') ?? ($model ? $model->view_btn : 'ดูโค้ด'),
+            'expire_color'    => old('expire_color') ?? ($model ? $model->expire_color : 'red'),
+            'expire_btn'      => old('expire_btn') ?? ($model ? $model->expire_btn : 'หมดอายุแล้ว'),
+            'already_color'   => old('already_color') ?? ($model ? $model->already_color : 'grey'),
+            'already_btn'     => old('already_btn') ?? ($model ? $model->already_btn : 'รับสิทธิ์เรียบร้อยแล้ว'),
         ];
         return $fields;
     }
@@ -76,6 +88,7 @@ class CampaignController extends Controller
             'title' => 'Campaign',
             'route' => 'site.campaigns',
             'fields' => $this->fields(),
+            'cols' => 12
         ]);
     }
 
@@ -95,7 +108,21 @@ class CampaignController extends Controller
             'start_date' => 'required|date|date_format:Y-m-d H:i:s',
             'end_date' => 'required|date|after:start_date|date_format:Y-m-d H:i:s',
             'owner_id' => 'required|exists:departments,id',
-            'status' => 'required|in:active,inactive'
+            'status' => 'required|in:active,inactive',
+            'title_alert'    => 'required',
+            'desc_alert'     => 'required',
+            'title_alert'   => 'required',
+            'desc_alert'    => 'required',
+            'main_color'     => 'required',
+            'secondary_color' => 'required',
+            'redeem_color'   => 'required',
+            'redeem_btn'     => 'required',
+            'view_color'     => 'required',
+            'view_btn'       => 'required',
+            'expire_color'   => 'required',
+            'expire_btn'     => 'required',
+            'already_color'  => 'required',
+            'already_btn'    => 'required',
         ]);
 
 
@@ -126,6 +153,7 @@ class CampaignController extends Controller
                     $table->string('code');
                     $table->string('value', 5);
                     $table->dateTime('import_date');
+                    $table->dateTime('update_date')->nullable();
                     $table->dateTime('redeem_date')->nullable();
                     $table->dateTime('first_view_date')->nullable();
                     $table->dateTime('expire_date')->nullable();
@@ -176,6 +204,7 @@ class CampaignController extends Controller
             'title' => $campaign->name,
             'route' => 'site.campaigns',
             'fields' => $this->fields($campaign),
+            'cols' => 12
         ])->with(compact('campaign'));
     }
 

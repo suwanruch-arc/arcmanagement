@@ -96,6 +96,11 @@
                                         </div>
                                     @endforeach
                                 </div>
+                                <div class="form-group">
+                                    <div class="col-4">
+                                        <x-input label="วันที่เริ่มต้น" name="start_date" :value="date('Y-m-d 00:00:00')" required />
+                                    </div>
+                                </div>
                             </form>
                         </div>
                         <div class="col">
@@ -182,6 +187,9 @@
 
 @section('js')
     <script>
+        $('#start_date').datetimepicker({
+            format: 'Y-m-d H:00:00'
+        });
         $('#table-template').dataTable({
             dom: 'ft',
             responsive: true,
@@ -197,6 +205,7 @@
         const formData = new FormData();
         formData.append('_token', '{{ csrf_token() }}');
         formData.append('type_split_data', $('[name=type_split_data]:checked').val());
+        formData.append('start_date', $('[name=start_date]').val());
         const pond = FilePond.create(document.getElementById('filepond'), {
             server: {
                 url: "{{ route('site.warehouse.upload', $campaign->id) }}",
