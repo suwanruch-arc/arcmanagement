@@ -6,7 +6,7 @@
     @endcan
     @can('delete')
         @if ($disable === 'active')
-            <form class="d-inline" method="post" action="{{ route("{$route}.destroy", $params) }}">
+            <form id="disable-form" class="d-inline" method="post" action="{{ route("{$route}.destroy", $params) }}">
                 @csrf
                 @method('DELETE')
                 @if ($disable === 'active')

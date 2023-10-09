@@ -18,6 +18,8 @@ use App\Http\Controllers\Api\RedeemController;
 
 Route::controller(RedeemController::class)->group(function () {
     Route::get('detail','getDetail');
+    Route::post('get-code','getCode');
+    Route::post('view-code','getView');
 });
 
 Route::prefix('img')->controller(ImageController::class)->group(function(){

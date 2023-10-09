@@ -52,15 +52,15 @@ class CampaignController extends Controller
             'status'        => old('status') ?? ($model ? $model->status : 'active'),
             'title_alert'   => old('title_alert') ?? ($model ? $model->title_alert : 'ยืนยันรับสิทธิ์'),
             'desc_alert'    => old('desc_alert') ?? ($model ? $model->desc_alert : 'ถ้ากดรับสิทธิ์จะไม่สามารถแก้ไขหรือยกเลิกได้'),
-            'main_color'      => old('main_color') ?? ($model ? $model->main_color : 'white'),
-            'secondary_color' => old('secondary_color') ?? ($model ? $model->secondary_color : 'blue'),
-            'redeem_color'    => old('redeem_color') ?? ($model ? $model->redeem_color : 'light-green'),
+            'main_color'      => old('main_color') ?? ($model ? $model->main_color : '#FFFFFF'),
+            'secondary_color' => old('secondary_color') ?? ($model ? $model->secondary_color : '#2196F3'),
+            'redeem_color'    => old('redeem_color') ?? ($model ? $model->redeem_color : '#8BC34A'),
             'redeem_btn'      => old('redeem_btn') ?? ($model ? $model->redeem_btn : 'กดรับสิทธิ์'),
-            'view_color'      => old('view_color') ?? ($model ? $model->view_color : 'amber'),
+            'view_color'      => old('view_color') ?? ($model ? $model->view_color : '#FFC107'),
             'view_btn'        => old('view_btn') ?? ($model ? $model->view_btn : 'ดูโค้ด'),
-            'expire_color'    => old('expire_color') ?? ($model ? $model->expire_color : 'red'),
+            'expire_color'    => old('expire_color') ?? ($model ? $model->expire_color : '#F44336'),
             'expire_btn'      => old('expire_btn') ?? ($model ? $model->expire_btn : 'หมดอายุแล้ว'),
-            'already_color'   => old('already_color') ?? ($model ? $model->already_color : 'grey'),
+            'already_color'   => old('already_color') ?? ($model ? $model->already_color : '#9E9E9E'),
             'already_btn'     => old('already_btn') ?? ($model ? $model->already_btn : 'รับสิทธิ์เรียบร้อยแล้ว'),
         ];
         return $fields;
@@ -116,12 +116,12 @@ class CampaignController extends Controller
             'main_color'     => 'required',
             'secondary_color' => 'required',
             'redeem_color'   => 'required',
-            'redeem_btn'     => 'required',
             'view_color'     => 'required',
-            'view_btn'       => 'required',
             'expire_color'   => 'required',
-            'expire_btn'     => 'required',
             'already_color'  => 'required',
+            'redeem_btn'     => 'required',
+            'view_btn'       => 'required',
+            'expire_btn'     => 'required',
             'already_btn'    => 'required',
         ]);
 
@@ -153,6 +153,7 @@ class CampaignController extends Controller
                     $table->string('code');
                     $table->string('value', 5);
                     $table->dateTime('import_date');
+                    $table->dateTime('start_date');
                     $table->dateTime('update_date')->nullable();
                     $table->dateTime('redeem_date')->nullable();
                     $table->dateTime('first_view_date')->nullable();
@@ -224,7 +225,21 @@ class CampaignController extends Controller
             'start_date' => 'required|date|date_format:Y-m-d H:i:s',
             'end_date' => 'required|date|after:start_date|date_format:Y-m-d H:i:s',
             'owner_id' => 'required|exists:departments,id',
-            'status' => 'required|in:active,inactive'
+            'status' => 'required|in:active,inactive',
+            'title_alert'    => 'required',
+            'desc_alert'     => 'required',
+            'title_alert'   => 'required',
+            'desc_alert'    => 'required',
+            'main_color'     => 'required',
+            'secondary_color' => 'required',
+            'redeem_color'   => 'required',
+            'view_color'     => 'required',
+            'expire_color'   => 'required',
+            'already_color'  => 'required',
+            'redeem_btn'     => 'required',
+            'view_btn'       => 'required',
+            'expire_btn'     => 'required',
+            'already_btn'    => 'required',
         ]);
 
         DB::transaction(function () use ($validated, $request, &$campaign) {

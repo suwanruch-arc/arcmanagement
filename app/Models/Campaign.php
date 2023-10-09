@@ -80,4 +80,9 @@ class Campaign extends Model
     {
         return $this->hasMany(Privilege::class);
     }
+
+    public function departments()
+    {
+        return $this->hasMany(Privilege::class);
+    }
 }

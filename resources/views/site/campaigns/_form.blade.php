@@ -52,35 +52,21 @@
                     required />
             </div>
             <div class="col">
-                <label for="main_color" class="form-label">
-                    สี Main
-                </label>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">
-                        <x-color-picker name="main_color" :value="$main_color" />
-                    </span>
-                </div>
+                <x-input type="color" label="สี Main" name="main_color" :value="$main_color" required />
             </div>
             <div class="col">
-                <label for="secondary_color" class="form-label">
-                    สี Secondary
-                </label>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">
-                        <x-color-picker name="secondary_color" :value="$secondary_color" />
-                    </span>
-                </div>
+                <x-input type="color" label="สี Secondary" name="secondary_color" :value="$secondary_color" required />
             </div>
             <div class="col">
                 <label for="redeem_btn" class="form-label">
                     ปุ่ม Redeem
                 </label>
                 <div class="input-group mb-3">
-                    <span class="input-group-text">
-                        <x-color-picker name="redeem_color" :value="$redeem_color" size="sm" />
-                    </span>
+                    <div class="input-group-text">
+                        <input type="color" name="redeem_color" value="{{ $redeem_color }}" required />
+                    </div>
                     <input type="text" class="form-control" id="redeem_btn" name="redeem_btn"
-                        value="{{ $redeem_btn }}">
+                        value="{{ $redeem_btn }}"></>
                 </div>
             </div>
             <div class="col">
@@ -88,11 +74,11 @@
                     ปุ่ม View
                 </label>
                 <div class="input-group mb-3">
-                    <span class="input-group-text">
-                        <x-color-picker name="view_color" :value="$view_color" size="sm" />
-                    </span>
+                    <div class="input-group-text">
+                        <input type="color" name="view_color" value="{{ $view_color }}" required />
+                    </div>
                     <input type="text" class="form-control" id="view_btn" name="view_btn"
-                        value="{{ $view_btn }}">
+                        value="{{ $view_btn }}"></>
                 </div>
             </div>
             <div class="col">
@@ -100,11 +86,11 @@
                     ปุ่ม Expire
                 </label>
                 <div class="input-group mb-3">
-                    <span class="input-group-text">
-                        <x-color-picker name="expire_color" :value="$expire_color" size="sm" />
-                    </span>
+                    <div class="input-group-text">
+                        <input type="color" name="expire_color" value="{{ $expire_color }}" required />
+                    </div>
                     <input type="text" class="form-control" id="expire_btn" name="expire_btn"
-                        value="{{ $expire_btn }}">
+                        value="{{ $expire_btn }}"></>
                 </div>
             </div>
             <div class="col">
@@ -112,11 +98,11 @@
                     ปุ่ม Already
                 </label>
                 <div class="input-group mb-3">
-                    <span class="input-group-text">
-                        <x-color-picker name="already_color" :value="$already_color" size="sm" />
-                    </span>
+                    <div class="input-group-text">
+                        <input type="color" name="already_color" value="{{ $already_color }}" required />
+                    </div>
                     <input type="text" class="form-control" id="already_btn" name="already_btn"
-                        value="{{ $already_btn }}">
+                        value="{{ $already_btn }}"></>
                 </div>
             </div>
         </div>

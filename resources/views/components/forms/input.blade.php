@@ -18,7 +18,7 @@
                 id="{{ $id ?? $name }}" rows="3">{{ $value }}</textarea>
         @elseif ($type === 'color')
             <input type="color" class="form-control form-control-color" name="{{ $name }}"
-                id="{{ $id ?? $name }}" value="#563d7c">
+                id="{{ $id ?? $name }}" value="{{ $value }}">
         @else
             @if ($prepend)
                 <span class="input-group-text">{{ $prepend }}</span>

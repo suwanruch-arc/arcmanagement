@@ -17,6 +17,25 @@
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     $(document).ready(function() {
+        $('form#disable-form').submit(function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'คุณแน่ใจไหม?',
+                text: "คุณจะไม่สามารถแก้ไขได้อีก",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'ยกเลิกการใช้งาน',
+                cancelButtonText: 'ย้อนกลับ',
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    e.currentTarget.submit();
+                }
+            })
+        });
+
         $('.uppercase').keyup(function(e) {
             const value = this.value.toUpperCase()
             $(this).val(value);

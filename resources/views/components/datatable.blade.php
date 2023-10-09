@@ -12,7 +12,7 @@
         กำลังโหลดข้อมูล...
     </div>
 </div>
-<div id="dataTableArea" style="display: none">
+<div class="table-responsive" id="dataTableArea" style="display: none">
     <table class="table table-bordered" id="dataTable" width="100%">
         {{ $slot }}
     </table>
