@@ -107,10 +107,8 @@ class RedeemController extends Controller
                             'detail'      => $privilege->detail,
                             'has_tandc'   => $privilege->has_tandc === 'yes',
                             'tandc'       => $privilege->tandc,
-                            'default_code' => $privilege->default_code
-                        ],
-                        'user' => [
-                            'expire_date' => $user->expire_date
+                            'default_code' => $privilege->default_code,
+                            'expire_date' => $privilege->end_date
                         ],
                         'template_type' => $campaign->template_type,
                     ];
@@ -135,7 +133,6 @@ class RedeemController extends Controller
 
     public function getCode(Request $request)
     {
-
         $now = date('Y-m-d H:i:s');
         $campaign_keyword = Str::upper($request->c);
         $partner_keyword = Str::upper($request->p);
@@ -146,18 +143,24 @@ class RedeemController extends Controller
         if ($recapt->success && $recapt->score > 0.7) {
             $campaign = Campaign::where(['keyword' => $campaign_keyword, 'status' => 'active'])->first();
             $user = DB::connection('storage_code')
-                ->table($campaign->table_name)->select(['code', 'is_use', 'expire_date', 'start_date', 'first_view_date', 'shop_id', 'privilege_id'])
+                ->table($campaign->table_name)->select(['id', 'code', 'is_use', 'expire_date', 'start_date', 'first_view_date', 'shop_id', 'privilege_id'])
                 ->where(['partner_keyword' => $partner_keyword, 'flag' => 'ok'])
                 ->where(DB::raw('BINARY unique_code'), '=', $unique_code)
                 ->first();
             $privilege = $campaign->privileges()->find($user->privilege_id);
 
             if ($user) {
+                $this->setFirstView($campaign->table_name, $user);
                 if ($now <= $user->expire_date) {
                     if ($user->is_use === 'no') {
+                        $expire = $privilege->has_timer === 'yes' ? date('Y-m-d H:i:s', strtotime("+{$privilege->timer_value}Minute")) : $user->expire_date;
+
                         $res['status'] = 'ok';
                         $res['code'] = $user->code;
+                        $res['expire'] = $expire;
                         $res['default_code'] = $privilege->default_code;
+
+                        $this->setRedeem($campaign->table_name, $user);
                     } else {
                         $res['status'] = 'already';
                     }
@@ -167,14 +170,78 @@ class RedeemController extends Controller
             } else {
                 $res['status'] = 'emptry';
             }
-        }else{
+        } else {
             $res['status'] = 'error';
         }
 
         return response()->json($res);
     }
 
-    public function getView()
+    public function getView(Request $request)
     {
+        $now = date('Y-m-d H:i:s');
+        $campaign_keyword = Str::upper($request->c);
+        $partner_keyword = Str::upper($request->p);
+        $unique_code = $request->u;
+        $response_recaptcha = $request->r;
+
+        $recapt = $this->validateCaptcha($response_recaptcha);
+        if ($recapt->success && $recapt->score > 0.7) {
+            $campaign = Campaign::where(['keyword' => $campaign_keyword, 'status' => 'active'])->first();
+            $user = DB::connection('storage_code')
+                ->table($campaign->table_name)->select(['id', 'code', 'is_use', 'expire_date', 'start_date', 'first_view_date', 'shop_id', 'privilege_id'])
+                ->where(['partner_keyword' => $partner_keyword, 'flag' => 'ok'])
+                ->where(DB::raw('BINARY unique_code'), '=', $unique_code)
+                ->first();
+            $privilege = $campaign->privileges()->find($user->privilege_id);
+
+            if ($user) {
+                $this->setFirstView($campaign->table_name, $user);
+                if ($now <= $user->expire_date) {
+                    $expire = $privilege->has_timer === 'yes' ? date('Y-m-d H:i:s', strtotime("+{$privilege->timer_value}Minute")) : $user->expire_date;
+
+                    $res['status'] = 'ok';
+                    $res['code'] = $user->code;
+                    $res['expire'] = $expire;
+                    $res['default_code'] = $privilege->default_code;
+
+                    $this->setRedeem($campaign->table_name, $user);
+                } else {
+                    $res['status'] = 'expired';
+                }
+            } else {
+                $res['status'] = 'emptry';
+            }
+        } else {
+            $res['status'] = 'error';
+        }
+        return response()->json($res);
+    }
+
+    public function setFirstView($table, $user)
+    {
+        if (is_null($user->first_view_date)) {
+            DB::connection('storage_code')
+                ->table($table)
+                ->where('id', $user->id)
+                ->where('code', $user->code)
+                ->update([
+                    'first_view_date' => date('Y-m-d H:i:s')
+                ]);
+        }
+    }
+
+    public function setRedeem($table, $user)
+    {
+        if ($user->is_use === 'no') {
+            DB::connection('storage_code')
+                ->table($table)
+                ->where('id', $user->id)
+                ->where('code', $user->code)
+                ->update([
+                    'redeem_date' => date('Y-m-d H:i:s'),
+                    'is_use' => 'yes'
+                ]);
+        }
     }
 }

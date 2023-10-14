@@ -17,6 +17,6 @@ class ImageController extends Controller
         $partner = Str::lower($partner);
         $department = Department::where('keyword', $partner)->value('id');
         $res = Image::get($department, 'departments', 'logo') ?? "https://a.yllo.in/assets/img/logo/{$partner}.png?" . time();
-        return  response()->json($res);
+        return  response()->json($res, 200, [], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
     }
 }

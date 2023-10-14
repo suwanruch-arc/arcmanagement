@@ -37,8 +37,8 @@ class PrivilegeController extends Controller
             'start_date' => old('start_date') ?? ($model ? $model->start_date : $campaign->start_date),
             'end_date' => old('end_date') ?? ($model ? $model->end_date : $campaign->end_date),
             'has_timer' => old('has_timer') ?? ($model ? $model->has_timer == 'yes' : false),
-            'timer_value' => old('timer_value') ?? ($model ? $model->timer_value : 60),
-            'skip_confirm' => old('skip_confirm') ?? ($model ? $model->skip_confirm == 'no' : false),
+            'timer_value' => old('timer_value') ?? ($model ? $model->timer_value : 10),
+            'skip_confirm' => old('skip_confirm') ?? ($model ? $model->skip_confirm == 'yes' : false),
             'can_view' => old('can_view') ?? ($model ? $model->can_view == 'yes' : false),
             'description' => old('description') ?? ($model ? $model->description : ''),
             'has_detail' => old('has_detail') ?? ($model ? $model->has_detail == 'yes' : false),
@@ -131,6 +131,7 @@ class PrivilegeController extends Controller
             $privilege = new Privilege;
             $privilege->fill($validated);
             $privilege->title = $privilege->title ?? "{$shop_keyword}_{$privilege->value}";
+            $privilege->skip_confirm = $request->skip_confirm ? 'yes' : 'no';
             $privilege->has_detail = $request->has_detail ? 'yes' : 'no';
             $privilege->has_tandc = $request->has_tandc ? 'yes' : 'no';
             $privilege->has_timer = $request->has_timer ? 'yes' : 'no';
@@ -236,6 +237,7 @@ class PrivilegeController extends Controller
             $settings = json_encode($request->settings ?? []);
 
             $privilege->fill($validated);
+            $privilege->skip_confirm = $request->skip_confirm ? 'yes' : 'no';
             $privilege->has_detail = $request->has_detail ? 'yes' : 'no';
             $privilege->has_tandc = $request->has_tandc ? 'yes' : 'no';
             $privilege->has_timer = $request->has_timer ? 'yes' : 'no';

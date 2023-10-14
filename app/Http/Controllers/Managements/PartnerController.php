@@ -20,7 +20,7 @@ class PartnerController extends Controller
         $fields = [
             'type' => $type,
             'id' => $model ? $model->id : '',
-            'status' => old('status') ?? ($model ? $model->status : ''),
+            'status' => old('status') ?? ($model ? $model->status : 'active'),
             'name' => old('name') ?? ($model ? $model->name : ''),
             'keyword' => old('keyword') ?? ($model ? $model->keyword : ''),
             'department_name' => old('department_name') ?? '',

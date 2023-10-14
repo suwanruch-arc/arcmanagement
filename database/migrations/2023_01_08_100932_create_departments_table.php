@@ -17,7 +17,7 @@ class CreateDepartmentsTable extends Migration
             $table->id();
             $table->foreignId('partner_id')->constrained('partners');
             $table->string('name', 255);
-            $table->string('keyword', 5);
+            $table->string('keyword', 10);
             $table->enum('is_main', ['yes', 'no']);
             $table->enum('status', ["active", "inactive"]);
             $table->timestamps();

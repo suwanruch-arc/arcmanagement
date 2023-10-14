@@ -15,7 +15,7 @@
             <x-input label="Department Name" name="department_name" :value="$department_name" />
         </div>
         <div class="col">
-            <x-input label="Department Keyword" name="department_keyword" :value="$department_keyword" />
+            <x-input label="Department Keyword" name="department_keyword" :value="$department_keyword" class="uppercase" />
         </div>
     </div>
 @endif

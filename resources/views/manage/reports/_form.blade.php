@@ -2,7 +2,13 @@
     <div class="col-4 border-end">
         <div class="row row-cols-1 row-cols-md-2">
             <div class="col">
-                <x-select :src="['main' => 'Main', 'db_95' => 'DB 95', 'db_a' => 'DB Ecoupon A', 'db_b' => 'DB Ecoupon B']" label="Connection" name="connection" :value="$connection" required />
+                <x-select :src="[
+                    'main' => 'Main',
+                    'db_storage_code' => 'DB Storage Code',
+                    'db_95' => 'DB 95',
+                    'db_a' => 'DB Ecoupon A',
+                    'db_b' => 'DB Ecoupon B',
+                ]" label="Connection" name="connection" :value="$connection" required />
             </div>
             <div class="col">
                 <x-select :src="['std' => 'Standard', 'raw' => 'Raw SQL']" label="Type" name="type_query" :value="$type_query" required />

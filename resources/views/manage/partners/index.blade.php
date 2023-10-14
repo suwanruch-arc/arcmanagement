@@ -13,9 +13,9 @@
             <x-datatable>
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Keyword</th>
-                        <th class="no-search" width="25%">Action</th>
+                        <th width="45%">Name</th>
+                        <th width="45%">Keyword</th>
+                        <th width="10%">Action</th>
                     </tr>
                 </thead>
                 <tbody>

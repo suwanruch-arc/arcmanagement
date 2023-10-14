@@ -16,8 +16,8 @@
         <x-input type="switch" class="fs-5 ms-1" name="can_view" :value="$can_view" />
     </div>
     <div class="col">
-        <x-input type="number" min="60" label="จับเวลา" name="timer_value" :value="$timer_value" append="วินาที"
-            :readonly="$has_timer === 'no'">
+        <x-input type="number" min="5" label="จับเวลา" name="timer_value" :value="$timer_value" append="นาที"
+            :readonly="!$has_timer">
             <x-slot name="prepend">
                 <x-input type="switch" name="has_timer" :value="$has_timer" />
             </x-slot>

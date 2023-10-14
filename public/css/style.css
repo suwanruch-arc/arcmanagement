@@ -83,3 +83,7 @@ table tbody tr:last-child td:last-child {
 #dataTable > thead > tr.filters > th:not(.search) > input.form-control {
     display: none;
 }
+
+.note-editor {
+    width: 100% !important;
+}
