@@ -62,7 +62,7 @@
                             <td>{{ $unique->secret_code }}</td>
                             <td>{{ $unique->unique_code }}</td>
                             <td>
-                                <a href="{{$link}}" target="_blank">{{ $link }}</a>
+                                <a href="{{ $link }}" target="_blank">{{ $link }}</a>
                             </td>
                             <td>
                                 <img class="img-thumbnail"
@@ -96,7 +96,12 @@
                 $.each($("[id^='select-']:checked"), function(indexInArray, data) {
                     id.push(parseInt(data.value))
                 });
-                openCenteredPopup("{{ route('site.warehouse.change-privilege', $campaign->id) }}", id)
+
+                if (id.length > 0) {
+                    openCenteredPopup("{{ route('site.warehouse.change-privilege', $campaign->id) }}", id)
+                }else{
+                    swal.fire('กรุณาเลือกข้อมูลก่อน')
+                }
             });
 
             $("tr").on('click', function(e) {

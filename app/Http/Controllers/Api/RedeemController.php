@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Crypt;
 
 class RedeemController extends Controller
 {
@@ -38,6 +40,9 @@ class RedeemController extends Controller
         $campaign_keyword = Str::upper($request->c);
         $partner_keyword = Str::upper($request->p);
         $unique_code = $request->u;
+
+        $logs['request'] = ['campaign' => $request->c, 'partner' => $request->p, 'unique' => $request->u];
+        $logs['data_access'] = $now;
 
         $campaign = Campaign::where(['keyword' => $campaign_keyword, 'status' => 'active'])->first();
         $user = DB::connection('storage_code')
@@ -128,6 +133,12 @@ class RedeemController extends Controller
         } else {
             $res['status'] = false;
         }
+
+        $date = date('Ymd');
+        Log::build([
+            'driver' => 'single',
+            'path' => storage_path("logs/redeem/{$date}.log"),
+        ])->info("Type:getDetail|Unique:{$unique_code}|Ip:{$request->ip()}|UserAgent:{$request->server('HTTP_USER_AGENT')}|Data:" . json_encode($logs) . "|Flag:" . json_encode($res['flag']));
         return response()->json($res);
     }
 
@@ -138,6 +149,9 @@ class RedeemController extends Controller
         $partner_keyword = Str::upper($request->p);
         $unique_code = $request->u;
         $response_recaptcha = $request->r;
+
+        $logs['request'] = ['campaign' => $request->c, 'partner' => $request->p, 'unique' => $request->u];
+        $logs['data_access'] = $now;
 
         $recapt = $this->validateCaptcha($response_recaptcha);
         if ($recapt->success && $recapt->score > 0.7) {
@@ -174,6 +188,11 @@ class RedeemController extends Controller
             $res['status'] = 'error';
         }
 
+        $date = date('Ymd');
+        Log::build([
+            'driver' => 'single',
+            'path' => storage_path("logs/redeem/{$date}.log"),
+        ])->info("Type:getCode|Unique:{$unique_code}|Ip:{$request->ip()}|UserAgent:{$request->server('HTTP_USER_AGENT')}|Data:" . json_encode($logs) . "|Return:" . json_encode($res));
         return response()->json($res);
     }
 
@@ -184,6 +203,10 @@ class RedeemController extends Controller
         $partner_keyword = Str::upper($request->p);
         $unique_code = $request->u;
         $response_recaptcha = $request->r;
+
+        $logs['request'] = ['campaign' => $request->c, 'partner' => $request->p, 'unique' => $request->u];
+        $logs['data_access'] = $now;
+
 
         $recapt = $this->validateCaptcha($response_recaptcha);
         if ($recapt->success && $recapt->score > 0.7) {
@@ -215,6 +238,12 @@ class RedeemController extends Controller
         } else {
             $res['status'] = 'error';
         }
+
+        $date = date('Ymd');
+        Log::build([
+            'driver' => 'single',
+            'path' => storage_path("logs/redeem/{$date}.log"),
+        ])->info("Type:getView|Unique:{$unique_code}|Ip:{$request->ip()}|UserAgent:{$request->server('HTTP_USER_AGENT')}|Data:" . json_encode($logs) . "|Return:" . json_encode($res));
         return response()->json($res);
     }
 
