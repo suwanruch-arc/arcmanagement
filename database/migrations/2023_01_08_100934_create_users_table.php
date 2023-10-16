@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name', 255);
             $table->string('email', 255)->nullable();
-            $table->string('username')->unique();
+            $table->string('username',100)->unique();
             $table->string('password');
             $table->string('contact_number')->nullable();
             $table->foreignId('partner_id')->nullable()->constrained('partners')->cascadeOnUpdate()->nullOnDelete();
