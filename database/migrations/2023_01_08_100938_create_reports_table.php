@@ -17,7 +17,7 @@ class CreateReportsTable extends Migration
             $table->id();
             $table->enum('connection',['main','db_storage_code','db_95','db_ecoupon_a','db_ecoupon_b']);
             $table->enum('type_query',['std','raw']);
-            $table->string('uuid')->unique();
+            $table->string('uuid',191)->unique();
             $table->string('name', 255);
             $table->text('description')->nullable();
             $table->string('from', 255)->nullable();
