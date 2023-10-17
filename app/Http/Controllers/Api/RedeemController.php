@@ -125,6 +125,7 @@ class RedeemController extends Controller
                         'code_type' => $privilege->default_code,
                         'settings' => $privilege->settings,
                         'status' => true,
+                        'flag' => 'ok',
                         'template' => $template,
                         'template_type' => $campaign->template_type,
                     ];
