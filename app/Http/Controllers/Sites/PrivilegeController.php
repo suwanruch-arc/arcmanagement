@@ -25,6 +25,8 @@ class PrivilegeController extends Controller
     public function fields($campaign, $model = null)
     {
         $type = $model ? 'update' : 'create';
+
+        // dd($model->settings);
         $fields = [
             'id' => ($model ? $model->id : ''),
             'type' => $type,
@@ -46,15 +48,15 @@ class PrivilegeController extends Controller
             'has_tandc' => old('has_tandc') ?? ($model ? $model->has_tandc == 'yes' : false),
             'tandc' => old('tandc') ?? ($model ? $model->tandc : ''),
             'status' => old('status') ?? ($model ? $model->status : 'active'),
-            'settings' => (object) [
-                'font-size' => 0,
-                'w' => 0,
-                'h' => 0,
-                'row-1' => 0,
-                'row-2' => 0,
-                'col-1' => 0,
-                'col-2' => 0,
-                'col-3' => 0,
+            'settings' =>  (object) [
+                'font-size' => 16,
+                'w' => 100,
+                'h' => 100,
+                'row-1' => 540,
+                'row-2' => 100,
+                'col-1' => 400,
+                'col-2' => 200,
+                'col-3' => 400,
             ]
         ];
 
@@ -105,7 +107,7 @@ class PrivilegeController extends Controller
             'end_date' => [
                 'required', 'date', 'after:start_date', 'date_format:Y-m-d H:i:s',
                 Rule::unique('privileges')->where(function ($query) use ($campaign) {
-                    return $campaign->template_type === 'STD' && $query->where('value', request()->input('value'))->where('shop_id', request()->input('shop_id'))->where('campaign_id', $campaign->id);
+                    return $query->where('value', request()->input('value'))->where('shop_id', request()->input('shop_id'))->where('campaign_id', $campaign->id);
                 }),
             ],
             'default_code' => 'required|in:qrcode,barcode,textcode',
@@ -216,7 +218,7 @@ class PrivilegeController extends Controller
             'end_date' => [
                 'required', 'date', 'after:start_date', 'date_format:Y-m-d H:i:s',
                 Rule::unique('privileges')->where(function ($query) use ($campaign, $privilege) {
-                    return $campaign->template_type === 'STD' ||  $query->where('campaign_id', $campaign->id)->where('value', request()->input('value'))->where('shop_id', request()->input('shop_id'))->where('id', '<>', $privilege->id);
+                    return $query->whereRaw("'STD' = '{$campaign->template_type}'")->where('campaign_id', $campaign->id)->where('value', request()->input('value'))->where('shop_id', request()->input('shop_id'))->where('id', '<>', $privilege->id);
                 }),
             ],
             'default_code' => 'required|in:qrcode,barcode,textcode',
