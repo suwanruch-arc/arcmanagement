@@ -64,9 +64,9 @@ class PartnerController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'keyword' => 'required|max:5|unique:partners',
+            'keyword' => 'required|max:10|unique:partners',
             'department_name' => 'nullable|max:255',
-            'department_keyword' => 'nullable|max:5|unique:departments,keyword',
+            'department_keyword' => 'nullable|max:10|unique:departments,keyword',
             'status' => 'required|in:active,inactive',
         ]);
 
@@ -138,7 +138,7 @@ class PartnerController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'keyword' => 'required|max:5|unique:partners,id,' . $partner->id,
+            'keyword' => 'required|max:10|unique:partners,id,' . $partner->id,
             'status' => 'required|in:active,inactive',
         ]);
 

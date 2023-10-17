@@ -61,7 +61,7 @@ class DepartmentController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'keyword' => 'required|max:5|unique:departments,keyword',
+            'keyword' => 'required|max:10|unique:departments,keyword',
             'status' => 'required|in:active,inactive',
         ]);
 
@@ -127,7 +127,7 @@ class DepartmentController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'keyword' => 'required|max:5|unique:departments,id,' . $department->id,
+            'keyword' => 'required|max:10|unique:departments,id,' . $department->id,
             'status' => 'required|in:active,inactive',
         ]);
 
