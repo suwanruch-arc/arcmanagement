@@ -40,7 +40,7 @@
                                 {!! Status::show($user->status) !!}
                             </td>
                             <td class="text-center">
-                                <x-action-btn :disable="$user->status" route="manage.users" :params="['user' => $user->id]" />
+                                <x-action-btn :model="$user" route="manage.users" :params="['user' => $user->id]" />
                             </td>
                         </tr>
                     @empty

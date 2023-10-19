@@ -77,7 +77,7 @@ class ReportController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'connection' => 'required|in:main,db_95,db_a,db_b',
+            'connection' => 'required|in:main,db_storage_code,db_95,db_a,db_b',
             'type_query' => 'required|in:std,raw',
             'name' => 'required|max:255',
             'description' => 'nullable',

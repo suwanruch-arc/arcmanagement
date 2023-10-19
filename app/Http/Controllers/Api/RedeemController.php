@@ -45,7 +45,7 @@ class RedeemController extends Controller
         $logs['data_access'] = $now;
 
         $campaign = Campaign::where(['keyword' => $campaign_keyword, 'status' => 'active'])->first();
-        $user = DB::connection('storage_code')
+        $user = DB::connection('db_storage_code')
             ->table($campaign->table_name)->select(['code', 'is_use', 'expire_date', 'start_date', 'first_view_date', 'shop_id', 'privilege_id'])
             ->where(['partner_keyword' => $partner_keyword, 'flag' => 'ok'])
             ->where(DB::raw('BINARY unique_code'), '=', $unique_code)
@@ -157,7 +157,7 @@ class RedeemController extends Controller
         $recapt = $this->validateCaptcha($response_recaptcha);
         if ($recapt->success && $recapt->score > 0.7) {
             $campaign = Campaign::where(['keyword' => $campaign_keyword, 'status' => 'active'])->first();
-            $user = DB::connection('storage_code')
+            $user = DB::connection('db_storage_code')
                 ->table($campaign->table_name)->select(['id', 'code', 'is_use', 'expire_date', 'start_date', 'first_view_date', 'shop_id', 'privilege_id'])
                 ->where(['partner_keyword' => $partner_keyword, 'flag' => 'ok'])
                 ->where(DB::raw('BINARY unique_code'), '=', $unique_code)
@@ -212,7 +212,7 @@ class RedeemController extends Controller
         $recapt = $this->validateCaptcha($response_recaptcha);
         if ($recapt->success && $recapt->score > 0.7) {
             $campaign = Campaign::where(['keyword' => $campaign_keyword, 'status' => 'active'])->first();
-            $user = DB::connection('storage_code')
+            $user = DB::connection('db_storage_code')
                 ->table($campaign->table_name)->select(['id', 'code', 'is_use', 'expire_date', 'start_date', 'first_view_date', 'shop_id', 'privilege_id'])
                 ->where(['partner_keyword' => $partner_keyword, 'flag' => 'ok'])
                 ->where(DB::raw('BINARY unique_code'), '=', $unique_code)
@@ -251,7 +251,7 @@ class RedeemController extends Controller
     public function setFirstView($table, $user)
     {
         if (is_null($user->first_view_date)) {
-            DB::connection('storage_code')
+            DB::connection('db_storage_code')
                 ->table($table)
                 ->where('id', $user->id)
                 ->where('code', $user->code)
@@ -264,7 +264,7 @@ class RedeemController extends Controller
     public function setRedeem($table, $user)
     {
         if ($user->is_use === 'no') {
-            DB::connection('storage_code')
+            DB::connection('db_storage_code')
                 ->table($table)
                 ->where('id', $user->id)
                 ->where('code', $user->code)

@@ -8,13 +8,13 @@ class ActionBtn extends Component
 {
     public $route;
     public $params;
-    public $disable;
+    public $model;
 
-    public function __construct($disable = null, $route, $params = [])
+    public function __construct($model = null, $route, $params = [])
     {
         $this->route = $route;
         $this->params = $params;
-        $this->disable = $disable;
+        $this->model = $model;
     }
 
     /**

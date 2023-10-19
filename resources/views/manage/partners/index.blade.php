@@ -28,8 +28,8 @@
                                 {{ $partner->keyword }}
                             </td>
                             <td class="text-center align-middle bg-light">
-                                <x-action-btn :disable="$partner->status" route="manage.partners" :params="['partner' => $partner->id]">
-                                    <x-button :href="route('manage.partners.departments.create', ['partner' => $partner->id])">
+                                <x-action-btn :model="$partner" route="manage.partners" :params="['partner' => $partner->id]">
+                                    <x-button label="เพิ่ม" :href="route('manage.partners.departments.create', ['partner' => $partner->id])">
                                         <b data-feather="plus"></b>
                                     </x-button>
                                 </x-action-btn>
@@ -49,7 +49,7 @@
                                     {{ $department->keyword }}
                                 </td>
                                 <td class="text-center">
-                                    <x-action-btn :disable="$department->status" route="manage.partners.departments" :params="['partner' => $partner->id, 'department' => $department->id]" />
+                                    <x-action-btn :model="$department" route="manage.partners.departments" :params="['partner' => $partner->id, 'department' => $department->id]" />
                                 </td>
                             </tr>
                         @empty

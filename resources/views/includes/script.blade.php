@@ -2,7 +2,6 @@
 <script type="text/javascript" src="{{ asset('js/jquery-3.7.0.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('plugins/DataTables/datatables.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/select2.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/froala_editor.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/feather.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/sweetalert2.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
@@ -12,28 +11,42 @@
 
 <script>
     feather.replace({
-        'aria-hidden': 'true'
+        'aria-hidden': 'true',
+        'class': 'fade'
     })
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
     $(document).ready(function() {
-        $('form#disable-form').submit(function(e) {
+        $('form#change-status-form').submit(function(e) {
             e.preventDefault();
-            Swal.fire({
-                title: 'คุณแน่ใจไหม?',
-                text: "คุณจะไม่สามารถแก้ไขได้อีก",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'ยกเลิกการใช้งาน',
-                cancelButtonText: 'ย้อนกลับ',
-                allowOutsideClick: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    e.currentTarget.submit();
+            const model = $(this).data("model")
+            $.ajax({
+                type: "GET",
+                url: "{{ route('manage.status.detail') }}",
+                data: {
+                    model: model
+                },
+                dataType: "html",
+                success: function(response) {
+                    $('#formStatement').html(response)
                 }
-            })
+            });
+            // Swal.fire({
+            //     title: 'คุณแน่ใจไหม?',
+            //     text: "คุณจะไม่สามารถแก้ไขได้อีก",
+            //     icon: 'warning',
+            //     showCancelButton: true,
+            //     confirmButtonColor: '#d33',
+            //     cancelButtonColor: '#3085d6',
+            //     confirmButtonText: 'ยกเลิกการใช้งาน',
+            //     cancelButtonText: 'ย้อนกลับ',
+            //     allowOutsideClick: false
+            // }).then((result) => {
+            //     if (result.isConfirmed) {
+            //         e.currentTarget.submit();
+            //     }
+            // })
         });
 
         $('.uppercase').keyup(function(e) {
@@ -67,17 +80,4 @@
             showConfirmButton: false,
         })
     }
-
-    // var editor = new FroalaEditor('.editor', {
-    //     heightMin: 200,
-    //     toolbarInline: false,
-    //     quickInsertEnabled: false,
-    //     toolbarButtons: [
-    //         [
-    //             'bold', 'italic', 'underline', 'superscript', 'formatOL',
-    //             'formatUL',
-    //             'clearFormatting', 'fontSize', 'textColor', 'backgroundColor', 'html'
-    //         ],
-    //     ]
-    // });
 </script>

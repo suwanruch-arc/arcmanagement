@@ -5,9 +5,11 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\AccountController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Managements\DepartmentController;
 use App\Http\Controllers\Managements\PartnerController;
 use App\Http\Controllers\Managements\ShopController;
+use App\Http\Controllers\Managements\StatusController;
 use App\Http\Controllers\Sites\CampaignController;
 use App\Http\Controllers\Sites\PrivilegeController;
 use App\Http\Controllers\ReportController;
@@ -38,9 +40,7 @@ Route::prefix('auth')->name('auth.')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard',  [DashboardController::class, 'main'])->name('dashboard');
 
     Route::prefix('account')->name('account.')->group(function () { // Change Password Route
         Route::get('change-password', [AccountController::class, 'showChangePasswordForm'])->name('change-password-form');
@@ -70,6 +70,11 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('admin')->group(function () {
         Route::prefix('manage')->name('manage.')->group(function () {
+            Route::prefix('status')->name('status.')->group(function () {
+                Route::get('detail', [StatusController::class, 'detail'])->name('detail');
+                Route::post('disable', [StatusController::class, 'disable'])->name('disable');
+                Route::post('reactive', [StatusController::class, 'reactive'])->name('reactive');
+            });
             Route::prefix('reports')->name('reports.')->group(function () {
                 Route::get('get-form', [ReportController::class, 'getForm'])->name('get-form');
                 Route::get('get-select-form', [ReportController::class, 'getSelectForm'])->name('get-select-form');

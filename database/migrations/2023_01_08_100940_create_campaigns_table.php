@@ -22,7 +22,7 @@ class CreateCampaignsTable extends Migration
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->text('description')->nullable();
-            $table->enum('status', ['active', 'inactive']);
+            $table->enum('status', ["active", "inactive"]);
             $table->string('title_alert');
             $table->string('desc_alert');
             $table->string('main_color');

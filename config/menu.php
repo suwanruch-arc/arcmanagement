@@ -15,21 +15,18 @@ return [
             'url' => 'site/campaigns',
             'child' => 'privileges',
         ],
-    ],
-    'reports' => 'reports',
-    'account' => [
-        [
-            'icon' => 'lock',
-            'text' => 'Change Password',
-            'url' => 'account/change-password'
-        ]
-    ],
-    'management' => [
         [
             'icon' => 'file-text',
             'text' => 'Reports',
             'url' => 'manage/reports'
         ],
+    ],
+    'management' => [
+        // [
+        //     'icon' => 'file-text',
+        //     'text' => 'Reports',
+        //     'url' => 'manage/reports'
+        // ],
         [
             'icon' => 'shopping-bag',
             'text' => ' Shops',
@@ -44,6 +41,13 @@ return [
             'icon' => 'user',
             'text' => 'Users',
             'url' => 'manage/users'
+        ]
+    ],
+    'account' => [
+        [
+            'icon' => 'lock',
+            'text' => 'Change Password',
+            'url' => 'account/change-password'
         ]
     ],
 ];

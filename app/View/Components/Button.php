@@ -11,17 +11,19 @@ class Button extends Component
     public $color;
     public $text;
     public $class;
+    public $label;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($type = 'button', $href = '#', $color = 'primary', $text = '', $class = '')
+    public function __construct($type = 'button', $href = '#', $color = 'primary', $text = '', $label = '', $class = '')
     {
         $this->type = $type;
         $this->href = $href;
         $this->color = $color;
         $this->text = $text;
+        $this->label = $label;
         $this->class = $class;
     }
 

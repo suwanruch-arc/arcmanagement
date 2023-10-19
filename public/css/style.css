@@ -20,12 +20,24 @@ body {
 .card {
     box-shadow: 2px 2px 0.5rem 0px rgba(204, 204, 204.48);
 }
-#mainSection,
+
+.fade {
+    animation: fadeInAnimation ease 1000ms;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+span[data-feather] {
+    width: 20px;
+    display: inline-block;
+}
+
+/* #mainSection,
 #sidebarMenu {
     animation: fadeInAnimation ease 1500ms;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
-}
+} */
 
 .select2-container--bootstrap-5 .select2-selection {
     border-radius: 0.375rem !important;

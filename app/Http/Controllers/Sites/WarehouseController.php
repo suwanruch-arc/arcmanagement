@@ -20,7 +20,7 @@ class WarehouseController extends Controller
 {
     public function index(Campaign $campaign)
     {
-        $uniques = DB::connection('storage_code')->table($campaign->table_name)->get();
+        $uniques = DB::connection('db_storage_code')->table($campaign->table_name)->get();
 
         return view('site.warehouse.index', compact('campaign'))->with(compact('uniques'));
     }
@@ -80,7 +80,7 @@ class WarehouseController extends Controller
         $temp_file_content = $this->getFileTemp($campaign->keyword);
         if ($temp_file_content) {
             $contents = explode("\r\n",  $temp_file_content);
-            $db_code = DB::connection('storage_code')->table($campaign->table_name)->where(['flag' => ['ok', 'deviate']])->pluck('code')->toArray();
+            $db_code = DB::connection('db_storage_code')->table($campaign->table_name)->where(['flag' => ['ok', 'deviate']])->pluck('code')->toArray();
             list($total, $already_code) = [0, []];
             switch ($campaign->template_type) {
                 case 'STD':
@@ -176,8 +176,8 @@ class WarehouseController extends Controller
         $temp_file_content = $this->getFileTemp($campaign->keyword);
         $start_date = $request->start_date;
         if ($temp_file_content) {
-            $unique_data = DB::connection('storage_code')->table($campaign->table_name)->where(['flag' => ['ok', 'deviate']])->pluck('unique_code', 'secret_code')->toArray();
-            $lot = DB::connection('storage_code')->table($campaign->table_name)->where(['flag' => ['ok', 'deviate']])->max('lot');
+            $unique_data = DB::connection('db_storage_code')->table($campaign->table_name)->where(['flag' => ['ok', 'deviate']])->pluck('unique_code', 'secret_code')->toArray();
+            $lot = DB::connection('db_storage_code')->table($campaign->table_name)->where(['flag' => ['ok', 'deviate']])->max('lot');
             $lot = $lot + 1;
             [$already_secret, $already_unique] = Arr::divide($unique_data);
             $privilege_list = $this->getPrivilegeList($campaign);
@@ -356,7 +356,7 @@ class WarehouseController extends Controller
     {
         $privilege = $campaign->privileges()->find($request->select);
         $unique_id = json_decode($request->id);
-        DB::connection('storage_code')->table($campaign->table_name)
+        DB::connection('db_storage_code')->table($campaign->table_name)
             ->whereIn('id', $unique_id)
             ->update([
                 'shop_keyword' => $privilege->shop->keyword,

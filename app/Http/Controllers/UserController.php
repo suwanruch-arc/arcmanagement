@@ -158,7 +158,7 @@ class UserController extends Controller
      */
     public function destroy(Request $request, User $user)
     {
-
+        dd($request->all());
         $name = $user->name;
         $user->update(['status' => 'inactive']);
 

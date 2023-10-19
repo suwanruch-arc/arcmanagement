@@ -7,7 +7,13 @@
 @section('content')
     <div class="row row-cols-1 row-cols-md-2">
         <div class="col-xl-3 col-sm-6 col-12">
-            <x-info-box label="Campaigns" icon="archive" value="200" />
+            <x-info-box label="Campaigns" icon="archive" :value="$total_campaign" />
+        </div>
+        <div class="col-xl-3 col-sm-6 col-12">
+            <x-info-box label="Total Code" icon="cloud" :value="$total_code" />
+        </div>
+        <div class="col-xl-3 col-sm-6 col-12">
+            <x-info-box label="Total Use" icon="code" :value="$total_use" />
         </div>
     </div>
 @endsection

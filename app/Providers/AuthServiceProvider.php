@@ -35,7 +35,7 @@ class AuthServiceProvider extends ServiceProvider
             return in_array($user->role, ['admin', 'moderator']);
         });
 
-        Gate::define('delete', function ($user) {
+        Gate::define('change-status', function ($user) {
             return in_array($user->role, ['admin']);
         });
 
