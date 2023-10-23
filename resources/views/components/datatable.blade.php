@@ -13,7 +13,7 @@
     </div>
 </div>
 <div class="table-responsive" id="dataTableArea" style="display: none">
-    <table class="table table-bordered" id="dataTable" width="100%">
+    <table class="table table-bordered nowrap" id="dataTable" width="100%">
         {{ $slot }}
     </table>
 </div>
@@ -24,6 +24,8 @@
             autoWidth: false,
             orderCellsTop: true,
             fixedHeader: true,
+            responsive: true,
+            order: [],
             ordering: {{ $sort }},
             language: {
                 url: "{{ asset('plugins/DataTables/th.json') }}",

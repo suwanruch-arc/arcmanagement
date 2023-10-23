@@ -1,4 +1,4 @@
-<div class="hstack">
+<div class="hstack justify-content-around">
     {{ $slot }}
     @can('update')
         <a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="แก้ไข" class="btn btn-warning m-1" type="button"
@@ -26,7 +26,8 @@
         @endphp
         @if ($show)
             <form data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ $title }}" id="change-status-form"
-                data-model="{{ $model->getTable() }}" class="d-inline" method="post" action="{{ $route }}">
+                data-model="{{ $model->getTable() }}" data-id="{{ $model->id }}" class="d-inline" method="post"
+                action="{{ $route }}">
                 @csrf
                 <button class="btn btn-{{ $color }} m-1" type="submit">
                     <i data-feather="{{ $icon }}"></i>

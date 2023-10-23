@@ -36,7 +36,7 @@ class PartnerController extends Controller
      */
     public function index()
     {
-        $partners = Partner::where('status', 'active')->get();
+        $partners = Partner::all();
         return view('manage.partners.index')->with(compact('partners'));
     }
 

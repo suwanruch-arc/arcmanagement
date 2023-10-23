@@ -37,7 +37,7 @@
                                     'id' => 'banner',
                                     'width' => '100px',
                                     'class' => 'img-thumbnail rounded p-1',
-                                    ]) !!}
+                                ]) !!}
                             </td>
                             <td>
                                 <button class="btn btn-link" onclick="showTandC('{!! $shop->tandc !!}')">แสดง</button>
@@ -46,7 +46,7 @@
                                 {!! Status::show($shop->status) !!}
                             </td>
                             <td class="text-center">
-                                <x-action-btn :disable="$shop->status" route="manage.shops" :params="['shop' => $shop->id]" />
+                                <x-action-btn :model="$shop" route="manage.shops" :params="['shop' => $shop->id]" />
                             </td>
                         </tr>
                     @empty

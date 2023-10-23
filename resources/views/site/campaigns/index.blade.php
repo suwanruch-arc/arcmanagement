@@ -32,7 +32,7 @@
                                 {!! Status::show($campaign->status) !!}
                             </td>
                             <td class="text-center">
-                                <x-action-btn :disable="$campaign->status" route="site.campaigns" :params="['campaign' => $campaign->id]">
+                                <x-action-btn :model="$campaign" route="site.campaigns" :params="['campaign' => $campaign->id]">
                                     <x-button color="secondary"
                                         href="{{ route('site.warehouse.index', $campaign->id) }}"
                                         class="m-1 text-nowrap">

@@ -10,7 +10,7 @@
             <x-info-box label="Campaigns" icon="archive" :value="$total_campaign" />
         </div>
         <div class="col-xl-3 col-sm-6 col-12">
-            <x-info-box label="Total Code" icon="cloud" :value="$total_code" />
+            <x-info-box label="Total Code" icon="terminal" :value="$total_code" />
         </div>
         <div class="col-xl-3 col-sm-6 col-12">
             <x-info-box label="Total Use" icon="code" :value="$total_use" />

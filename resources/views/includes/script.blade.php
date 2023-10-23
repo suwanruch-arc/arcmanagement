@@ -20,16 +20,57 @@
     $(document).ready(function() {
         $('form#change-status-form').submit(function(e) {
             e.preventDefault();
+            const id = $(this).data("id")
             const model = $(this).data("model")
             $.ajax({
                 type: "GET",
                 url: "{{ route('manage.status.detail') }}",
                 data: {
+                    id: id,
                     model: model
                 },
                 dataType: "html",
                 success: function(response) {
-                    $('#formStatement').html(response)
+                    Swal.fire({
+                        title: 'คุณแน่ใจใช่ไหม?',
+                        html: response,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'ปิดการใช้งาน',
+                        cancelButtonText: 'ย้อนกลับ',
+                        focusConfirm: false,
+                        focusCancel: true,
+                        showClass: {
+                            popup: "animate__animated animate__shakeX animate__fast"
+                        },
+                    }).then((action) => {
+                        if (action.isConfirmed) {
+                            var disableId = [];
+                            $.each($('[id="disable-id"]'), function(indexInArray,
+                                input) {
+                                disableId.push({
+                                    table: input.name,
+                                    id: input.value
+                                })
+                            });
+                            $.ajax({
+                                type: "POST",
+                                url: "{{ route('manage.status.disable') }}",
+                                data: {
+                                    _token: '{{ csrf_token() }}',
+                                    mainId: $('#main_id').val(),
+                                    mainTable: $('#main_table').val(),
+                                    data: disableId
+                                },
+                                dataType: "JSON",
+                                success: function(response) {
+                                    console.log(response);
+                                }
+                            });
+                        }
+                    })
                 }
             });
             // Swal.fire({

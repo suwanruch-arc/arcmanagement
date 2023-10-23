@@ -137,8 +137,8 @@ class CampaignController extends Controller
             $campaign->save();
 
 
-            if (!Schema::connection('storage_code')->hasTable($table_name)) {
-                Schema::connection('storage_code')->create($table_name, function (Blueprint $table) use ($campaign) {
+            if (!Schema::connection('db_storage_code')->hasTable($table_name)) {
+                Schema::connection('db_storage_code')->create($table_name, function (Blueprint $table) use ($campaign) {
                     $table->id();
                     $table->integer('lot');
                     $table->string('refid');

@@ -15,7 +15,8 @@
                     <tr>
                         <th width="45%">Name</th>
                         <th width="45%">Keyword</th>
-                        <th width="10%">Action</th>
+                        <th width="5%">Status</th>
+                        <th width="5%">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,9 +28,12 @@
                             <td class="align-middle bg-light">
                                 {{ $partner->keyword }}
                             </td>
+                            <td class="text-center">
+                                {!! Status::show($partner->status) !!}
+                            </td>
                             <td class="text-center align-middle bg-light">
                                 <x-action-btn :model="$partner" route="manage.partners" :params="['partner' => $partner->id]">
-                                    <x-button label="เพิ่ม" :href="route('manage.partners.departments.create', ['partner' => $partner->id])">
+                                    <x-button class="m-1" label="เพิ่ม" :href="route('manage.partners.departments.create', ['partner' => $partner->id])">
                                         <b data-feather="plus"></b>
                                     </x-button>
                                 </x-action-btn>
@@ -47,6 +51,9 @@
                                 </td>
                                 <td class="align-middle">
                                     {{ $department->keyword }}
+                                </td>
+                                <td class="text-center">
+                                    {!! Status::show($department->status) !!}
                                 </td>
                                 <td class="text-center">
                                     <x-action-btn :model="$department" route="manage.partners.departments" :params="['partner' => $partner->id, 'department' => $department->id]" />
