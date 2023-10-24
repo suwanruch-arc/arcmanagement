@@ -43,7 +43,7 @@
                         focusConfirm: false,
                         focusCancel: true,
                         showClass: {
-                            popup: "animate__animated animate__shakeX animate__fast"
+                            popup: "animate__animated animate__headShake animate__faster"
                         },
                     }).then((action) => {
                         if (action.isConfirmed) {

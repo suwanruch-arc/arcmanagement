@@ -9,10 +9,12 @@
         @foreach ($partners as $partner)
             <optgroup label="{{ $partner->name }}">
                 @foreach ($partner->users as $user)
-                    <option partner="{{ $partner->keyword }}" department="{{ $user->department->keyword }}"
-                        value="{{ $user->id }}" @if (in_array($user->id, $selected)) selected @endif>
-                        {{ $user->department->name ?? 'None' }} - {{ $user->name }}
-                    </option>
+                    @if ($user->department)
+                        <option partner="{{ $partner->keyword }}" department="{{ $user->department->keyword }}"
+                            value="{{ $user->id }}" @if (in_array($user->id, $selected)) selected @endif>
+                            {{ $user->department->name ?? 'None' }} - {{ $user->name }}
+                        </option>
+                    @endif
                 @endforeach
             </optgroup>
         @endforeach

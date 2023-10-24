@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master', ['route' => url()->previous()])
 
 @section('title')
     <h3>Users</h3>
@@ -20,6 +20,7 @@
                         <th width="5%">Position</th>
                         <th width="5%">Role</th>
                         <th width="5%">From</th>
+                        <th width="5%">Password</th>
                         <th width="1%">Status</th>
                         <th width="9%">Action</th>
                     </tr>
@@ -48,6 +49,9 @@
                             <td class="fw-bold text-uppercase text-center">
                                 {{ $user->from }}
                             </td>
+                            <td class=" text-center">
+                                <button class="btn btn-link" onclick="resetPassword({{ $user->id }})">รีเซ็ต</button>
+                            </td>
                             <td class="text-center">
                                 {!! Status::show($user->status) !!}
                             </td>
@@ -61,4 +65,42 @@
             </x-datatable>
         </x-card>
     </x-container>
+@endsection
+
+@section('js')
+    <script>
+        function resetPassword(id) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'คุณต้องการ รีเซ็ตรหัสผ่าน หรือไม่?',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'รีเซ็ต',
+                cancelButtonText: 'ย้อนกลับ',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('account.reset-password') }}",
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            id: id
+                        },
+                        dataType: "JSON",
+                        success: function(response) {
+                            if (response) {
+                                Swal.fire('Saved!', '', 'success')
+                            } else {
+                                Swal.fire('Error!', '', 'error')
+                            }
+                        },
+                        error: function(response) {
+                            Swal.fire('Error!', '', 'error')
+                        }
+                    });
+                }
+            })
+        }
+    </script>
 @endsection

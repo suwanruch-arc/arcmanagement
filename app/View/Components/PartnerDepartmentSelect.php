@@ -12,17 +12,19 @@ class PartnerDepartmentSelect extends Component
     public $departmentList;
     public $partnerValue;
     public $departmentValue;
+    public $required;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($partnerValue = '', $departmentValue = '')
+    public function __construct($required = null, $partnerValue = '', $departmentValue = '')
     {
         $this->partnerList = Partner::list();
         $this->departmentList = Department::list();
         $this->partnerValue = $partnerValue;
         $this->departmentValue = $departmentValue;
+        $this->required = $required;
     }
 
     /**

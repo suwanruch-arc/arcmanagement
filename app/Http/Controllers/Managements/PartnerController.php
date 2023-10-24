@@ -145,6 +145,7 @@ class PartnerController extends Controller
         DB::transaction(function () use ($validated, $request, &$partner) {
             $partner->fill($validated);
             $partner->keyword = Str::upper($partner->keyword);
+            $partner->status = $request->status;
             $partner->save();
 
             if ($request->hasFile('logo')) {

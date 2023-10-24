@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master', ['route' => url()->previous()])
 
 @section('title')
     <h3>แก้ไข : {{ $title }}</h3>

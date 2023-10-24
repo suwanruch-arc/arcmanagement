@@ -1,4 +1,4 @@
-<div class="hstack justify-content-around">
+<div class="hstack justify-content-center">
     {{ $slot }}
     @can('update')
         <a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="แก้ไข" class="btn btn-warning m-1" type="button"
@@ -6,22 +6,27 @@
     @endcan
     @can('change-status')
         @php
-            $show = true;
-            if ($model->getTable() === 'departments' && $model->is_main === 'yes') {
-                $route = null;
-                $title = 'ไม่สามารถปิดการใช้งาน Department หลักได้';
-                $color = 'outline-secondary disabled';
-                $icon = 'x-circle';
-            } elseif ($model->status === 'active') {
-                $route = route('manage.status.disable');
-                $title = 'ปิดการใช้งาน';
-                $color = 'danger';
-                $icon = 'x-circle';
+            if (isset($model->status)) {
+                $show = true;
+                if ($model->getTable() === 'departments' && $model->is_main === 'yes') {
+                    $route = null;
+                    $title = 'ไม่สามารถปิดการใช้งาน Department หลักได้';
+                    $color = 'outline-secondary disabled';
+                    $icon = 'x-circle';
+                    $show = false;
+                } elseif ($model->status === 'active') {
+                    $route = route('manage.status.disable');
+                    $title = 'ปิดการใช้งาน';
+                    $color = 'danger';
+                    $icon = 'x-circle';
+                } else {
+                    $route = route('manage.status.reactive');
+                    $title = 'Re-Active';
+                    $color = 'success';
+                    $icon = 'refresh-cw';
+                }
             } else {
-                $route = route('manage.status.reactive');
-                $title = 'Re-Active';
-                $color = 'success';
-                $icon = 'refresh-cw';
+                $show = false;
             }
         @endphp
         @if ($show)

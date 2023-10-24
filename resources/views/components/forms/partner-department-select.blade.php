@@ -1,18 +1,18 @@
 <div class="col">
-    <x-select select2 label="Partner" name="partner_id" required>
+    <x-select select2 label="Partner" name="partner_id" :required="$required">
         @foreach ($partnerList as $id => $name)
-            <option value="{{ $id }}" @if ($id === $partnerValue) selected @endif>
+            <option value="{{ $id }}" @if ($id === $partnerValue || $id === intval($partnerValue)) selected @endif>
                 {{ $name }}
             </option>
         @endforeach
     </x-select>
 </div>
 <div class="col">
-    <x-select select2 label="Department" name="department_id" required>
+    <x-select select2 label="Department" name="department_id" :required="$required">
         @foreach ($departmentList as $partner => $department)
             <optgroup label="{{ $partner }}">
                 @foreach ($department as $id => $name)
-                    <option value="{{ $id }}" @if ($id === $departmentValue) selected @endif>
+                    <option value="{{ $id }}" @if ($id === $departmentValue || $id === intval($departmentValue)) selected @endif>
                         {{ $name }}
                     </option>
                 @endforeach
@@ -33,10 +33,11 @@
                     dep.html(optGroup);
                     $('#department_id').prop('disabled', false).trigger('change');
                 } else {
-                    dep.html('<option selected disabled value="">Choose...</option>');
+                    dep.html('<option selected disabled value="">กรุณาเลือก...</option>');
                     $('#department_id').prop('disabled', true).trigger('change');
                 }
             });
+
             if ($('#partner_id').find(":selected").val() != '') {
                 $('#partner_id').trigger('change');
                 $('#department_id').prop('disabled', false);

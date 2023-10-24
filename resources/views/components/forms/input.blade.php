@@ -15,7 +15,7 @@
     <div class="input-group mb-3">
         @if ($type === 'area')
             <textarea class="form-control {{ $class }}  @error($name) is-invalid @enderror" name="{{ $name }}"
-                id="{{ $id ?? $name }}" rows="3">{{ $value }}</textarea>
+                id="{{ $id ?? $name }}" rows="3" placeholder="{{ $placeholder }}">{{ $value }}</textarea>
         @elseif ($type === 'color')
             <input type="color" class="form-control form-control-color" name="{{ $name }}"
                 id="{{ $id ?? $name }}" value="{{ $value }}">

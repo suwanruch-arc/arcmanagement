@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('account')->name('account.')->group(function () { // Change Password Route
         Route::get('change-password', [AccountController::class, 'showChangePasswordForm'])->name('change-password-form');
         Route::post('update-password', [AccountController::class, 'updatePassword'])->name('update-password');
+        Route::post('reset-password', [AccountController::class, 'resetPassword'])->name('reset-password');
     });
 
     Route::name('site.')->group(function () {

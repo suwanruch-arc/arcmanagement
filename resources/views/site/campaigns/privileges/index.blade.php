@@ -1,11 +1,11 @@
-@extends('layouts.master')
+@extends('layouts.master', ['route' => route('site.campaigns.index')])
 
 @section('title')
-    <h3><a class="btn btn-sm btn-outline-secondary mb-2" href="{{ route('site.campaigns.index') }}">
-            <i data-feather="chevrons-left"></i> ย้อนกลับ
-        </a>&nbsp;<a class="btn btn-sm btn-outline-secondary mb-2" href="{{ route('site.warehouse.index', $campaign->id) }}">
-            <i data-feather="upload"></i> นำเข้าข้อมูล
-        </a>
+    <a class="btn btn-sm btn-outline-secondary mb-2" href="{{ route('site.warehouse.index', $campaign->id) }}">
+        <i data-feather="upload"></i> นำเข้าข้อมูล
+    </a>
+    <h3>
+
         <br> {{ $campaign->name }} - Privileges
     </h3>
 @endsection
@@ -76,7 +76,7 @@
                                 {!! Status::show($privilege->status) !!}
                             </td>
                             <td class="text-center align-middle">
-                                <x-action-btn :disable="$privilege->status" route="site.campaigns.privileges" :params="['campaign' => $privilege->campaign->id, 'privilege' => $privilege->id]" />
+                                <x-action-btn :model="$privilege" route="site.campaigns.privileges" :params="['campaign' => $privilege->campaign->id, 'privilege' => $privilege->id]" />
                             </td>
                         </tr>
                         @empty

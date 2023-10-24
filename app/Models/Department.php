@@ -21,15 +21,21 @@ class Department extends Model
         return $this->belongsTo(Partner::class);
     }
 
-    public static function list()
+    public static function list($partner_id = null)
     {
-        $department = Department::all(); // Retrieve all users
+        $department_query = Department::where('status','active'); // Retrieve all users
+
+        if($partner_id){
+            $department_query->where('partner_id',$partner_id);
+        }
+
+        $department = $department_query->get();
 
         foreach ($department as $item) {
             $departmentList[$item->partner->name][$item->id] = $item->name;
         }
 
-        return $departmentList;
+        return $departmentList ?? [];
     }
 
     public function users()

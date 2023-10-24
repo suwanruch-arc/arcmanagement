@@ -26,10 +26,10 @@
 @endif
 <input name="main_id" id="main_id" value="{{ $main->id }}" type="hidden" />
 <input name="main_table" id="main_table" value="{{ $main->table }}" type="hidden" />
-<style>
+{{-- <style>
     .swal2-confirm {
         animation: headShake;
         animation-iteration-count: infinite;
         animation-duration: 1s;
     }
-</style>
+</style> --}}

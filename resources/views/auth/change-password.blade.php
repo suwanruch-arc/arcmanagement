@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master', ['route' => url()->previous()])
 
 @section('head_title')
     Change Password

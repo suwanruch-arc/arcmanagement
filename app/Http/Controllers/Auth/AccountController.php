@@ -29,4 +29,10 @@ class AccountController extends Controller
 
         return redirect()->route('dashboard');
     }
+
+    public function resetPassword(Request $request)
+    {
+        $id = $request->id;
+        return User::find($id)->update(['password' => Hash::make('Pass@1234')]);
+    }
 }

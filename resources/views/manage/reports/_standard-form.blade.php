@@ -1,19 +1,19 @@
 <table class="table table-bordered" width="100%">
     <tbody>
         <tr>
-            <th class="text-center">FROM <span class="text-danger">*</span></th>
+            <th class="text-center">Table <span class="text-danger">*</span></th>
             <td colspan="2">
-                <x-input name="from" required :value="$report->from ?? ''" />
+                <x-input name="from" required :value="$report->from ?? null" placeholder='Table Name'/>
             </td>
         </tr>
         <tr>
-            <th class="text-center">WHERE</th>
+            <th class="text-center">Where</th>
             <td colspan="2">
                 <x-input name="where" :value="$report->where ?? ''" />
             </td>
         </tr>
         <tr>
-            <th class="text-center">SELECT</th>
+            <th class="text-center">Column</th>
             <th width="85%" id="formSelect">
                 @if ($report)
                     @foreach ($report->settings as $item)

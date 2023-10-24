@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master', ['route' => url()->previous()])
 
 @section('title')
     <h3>Partner</h3>
@@ -47,7 +47,7 @@
                                         'width' => '100px',
                                         'class' => 'img-thumbnail rounded p-1',
                                     ]) !!}
-                                    {{ $department->name }}
+                                    {{ $department->name }} <i><small>({{ $department->is_main ? 'Main' : '' }})</small></i>
                                 </td>
                                 <td class="align-middle">
                                     {{ $department->keyword }}

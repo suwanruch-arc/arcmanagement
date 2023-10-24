@@ -26,7 +26,7 @@
         </div>
         <div class="row row-cols-1">
             <div class="col">
-                <x-assign-list :selected="$assign_users" required />
+                <x-assign-list :selected="$assign_users"  />
             </div>
         </div>
     </div>

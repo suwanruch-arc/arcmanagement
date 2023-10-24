@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Sites;
 
+use App\Models\Partner;
 use App\Models\Campaign;
 use App\Models\Department;
 use Illuminate\Support\Str;
@@ -70,11 +71,22 @@ class CampaignController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $campaigns = Campaign::all();
+        $campaign_query = Campaign::orderBy('status')->orderBy('end_date');
 
-        return view('site.campaigns.index', compact('campaigns'));
+        if ($request->department_id) {
+            $campaign_query->where('owner_id', $request->department_id);
+        }
+
+        $campaigns = $campaign_query->get();
+
+        $partner_id = Auth::user()->position === 'leader' ? Auth::user()->partner_id : null;
+
+        return view('site.campaigns.index', [
+            'partner_lists' => Partner::list(),
+            'department_lists' => Department::list($partner_id),
+        ])->with(compact('campaigns'));
     }
 
     /**

@@ -32,6 +32,6 @@
         <x-select label="Status" name="status" :src="['active' => 'ใช้งาน', 'inactive' => 'ไม่ใช้งาน']" :value="$status" required />
     </div>
     <div class="col">
-        <x-input label="Contact Number" name="contact_number" :value="$contact_number" required />
+        <x-input class="numberonly" min="10" max="10" type="tel" label="Contact Number" name="contact_number" :value="$contact_number" required />
     </div>
 </div>

@@ -16,13 +16,13 @@ class Partner extends Model
 
     public static function list()
     {
-        $partner = Partner::all(); // Retrieve all partners
+        $partner = Partner::where('status','active')->get(); // Retrieve all partners
 
         foreach ($partner as $item) {
             $partnerList[$item->id] = $item->name;
         }
 
-        return $partnerList;
+        return $partnerList ?? [];
     }
 
     public function department()

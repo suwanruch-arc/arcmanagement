@@ -32,7 +32,7 @@ class ReportController extends Controller
             'type_query' => old('type_query') ?? ($model ? $model->type_query : 'std'),
             'name' => old('name') ?? ($model ? $model->name : ''),
             'description' => old('description') ?? ($model ? $model->description : ''),
-            'assign_users' => $assign_users ?? []
+            'assign_users' => $assign_users ?? [],
         ];
         return $fields;
     }
@@ -48,7 +48,9 @@ class ReportController extends Controller
                 ]);
                 break;
             case 'raw':
-                return view('manage.reports._sql-form');
+                return view('manage.reports._sql-form', [
+                    'sql' => old('sql') ?? ($report ? $report->sql : null)
+                ]);
                 break;
         }
     }
@@ -61,6 +63,7 @@ class ReportController extends Controller
     public function index()
     {
         $reports = Report::all();
+        
         return view('manage.reports.index')->with(compact('reports'));
     }
 
@@ -81,7 +84,6 @@ class ReportController extends Controller
             'type_query' => 'required|in:std,raw',
             'name' => 'required|max:255',
             'description' => 'nullable',
-            'assign_lists' => 'required',
             'from' => 'required_if:type_query,std',
             'where' => 'nullable',
         ]);
@@ -143,7 +145,6 @@ class ReportController extends Controller
             'type_query' => 'required|in:std,raw',
             'name' => 'required|max:255',
             'description' => 'nullable',
-            'assign_lists' => 'required',
             'from' => 'required_if:type_query,std',
             'where' => 'nullable',
         ]);
