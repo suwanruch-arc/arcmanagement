@@ -66,28 +66,15 @@
                                 },
                                 dataType: "JSON",
                                 success: function(response) {
-                                    location.reload()
+                                    if (response.status === 'ok') {
+                                        location.reload()
+                                    }
                                 }
                             });
                         }
                     })
                 }
             });
-            // Swal.fire({
-            //     title: 'คุณแน่ใจไหม?',
-            //     text: "คุณจะไม่สามารถแก้ไขได้อีก",
-            //     icon: 'warning',
-            //     showCancelButton: true,
-            //     confirmButtonColor: '#d33',
-            //     cancelButtonColor: '#3085d6',
-            //     confirmButtonText: 'ยกเลิกการใช้งาน',
-            //     cancelButtonText: 'ย้อนกลับ',
-            //     allowOutsideClick: false
-            // }).then((result) => {
-            //     if (result.isConfirmed) {
-            //         e.currentTarget.submit();
-            //     }
-            // })
         });
 
         $('.uppercase').keyup(function(e) {

@@ -68,6 +68,8 @@ class StatusController extends Controller
             }
         }
         DB::table($main_table)->where('id', $main_id)->update(['status' => 'inactive']);
+
+        return response()->json(['status'=>'ok']);
     }
     public function reactive(Request $request)
     {
