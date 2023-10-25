@@ -63,7 +63,7 @@ class ReportController extends Controller
     public function index()
     {
         $reports = Report::all();
-        
+
         return view('manage.reports.index')->with(compact('reports'));
     }
 
@@ -141,7 +141,7 @@ class ReportController extends Controller
     public function update(Request $request, Report $report)
     {
         $validated = $request->validate([
-            'connection' => 'required|in:main,db_95,db_a,db_b',
+            'connection' => 'required|in:main,db_storage_code,db_95,db_a,db_b',
             'type_query' => 'required|in:std,raw',
             'name' => 'required|max:255',
             'description' => 'nullable',
@@ -236,7 +236,7 @@ class ReportController extends Controller
         if (!count($report->settings)) {
             $ignoreStr = ['id', 'password', 'remember_token'];
             $patterns = ['_'];
-            foreach (Schema::getColumnListing($table) as $key => $field) {
+            foreach (Schema::connection($report->connection)->getColumnListing($table) as $key => $field) {
                 if (!in_array($field, $ignoreStr) && !preg_match("/_id/", $field)) {
                     $select['label'] = ucwords(str_replace($patterns, ' ', $field));
                     $select['field'] = $field;
