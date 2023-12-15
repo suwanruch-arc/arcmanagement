@@ -9,6 +9,7 @@
             @foreach (config('menu') as $menu_header => $item)
                 @if (!empty($item))
                     @can($menu_header)
+                    
                         <h6
                             class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-3 mb-1 text-capitalize">
                             <span>{{ $menu_header }}</span>

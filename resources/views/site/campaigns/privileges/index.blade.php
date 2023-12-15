@@ -23,7 +23,7 @@
                                 <th class="search" width="1%">Banner</th>
                             @break
 
-                            @case('CTM')
+                            @case('CTMT')
                                 <th class="search" width="1%">Template</th>
                             @break
                         @endswitch
@@ -54,7 +54,7 @@
                                     </td>
                                 @break
 
-                                @case('CTM')
+                                @case('CTMT')
                                     <td class="text-center">
                                         {!! Image::show($privilege->id, 'privileges', [
                                             'id' => 'template',

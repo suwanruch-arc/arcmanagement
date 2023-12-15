@@ -46,7 +46,7 @@
                             </p>
                         @break
 
-                        @case('CTM')
+                        @case('CTMT')
                             <h6>Template ที่ใช้งาน</h6>
                             <table class="table table-bordered" id="table-template">
                                 <thead>

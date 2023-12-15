@@ -39,7 +39,7 @@ class WarehouseController extends Controller
                 }
                 break;
 
-            case 'CTM':
+            case 'CTMT':
                 foreach ($privileges as $key => $privilege) {
                     $templates[$privilege->id]['expire'] = date('Y-m-d', strtotime($privilege->end_date));
                     $templates[$privilege->id]['value'] = $privilege->value;
@@ -119,7 +119,7 @@ class WarehouseController extends Controller
                         }
                     }
                     break;
-                case 'CTM':
+                case 'CTMT':
                     $template_list = $this->getTemplateList($campaign);
                     foreach ($contents as $key => $data) {
                         $line = $key + 1;
@@ -193,7 +193,7 @@ class WarehouseController extends Controller
                         $privilege_keyword = $privilege_list[$shop_keyword][$expire][$value]['keyword'];
                         $shop_id = $privilege_list[$shop_keyword][$expire][$value]['shop_id'];
                         break;
-                    case 'CTM':
+                    case 'CTMT':
                         list($mobile, $code, $template) = $split_data;
                         $templates = collect($template_list)->firstWhere('template', $template);
                         $privilege_id = $templates['privilege_id'];

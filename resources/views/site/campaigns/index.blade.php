@@ -49,7 +49,11 @@
                 </form>
             </x-card>
         @endif
-        <x-header-btn justify="end" />
+        <div class="d-flex justify-content-end">
+            <a href="{{ route('site.campaigns.pre-create') }}"
+                class="text-bg-primary text-decoration-none rounded-top mx-2 px-3 py-1 fs-6">สร้างแคมเปญ</a>
+        </div>
+
         <x-card>
             <x-datatable sort>
                 <thead>

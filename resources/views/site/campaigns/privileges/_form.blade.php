@@ -21,7 +21,7 @@
         @include('site.campaigns.privileges._std')
     @break
 
-    @case('CTM')
+    @case('CTMT')
         @include('site.campaigns.privileges._ctm', ['settings' => $settings])
     @break
 @endswitch

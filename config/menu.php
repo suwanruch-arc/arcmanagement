@@ -22,11 +22,11 @@ return [
         ],
     ],
     'management' => [
-        // [
-        //     'icon' => 'file-text',
-        //     'text' => 'Reports',
-        //     'url' => 'manage/reports'
-        // ],
+        [
+            'icon' => 'layers',
+            'text' => 'Maplink',
+            'url' => 'manage/map-link'
+        ],
         [
             'icon' => 'shopping-bag',
             'text' => ' Shops',

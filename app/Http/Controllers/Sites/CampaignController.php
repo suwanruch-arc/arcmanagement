@@ -41,28 +41,27 @@ class CampaignController extends Controller
         $type = $model ? 'update' : 'create';
         $fields = [
             'type'          => $type,
-            'template_type' => old('template_type') ?? ($model ? $model->template_type : 'STD'),
+            'template_type' => old('template_type') ?? ($model ? $model->template_type : $_GET['template_type'] ?? 'STD'),
             'name'          => old('name') ?? ($model ? $model->name : ''),
             'keyword'       => old('keyword') ?? ($model ? $model->keyword : ''),
             'description'   => old('description') ?? ($model ? $model->description : ''),
-            'start_date'    => old('start_date') ?? ($model ? $model->start_date : date('Y-m-d H:00:00')),
+            'start_date'    => old('start_date') ?? ($model ? $model->start_date : date('Y-m-d 00:00:00')),
             'end_date'      => old('end_date') ?? ($model ? $model->end_date :  date('Y-m-t 23:59:59')),
-            'owner_id'      => old('owner_id') ?? ($model ? $model->owner_id : ''),
+            'owner_id'      => old('owner_id') ?? ($model ? $model->owner_id : $_GET['owner_id'] ?? ''),
             'assign_users'  => old('assign_lists') ?? ($assign_users ?? []),
-            'owner_lists'   => $this->getOwnerLists(),
             'status'        => old('status') ?? ($model ? $model->status : 'active'),
             'title_alert'   => old('title_alert') ?? ($model ? $model->title_alert : 'ยืนยันรับสิทธิ์'),
             'desc_alert'    => old('desc_alert') ?? ($model ? $model->desc_alert : 'ถ้ากดรับสิทธิ์จะไม่สามารถแก้ไขหรือยกเลิกได้'),
+            'redeem_btn'      => old('redeem_btn') ?? ($model ? $model->redeem_btn : 'กดรับสิทธิ์'),
+            'view_btn'        => old('view_btn') ?? ($model ? $model->view_btn : 'ดูโค้ด'),
+            'expire_btn'      => old('expire_btn') ?? ($model ? $model->expire_btn : 'หมดอายุแล้ว'),
+            'already_btn'     => old('already_btn') ?? ($model ? $model->already_btn : 'รับสิทธิ์เรียบร้อยแล้ว'),
             'main_color'      => old('main_color') ?? ($model ? $model->main_color : '#FFFFFF'),
             'secondary_color' => old('secondary_color') ?? ($model ? $model->secondary_color : '#2196F3'),
             'redeem_color'    => old('redeem_color') ?? ($model ? $model->redeem_color : '#8BC34A'),
-            'redeem_btn'      => old('redeem_btn') ?? ($model ? $model->redeem_btn : 'กดรับสิทธิ์'),
             'view_color'      => old('view_color') ?? ($model ? $model->view_color : '#FFC107'),
-            'view_btn'        => old('view_btn') ?? ($model ? $model->view_btn : 'ดูโค้ด'),
             'expire_color'    => old('expire_color') ?? ($model ? $model->expire_color : '#F44336'),
-            'expire_btn'      => old('expire_btn') ?? ($model ? $model->expire_btn : 'หมดอายุแล้ว'),
             'already_color'   => old('already_color') ?? ($model ? $model->already_color : '#9E9E9E'),
-            'already_btn'     => old('already_btn') ?? ($model ? $model->already_btn : 'รับสิทธิ์เรียบร้อยแล้ว'),
         ];
         return $fields;
     }
@@ -94,13 +93,25 @@ class CampaignController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function preCreate()
+    {
+        return view('site.campaigns.pre-create', [
+            'owner_lists'   => $this->getOwnerLists(),
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         return view('components.views.create', [
             'title' => 'Campaign',
             'route' => 'site.campaigns',
             'fields' => $this->fields(),
-            'cols' => 12
         ]);
     }
 

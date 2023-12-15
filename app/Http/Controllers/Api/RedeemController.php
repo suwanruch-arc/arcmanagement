@@ -118,7 +118,7 @@ class RedeemController extends Controller
                         'template_type' => $campaign->template_type,
                     ];
                     break;
-                case 'CTM':
+                case 'CTMT':
                     $template = Image::getUrl($privilege->id, 'privileges', 'template');
                     $res = [
                         'code' => $user->code,

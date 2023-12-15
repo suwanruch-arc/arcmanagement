@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\AccountController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Managements\DepartmentController;
+use App\Http\Controllers\Managements\MapLinkController;
 use App\Http\Controllers\Managements\PartnerController;
 use App\Http\Controllers\Managements\ShopController;
 use App\Http\Controllers\Managements\StatusController;
@@ -54,6 +55,7 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::prefix('site')->group(function () {
+            Route::get('/campaigns/pre-create', [CampaignController::class, 'preCreate'])->name('campaigns.pre-create');
             Route::resource('campaigns', CampaignController::class);
             Route::resource('campaigns.privileges', PrivilegeController::class);
             Route::controller(WarehouseController::class)->prefix('/campaigns/{campaign}/warehouse')->name('warehouse.')->group(function () {
@@ -85,6 +87,9 @@ Route::middleware('auth')->group(function () {
             Route::resource('partners', PartnerController::class);
             Route::resource('partners.departments', DepartmentController::class);
             Route::resource('users', UserController::class);
+            Route::prefix('map-link')->name('map-link.')->group(function () {
+                Route::get('/', [MapLinkController::class, 'index'])->name('index');
+            });
         });
     });
 });

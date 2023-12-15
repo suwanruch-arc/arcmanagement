@@ -39,7 +39,7 @@
                                 case 'STD':
                                     $field = 'banner';
                                     break;
-                                case 'CTM':
+                                case 'CTMT':
                                     $field = 'template';
                                     break;
                             }

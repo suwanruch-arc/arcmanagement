@@ -51,7 +51,7 @@
                                             ]) !!}
                                         @break
 
-                                        @case('CTM')
+                                        @case('CTMT')
                                             {!! Image::show($privilege->id, 'privileges', [
                                                 'id' => 'template',
                                                 'width' => '100px',
