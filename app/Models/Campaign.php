@@ -18,20 +18,9 @@ class Campaign extends Model
         'end_date',
         'description',
         'owner_id',
+        'settings',
         'created_by',
         'updated_by',
-        'title_alert',
-        'desc_alert',
-        'main_color',
-        'secondary_color',
-        'redeem_color',
-        'redeem_btn',
-        'view_color',
-        'view_btn',
-        'expire_color',
-        'expire_btn',
-        'already_color',
-        'already_btn',
     ];
 
     public function getButton($type)

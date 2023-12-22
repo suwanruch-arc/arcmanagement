@@ -19,10 +19,10 @@ class PartnerController extends Controller
         $type = $model ? 'update' : 'create';
         $fields = [
             'type' => $type,
-            'id' => $model ? $model->id : '',
-            'status' => old('status') ?? ($model ? $model->status : 'active'),
-            'name' => old('name') ?? ($model ? $model->name : ''),
-            'keyword' => old('keyword') ?? ($model ? $model->keyword : ''),
+            'id' => $model->id ?? '',
+            'status' => old('status') ?? $model->status ?? 'active',
+            'name' => old('name') ?? $model->name ?? '',
+            'keyword' => old('keyword') ?? $model->keyword ?? '',
             'department_name' => old('department_name') ?? '',
             'department_keyword' => old('department_keyword') ?? '',
         ];
@@ -108,7 +108,7 @@ class PartnerController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**

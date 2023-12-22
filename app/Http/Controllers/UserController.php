@@ -16,18 +16,20 @@ class UserController extends Controller
     public function fields($model = null)
     {
         $type = $model ? 'update' : 'create';
+
         $fields = [
             'type'            => $type,
-            'name'            => old('name') ?? ($model ? $model->name : ''),
-            'email'           => old('email') ?? ($model ? $model->email : ''),
-            'username'        => old('username') ?? ($model ? $model->username : Str::random(6)),
-            'contact_number'  => old('contact_number') ?? ($model ? $model->contact_number : ''),
-            'partner_id'      => old('partner_id') ?? ($model ? $model->partner_id : ''),
-            'department_id'   => old('department_id') ?? ($model ? $model->department_id : ''),
-            'position'        => old('position') ?? ($model ? $model->position : ''),
-            'role'            => old('role') ?? ($model ? $model->role : ''),
-            'status'          => old('status') ?? ($model ? $model->status : 'active'),
+            'name'            => old('name') ?? $model->name ?? '',
+            'email'           => old('email') ?? $model->email ?? '',
+            'username'        => old('username') ?? $model->username ?? Str::random(6),
+            'contact_number'  => old('contact_number') ?? $model->contact_number ?? '',
+            'partner_id'      => old('partner_id') ?? $model->partner_id ?? '',
+            'department_id'   => old('department_id') ?? $model->department_id ?? '',
+            'position'        => old('position') ?? $model->position ?? '',
+            'role'            => old('role') ?? $model->role ?? '',
+            'status'          => old('status') ?? $model->status ?? 'active',
         ];
+
         return $fields;
     }
 
@@ -93,17 +95,6 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -140,7 +131,6 @@ class UserController extends Controller
         ]);
 
         $user->fill($validated);
-        $user->from = 'ecp';
         $user->updated_by = Auth::id();
         $user->save();
 
@@ -149,6 +139,24 @@ class UserController extends Controller
         return redirect()->route("manage.users.index")
             ->with('success', __('message.updated', ['name' => $name]));
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(User $user)
+    {
+        $data = [
+            'name' => $user->name
+        ];
+
+        return view('components.views.view', [
+            'title' => $user->name
+        ])->with(compact('data'));
+    }
+
 
     /**
      * Remove the specified resource from storage.

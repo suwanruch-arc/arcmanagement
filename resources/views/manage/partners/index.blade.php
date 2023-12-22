@@ -34,7 +34,7 @@
                             <td class="text-center align-middle bg-light">
                                 <x-action-btn :model="$partner" route="manage.partners" :params="['partner' => $partner->id]">
                                     <x-button class="m-1" label="เพิ่ม" :href="route('manage.partners.departments.create', ['partner' => $partner->id])">
-                                        <b data-feather="plus"></b>
+                                        <i class="si-plus"></i>
                                     </x-button>
                                 </x-action-btn>
                             </td>

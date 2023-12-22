@@ -6,10 +6,10 @@ class Status
     {
         switch ($status) {
             case 'active':
-                $status = "<span style='width:{$size}px;height:{$size}px;' class='text-success' data-feather='check-circle'></span>";
+                $status = "<i class='status-icon text-success si-check-circle'></i>";
                 break;
             case 'inactive':
-                $status = "<span style='width:{$size}px;height:{$size}px;' class='text-danger' data-feather='x-circle'></span>";
+                $status = "<i class='status-icon text-danger si-x-circle'></i>";
                 break;
         }
         return $status;

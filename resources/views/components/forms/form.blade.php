@@ -11,5 +11,5 @@
 <form {{ $attributes }} enctype="multipart/form-data">
     @csrf
     {{ $slot }}
-    <button class="btn btn-success mt-3" type="submit">บันทึก</button>
+    <button class="btn btn-success mt-3" type="submit"><i class="si-disk"></i> บันทึก</button>
 </form>

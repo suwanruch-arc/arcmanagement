@@ -6,7 +6,7 @@
     </div>
 @else
     @if ($label)
-        <label for="{{ $id ?? $name }}" class="form-label">{{ $label }}
+        <label for="{{ $id ?? $name }}" class="form-label">{!! $label !!}
             @if ($required)
                 <span class="text-danger">*</span>
             @endif
@@ -35,12 +35,11 @@
                 <span class="input-group-text">{{ $append }}</span>
             @endif
         @endif
-
-        @error($name)
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-        @enderror
     </div>
+    @error($name)
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+    @enderror
 
 @endif

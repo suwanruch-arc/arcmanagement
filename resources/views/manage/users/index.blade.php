@@ -29,7 +29,7 @@
                     @forelse ($users as $user)
                         <tr>
                             <td>{{ $user->name }}</td>
-                            <td>{{ $user->email }}</td>
+                            <td>{{ Str::mask($user->email, '*', -21, 3) }}</td>
                             <td>{{ $user->username }}</td>
                             <td class="text-center">
                                 {{ Str::mask($user->contact_number, '*', 7) }}

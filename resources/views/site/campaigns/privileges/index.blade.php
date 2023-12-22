@@ -42,8 +42,8 @@
                     @forelse ($privileges as $privilege)
                         <tr>
                             <td class="text-center align-middle">{{ strtoupper($privilege->default_code) }}</td>
-
-                            @switch($campaign->template_type)
+                            <td class="text-center">ดูรูปภาพ</td>
+                            {{-- @switch($campaign->template_type)
                                 @case('STD')
                                     <td class="text-center">
                                         {!! Image::show($privilege->id, 'privileges', [
@@ -63,7 +63,7 @@
                                         ]) !!}
                                     </td>
                                 @break
-                            @endswitch
+                            @endswitch --}}
 
                             <td class="align-middle">{{ $privilege->shop->name }}</td>
                             <td class="align-middle">{{ $privilege->title }}</td>

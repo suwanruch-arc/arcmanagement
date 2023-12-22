@@ -18,12 +18,12 @@ class ShopController extends Controller
         $type = $model ? 'update' : 'create';
         $fields = [
             'type'         => $type,
-            'id' => $model ? $model->id : '',
-            'has_template' => old('has_template') ?? ($model->has_template ?? 'no'),
-            'name'         => old('name') ?? ($model ? $model->name : ''),
-            'keyword'      => old('keyword') ?? ($model ? $model->keyword : ''),
-            'tandc'        => old('tandc') ?? ($model ? $model->tandc : ''),
-            'status'       => old('status') ?? ($model ? $model->status : 'active'),
+            'id'           => $model->id ?? '',
+            'has_template' => old('has_template') ?? $model->has_template ?? 'no',
+            'name'         => old('name') ?? $model->name ?? '',
+            'keyword'      => old('keyword') ?? $model->keyword ?? '',
+            'tandc'        => old('tandc') ?? $model->tandc ?? '',
+            'status'       => old('status') ?? $model->status ?? 'active',
         ];
         return $fields;
     }

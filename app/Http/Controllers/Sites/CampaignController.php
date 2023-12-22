@@ -35,33 +35,44 @@ class CampaignController extends Controller
 
     public function fields($model = null)
     {
+        $type = $model ? 'update' : 'create';
+
         if ($model) {
             $assign_users = $model->assign_lists->pluck('user_id')->toArray();
+            $settings = json_decode($model->settings);
         }
-        $type = $model ? 'update' : 'create';
+
         $fields = [
             'type'          => $type,
-            'template_type' => old('template_type') ?? ($model ? $model->template_type : $_GET['template_type'] ?? 'STD'),
-            'name'          => old('name') ?? ($model ? $model->name : ''),
-            'keyword'       => old('keyword') ?? ($model ? $model->keyword : ''),
-            'description'   => old('description') ?? ($model ? $model->description : ''),
-            'start_date'    => old('start_date') ?? ($model ? $model->start_date : date('Y-m-d 00:00:00')),
-            'end_date'      => old('end_date') ?? ($model ? $model->end_date :  date('Y-m-t 23:59:59')),
-            'owner_id'      => old('owner_id') ?? ($model ? $model->owner_id : $_GET['owner_id'] ?? ''),
-            'assign_users'  => old('assign_lists') ?? ($assign_users ?? []),
-            'status'        => old('status') ?? ($model ? $model->status : 'active'),
-            'title_alert'   => old('title_alert') ?? ($model ? $model->title_alert : 'ยืนยันรับสิทธิ์'),
-            'desc_alert'    => old('desc_alert') ?? ($model ? $model->desc_alert : 'ถ้ากดรับสิทธิ์จะไม่สามารถแก้ไขหรือยกเลิกได้'),
-            'redeem_btn'      => old('redeem_btn') ?? ($model ? $model->redeem_btn : 'กดรับสิทธิ์'),
-            'view_btn'        => old('view_btn') ?? ($model ? $model->view_btn : 'ดูโค้ด'),
-            'expire_btn'      => old('expire_btn') ?? ($model ? $model->expire_btn : 'หมดอายุแล้ว'),
-            'already_btn'     => old('already_btn') ?? ($model ? $model->already_btn : 'รับสิทธิ์เรียบร้อยแล้ว'),
-            'main_color'      => old('main_color') ?? ($model ? $model->main_color : '#FFFFFF'),
-            'secondary_color' => old('secondary_color') ?? ($model ? $model->secondary_color : '#2196F3'),
-            'redeem_color'    => old('redeem_color') ?? ($model ? $model->redeem_color : '#8BC34A'),
-            'view_color'      => old('view_color') ?? ($model ? $model->view_color : '#FFC107'),
-            'expire_color'    => old('expire_color') ?? ($model ? $model->expire_color : '#F44336'),
-            'already_color'   => old('already_color') ?? ($model ? $model->already_color : '#9E9E9E'),
+            'template_type' => old('template_type') ?? $model->template_type ?? $_GET['template_type'] ?? 'STD',
+            'name'          => old('name') ?? $model->name ?? '',
+            'keyword'       => old('keyword') ?? $model->keyword ?? '',
+            'description'   => old('description') ?? $model->description ?? '',
+            'start_date'    => old('start_date') ?? $model->start_date ?? date('Y-m-d 00:00:00'),
+            'end_date'      => old('end_date') ?? $model->end_date ??  date('Y-m-t 23:59:59'),
+            'owner_id'      => old('owner_id') ?? $model->owner_id ?? $_GET['owner_id'] ?? '',
+            'assign_users'  => old('assign_lists') ?? $assign_users ?? [],
+            'status'        => old('status') ?? $model->status ?? 'active',
+            'settings'      => (object) [
+                'alert' => (object) [
+                    'title' => old('settings.alert.title') ?? $settings->alert->title ?? 'ยืนยันรับสิทธิ์',
+                    'description' => old('settings.alert.description') ?? $settings->alert->title ?? 'ถ้ากดรับสิทธิ์จะไม่สามารถแก้ไขหรือยกเลิกได้'
+                ],
+                'button' => (object) [
+                    'redeem'  => old('settings.button.redeem') ?? $settings->button->redeem ?? 'กดรับสิทธิ์',
+                    'view'    => old('settings.button.view') ?? $settings->button->view ?? 'ดูโค้ด',
+                    'already' => old('settings.button.already') ?? $settings->button->already ?? 'รับสิทธิ์เรียบร้อยแล้ว',
+                    'expire'  => old('settings.button.expire') ?? $settings->button->expire ?? 'หมดอายุแล้ว',
+                ],
+                'color' => (object) [
+                    'main'      => old('settings.color.main') ?? $settings->color->main ?? '#FFFFFF',
+                    'secondary' => old('settings.color.secondary') ?? $settings->color->secondary ?? '#2196F3',
+                    'redeem'    => old('settings.color.redeem') ?? $settings->color->redeem ?? '#8BC34A',
+                    'view'      => old('settings.color.view') ?? $settings->color->view ?? '#FFC107',
+                    'already'   => old('settings.color.already') ?? $settings->color->already ?? '#9E9E9E',
+                    'expire'    => old('settings.color.expire') ?? $settings->color->expire ?? '#F44336',
+                ]
+            ]
         ];
         return $fields;
     }
@@ -108,10 +119,13 @@ class CampaignController extends Controller
      */
     public function create()
     {
+        $type = $_GET['template_type'];
+
         return view('components.views.create', [
             'title' => 'Campaign',
             'route' => 'site.campaigns',
             'fields' => $this->fields(),
+            'cols' => $type === 'STD' ? 12 : 6
         ]);
     }
 
@@ -132,44 +146,31 @@ class CampaignController extends Controller
             'end_date' => 'required|date|after:start_date|date_format:Y-m-d H:i:s',
             'owner_id' => 'required|exists:departments,id',
             'status' => 'required|in:active,inactive',
-            'title_alert'    => 'required',
-            'desc_alert'     => 'required',
-            'title_alert'   => 'required',
-            'desc_alert'    => 'required',
-            'main_color'     => 'required',
-            'secondary_color' => 'required',
-            'redeem_color'   => 'required',
-            'view_color'     => 'required',
-            'expire_color'   => 'required',
-            'already_color'  => 'required',
-            'redeem_btn'     => 'required',
-            'view_btn'       => 'required',
-            'expire_btn'     => 'required',
-            'already_btn'    => 'required',
+            'settings' => 'required|array',
         ]);
-
 
         DB::transaction(function () use ($validated, $request, &$campaign) {
             $campaign = new Campaign;
             $campaign->fill($validated);
             $campaign->keyword = Str::upper($campaign->keyword);
-            $table_name = Str::lower("tb_{$campaign->owner->keyword}_{$campaign->keyword}");
-            $campaign->table_name = $table_name;
+
+            if ($campaign->template_type !== 'CTMS') {
+                $table_name = Str::lower("tb_{$campaign->owner->keyword}_{$campaign->keyword}");
+                $campaign->table_name = $table_name;
+            }
+
+            $campaign->settings = json_encode($campaign->settings, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
             $campaign->created_by = Auth::id();
             $campaign->updated_by = Auth::id();
             $campaign->save();
 
-
-            if (!Schema::connection('db_storage_code')->hasTable($table_name)) {
+            if ($campaign->template_type !== 'CTMS' && !Schema::connection('db_storage_code')->hasTable($table_name)) {
                 Schema::connection('db_storage_code')->create($table_name, function (Blueprint $table) use ($campaign) {
                     $table->id();
-                    $table->integer('lot');
                     $table->string('refid');
-                    $table->string('partner_keyword', 10)->index();
-                    $table->integer('shop_id')->index();
-                    $table->string('shop_keyword', 10)->index();
-                    $table->integer('privilege_id')->index();
+                    $table->string('partner_keyword', 10)->index()->default($campaign->keyword);
                     $table->string('privilege_keyword', 10)->index();
+                    $table->string('shop_keyword', 10)->index();
                     $table->string('secret_code', 12)->unique();
                     $table->string('unique_code', 20)->unique();
                     $table->string('msisdn', 11)->nullable();
@@ -178,12 +179,12 @@ class CampaignController extends Controller
                     $table->dateTime('import_date');
                     $table->dateTime('start_date');
                     $table->dateTime('update_date')->nullable();
-                    $table->dateTime('redeem_date')->nullable();
                     $table->dateTime('first_view_date')->nullable();
+                    $table->dateTime('redeem_date')->nullable();
                     $table->dateTime('expire_date')->nullable();
-                    $table->text('info')->nullable();
                     $table->enum('flag', ["ok", "cancel", "deviate"]);
                     $table->enum('is_use', ["yes", "no"]);
+                    $table->text('info')->nullable();
                 });
             }
 
@@ -205,17 +206,6 @@ class CampaignController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Campaign $campaign)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -223,12 +213,14 @@ class CampaignController extends Controller
      */
     public function edit(Campaign $campaign)
     {
+        $type = $campaign->template_type;
+
         return view('components.views.update', [
             'params' => ['campaign' => $campaign->id],
             'title' => $campaign->name,
             'route' => 'site.campaigns',
             'fields' => $this->fields($campaign),
-            'cols' => 12
+            'cols' => $type === 'STD' ? 12 : 6
         ])->with(compact('campaign'));
     }
 
@@ -249,24 +241,12 @@ class CampaignController extends Controller
             'end_date' => 'required|date|after:start_date|date_format:Y-m-d H:i:s',
             'owner_id' => 'required|exists:departments,id',
             'status' => 'required|in:active,inactive',
-            'title_alert'    => 'required',
-            'desc_alert'     => 'required',
-            'title_alert'   => 'required',
-            'desc_alert'    => 'required',
-            'main_color'     => 'required',
-            'secondary_color' => 'required',
-            'redeem_color'   => 'required',
-            'view_color'     => 'required',
-            'expire_color'   => 'required',
-            'already_color'  => 'required',
-            'redeem_btn'     => 'required',
-            'view_btn'       => 'required',
-            'expire_btn'     => 'required',
-            'already_btn'    => 'required',
+            'settings' => 'required|array',
         ]);
 
         DB::transaction(function () use ($validated, $request, &$campaign) {
             $campaign->fill($validated);
+            $campaign->settings = json_encode($campaign->settings, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
             $campaign->updated_by = Auth::id();
             $campaign->save();
 
@@ -286,6 +266,17 @@ class CampaignController extends Controller
 
         return redirect()->route('site.campaigns.index')
             ->with('success', __('message.updated', ['name' => $name]));
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Campaign $campaign)
+    {
+        //
     }
 
     /**

@@ -4,15 +4,15 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 @endif
-<div class="fs-4" id="loading">
+{{-- <div class="fs-4" id="loading">
     <div class="d-flex justify-content-center">
         <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>&nbsp;
         กำลังโหลดข้อมูล...
     </div>
-</div>
-<div class="table-responsive" id="dataTableArea" style="display: none">
+</div> --}}
+<div class="table-responsive" id="dataTableArea">
     <table class="table table-bordered nowrap" id="dataTable" width="100%">
         {{ $slot }}
     </table>
@@ -43,11 +43,11 @@
                 [10, 25, 50, 100, 200, "ทั้งหมด"]
             ],
             iDisplayLength: 10,
-            initComplete: function() {
-                $('#loading').slideUp(function() {
-                    $('#dataTableArea').slideDown()
-                });
-            },
+            // initComplete: function() {
+            //     $('#loading').slideUp(function() {
+            //         $('#dataTableArea').slideDown()
+            //     });
+            // },
         });
 
     });

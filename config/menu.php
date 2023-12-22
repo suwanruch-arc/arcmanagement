@@ -16,24 +16,24 @@ return [
             'child' => 'privileges',
         ],
         [
-            'icon' => 'file-text',
+            'icon' => 'chart-pie',
             'text' => 'Reports',
             'url' => 'manage/reports'
         ],
     ],
     'management' => [
         [
-            'icon' => 'layers',
+            'icon' => 'code',
             'text' => 'Maplink',
             'url' => 'manage/map-link'
         ],
         [
-            'icon' => 'shopping-bag',
+            'icon' => 'bag',
             'text' => ' Shops',
             'url' => 'manage/shops'
         ],
         [
-            'icon' => 'users',
+            'icon' => 'backpack',
             'text' => 'Partners',
             'url' => 'manage/partners'
         ],

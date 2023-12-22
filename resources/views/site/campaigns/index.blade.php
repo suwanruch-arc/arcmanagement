@@ -51,7 +51,8 @@
         @endif
         <div class="d-flex justify-content-end">
             <a href="{{ route('site.campaigns.pre-create') }}"
-                class="text-bg-primary text-decoration-none rounded-top mx-2 px-3 py-1 fs-6">สร้างแคมเปญ</a>
+                class="text-bg-primary text-decoration-none rounded-top mx-2 px-3 py-1 fs-6"><i class="si-plus"></i>
+                สร้างแคมเปญ</a>
         </div>
 
         <x-card>
@@ -77,7 +78,7 @@
                             <td>{{ $campaign->template_type }}</td>
                             <td>{{ $campaign->owner->name }}</td>
                             <td class="fw-bold text-center">
-                                {{ $campaign->start_date }} - {{ $campaign->end_date }}
+                                {{ date('d/m/Y H:i', strtotime($campaign->start_date)) }} - {{ date('d/m/Y H:i', strtotime($campaign->end_date)) }}
                             </td>
                             <td class="text-center align-middle">
                                 {!! Status::show($campaign->status) !!}
@@ -86,11 +87,11 @@
                                 <x-action-btn :model="$campaign" route="site.campaigns" :params="['campaign' => $campaign->id]">
                                     <x-button label='คลังข้อมูล' color="secondary"
                                         href="{{ route('site.warehouse.index', $campaign->id) }}" class="m-1 text-nowrap">
-                                        <span data-feather="archive"></span>
+                                        <i class="si-archive"></i>
                                     </x-button>
                                     <x-button label='Privileges' color="info" class="m-1 text-nowrap"
                                         href="{{ route('site.campaigns.privileges.index', $campaign->id) }}">
-                                        <span data-feather="layers"></span>
+                                        <i class="si-stack"></i>
                                     </x-button>
                                 </x-action-btn>
                             </td>

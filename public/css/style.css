@@ -74,26 +74,7 @@ input:read-only.readonly {
 
 table {
     border-collapse: collapse;
-    border-radius: 0.375rem;
     overflow: hidden;
-}
-
-table tr:first-child th:first-child,
-table thead tr:first-child th:first-child {
-    border-top-left-radius: 0.375rem;
-}
-table tr:first-child th:last-child,
-table thead tr:first-child th:last-child {
-    border-top-right-radius: 0.375rem;
-}
-
-table tr:last-child td:first-child,
-table tbody tr:last-child td:first-child {
-    border-bottom-left-radius: 0.375rem;
-}
-table tr:last-child td:last-child,
-table tbody tr:last-child td:last-child {
-    border-bottom-right-radius: 0.375rem;
 }
 
 #dataTable > thead > tr.filters > th:not(.search) > input.form-control {
@@ -106,4 +87,18 @@ table tbody tr:last-child td:last-child {
 
 table tbody tr td {
     vertical-align: middle !important;
+}
+
+[class*=" si-"],
+[class^="si-"] {
+    vertical-align: -5px !important;
+}
+
+[class*=" si-"]:before,
+[class^="si-"]:before {
+    font-size: 20px !important;
+}
+
+.status-icon::before {
+    font-size: 35px !important;
 }
