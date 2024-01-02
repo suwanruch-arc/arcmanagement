@@ -177,11 +177,10 @@ class WarehouseController extends Controller
         $start_date = $request->start_date;
         if ($temp_file_content) {
             $unique_data = DB::connection('db_storage_code')->table($campaign->table_name)->where(['flag' => ['ok', 'deviate']])->pluck('unique_code', 'secret_code')->toArray();
-            $lot = DB::connection('db_storage_code')->table($campaign->table_name)->where(['flag' => ['ok', 'deviate']])->max('lot');
-            $lot = $lot + 1;
+            // $lot = DB::connection('db_storage_code')->table($campaign->table_name)->where(['flag' => ['ok', 'deviate']])->max('lot');
+            // $lot = $lot + 1;
             [$already_secret, $already_unique] = Arr::divide($unique_data);
             $privilege_list = $this->getPrivilegeList($campaign);
-            $template_list = $this->getTemplateList($campaign);
             $contents = explode("\r\n",  $temp_file_content);
 
             foreach ($contents as $key => $data) {
@@ -194,6 +193,7 @@ class WarehouseController extends Controller
                         $shop_id = $privilege_list[$shop_keyword][$expire][$value]['shop_id'];
                         break;
                     case 'CTMT':
+                        $template_list = $this->getTemplateList($campaign);
                         list($mobile, $code, $template) = $split_data;
                         $templates = collect($template_list)->firstWhere('template', $template);
                         $privilege_id = $templates['privilege_id'];
@@ -214,11 +214,11 @@ class WarehouseController extends Controller
 
                 $insert = [
                     'refid'             => "'{$refid}'",
-                    'lot'               => "'{$lot}'",
+                    // 'lot'               => "'{$lot}'",
                     'partner_keyword'   => "'{$campaign->owner->keyword}'",
-                    'privilege_id'      => "'{$privilege_id}'",
+                    // 'privilege_id'      => "'{$privilege_id}'",
                     'privilege_keyword' => "'{$privilege_keyword}'",
-                    'shop_id'           => "'{$shop_id}'",
+                    // 'shop_id'           => "'{$shop_id}'",
                     'shop_keyword'      => "'{$shop_keyword}'",
                     'secret_code'       => "'{$secret_code}'",
                     'unique_code'       => "'{$unique}'",

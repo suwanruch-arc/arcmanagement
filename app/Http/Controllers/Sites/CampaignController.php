@@ -45,6 +45,7 @@ class CampaignController extends Controller
         $fields = [
             'type'          => $type,
             'template_type' => old('template_type') ?? $model->template_type ?? $_GET['template_type'] ?? 'STD',
+            'connection'    => old('connection') ?? $model->connection ?? $_GET['template_type'] === 'CTMS' ? 'db_a' : 'db_storage_code',
             'name'          => old('name') ?? $model->name ?? '',
             'keyword'       => old('keyword') ?? $model->keyword ?? '',
             'description'   => old('description') ?? $model->description ?? '',
@@ -55,8 +56,8 @@ class CampaignController extends Controller
             'status'        => old('status') ?? $model->status ?? 'active',
             'settings'      => (object) [
                 'alert' => (object) [
-                    'title' => old('settings.alert.title') ?? $settings->alert->title ?? 'ยืนยันรับสิทธิ์',
-                    'description' => old('settings.alert.description') ?? $settings->alert->title ?? 'ถ้ากดรับสิทธิ์จะไม่สามารถแก้ไขหรือยกเลิกได้'
+                    'title'       => old('settings.alert.title') ?? $settings->alert->title ?? 'ยืนยันรับสิทธิ์',
+                    'description' => old('settings.alert.description') ?? $settings->alert->description ?? 'ถ้ากดรับสิทธิ์จะไม่สามารถแก้ไขหรือยกเลิกได้'
                 ],
                 'button' => (object) [
                     'redeem'  => old('settings.button.redeem') ?? $settings->button->redeem ?? 'กดรับสิทธิ์',
@@ -146,17 +147,20 @@ class CampaignController extends Controller
             'end_date' => 'required|date|after:start_date|date_format:Y-m-d H:i:s',
             'owner_id' => 'required|exists:departments,id',
             'status' => 'required|in:active,inactive',
-            'settings' => 'required|array',
+            'settings' => 'nullable|array',
         ]);
 
         DB::transaction(function () use ($validated, $request, &$campaign) {
             $campaign = new Campaign;
             $campaign->fill($validated);
             $campaign->keyword = Str::upper($campaign->keyword);
+            $campaign->connection = $request->connection ?? 'db_storage_code';
 
             if ($campaign->template_type !== 'CTMS') {
                 $table_name = Str::lower("tb_{$campaign->owner->keyword}_{$campaign->keyword}");
                 $campaign->table_name = $table_name;
+            } else {
+                $campaign->table_name = $request->table_name;
             }
 
             $campaign->settings = json_encode($campaign->settings, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
@@ -241,7 +245,7 @@ class CampaignController extends Controller
             'end_date' => 'required|date|after:start_date|date_format:Y-m-d H:i:s',
             'owner_id' => 'required|exists:departments,id',
             'status' => 'required|in:active,inactive',
-            'settings' => 'required|array',
+            'settings' => 'nullable|array',
         ]);
 
         DB::transaction(function () use ($validated, $request, &$campaign) {

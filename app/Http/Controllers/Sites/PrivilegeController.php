@@ -15,6 +15,7 @@ use App\Providers\FileServiceProvider;
 
 class PrivilegeController extends Controller
 {
+
     public function getShopLists()
     {
         $shop_lists = Shop::where('status', 'active')->pluck('name', 'id')->toArray();
@@ -49,14 +50,14 @@ class PrivilegeController extends Controller
             'tandc' => old('tandc') ?? ($model ? $model->tandc : ''),
             'status' => old('status') ?? ($model ? $model->status : 'active'),
             'settings' =>  (object) [
-                'font-size' => 16,
+                'font_size' => 16,
                 'w' => 100,
                 'h' => 100,
-                'row-1' => 540,
-                'row-2' => 100,
-                'col-1' => 400,
-                'col-2' => 200,
-                'col-3' => 400,
+                'row1' => 540,
+                'row2' => 100,
+                'col1' => 400,
+                'col2' => 200,
+                'col3' => 400,
             ]
         ];
 

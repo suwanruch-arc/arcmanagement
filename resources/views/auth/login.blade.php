@@ -18,17 +18,17 @@
                 <label for="username">Username</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password" >
                 <label for="password">Password</label>
             </div>
 
             <div class="checkbox mb-3">
                 <label>
-                    <input type="checkbox" id="rememberme" name="rememberme"> Remember me
+                    <input type="checkbox" id="rememberme" name="rememberme" checked> Remember me
                 </label>
             </div>
             <button class="w-100 btn btn-lg btn-primary" type="submit"><i data-feather="log-in"></i> Sign in</button>
-            <p class="mt-5 mb-3 text-muted">&copy; 2023</p>
+            <p class="mt-5 mb-3 text-muted">&copy; {{date('Y')}}</p>
         </form>
     </main>
 @endsection

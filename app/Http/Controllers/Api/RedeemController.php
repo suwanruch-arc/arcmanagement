@@ -46,13 +46,14 @@ class RedeemController extends Controller
 
         $campaign = Campaign::where(['keyword' => $campaign_keyword, 'status' => 'active'])->first();
         $user = DB::connection('db_storage_code')
-            ->table($campaign->table_name)->select(['code', 'is_use', 'expire_date', 'start_date', 'first_view_date', 'shop_id', 'privilege_id'])
+            ->table($campaign->table_name)->select(['code', 'is_use', 'expire_date', 'start_date', 'first_view_date', 'privilege_keyword'])
             ->where(['partner_keyword' => $partner_keyword, 'flag' => 'ok'])
             ->where(DB::raw('BINARY unique_code'), '=', $unique_code)
             ->first();
 
         if ($user && $now >= $user->start_date) {
-            $privilege = $campaign->privileges()->find($user->privilege_id);
+            $privilege = Privilege::where(['campaign_id' => $campaign->id, 'keyword' => $user->privilege_keyword])->first();
+            $config = json_decode($campaign->settings);
             switch ($campaign->template_type) {
                 case 'STD':
                     $banner = Image::getUrl($privilege->id, 'privileges', 'banner');
@@ -88,12 +89,12 @@ class RedeemController extends Controller
                         'config' => [
                             'alert' => [
                                 'status' => $privilege->skip_confirm === 'no',
-                                'title' => $campaign->title_alert,
-                                'desc'  => $campaign->desc_alert
+                                'title' => $config->alert->title,
+                                'desc'  => $config->alert->description
                             ],
                             'themes' => [
-                                'main'      => $campaign->main_color,
-                                'secondary' => $campaign->secondary_color,
+                                'main'      => $config->color->main,
+                                'secondary' => $config->color->secondary,
                             ],
                             'timer' => [
                                 'status' => $privilege->has_timer === 'yes',
@@ -158,11 +159,11 @@ class RedeemController extends Controller
         if ($recapt->success && $recapt->score > 0.7) {
             $campaign = Campaign::where(['keyword' => $campaign_keyword, 'status' => 'active'])->first();
             $user = DB::connection('db_storage_code')
-                ->table($campaign->table_name)->select(['id', 'code', 'is_use', 'expire_date', 'start_date', 'first_view_date', 'shop_id', 'privilege_id'])
+                ->table($campaign->table_name)->select(['id', 'code', 'is_use', 'expire_date', 'start_date', 'first_view_date',  'privilege_keyword'])
                 ->where(['partner_keyword' => $partner_keyword, 'flag' => 'ok'])
                 ->where(DB::raw('BINARY unique_code'), '=', $unique_code)
                 ->first();
-            $privilege = $campaign->privileges()->find($user->privilege_id);
+            $privilege = Privilege::where(['campaign_id' => $campaign->id, 'keyword' => $user->privilege_keyword])->first();
 
             if ($user) {
                 $this->setFirstView($campaign->table_name, $user);
@@ -213,11 +214,11 @@ class RedeemController extends Controller
         if ($recapt->success && $recapt->score > 0.7) {
             $campaign = Campaign::where(['keyword' => $campaign_keyword, 'status' => 'active'])->first();
             $user = DB::connection('db_storage_code')
-                ->table($campaign->table_name)->select(['id', 'code', 'is_use', 'expire_date', 'start_date', 'first_view_date', 'shop_id', 'privilege_id'])
+                ->table($campaign->table_name)->select(['id', 'code', 'is_use', 'expire_date', 'start_date', 'first_view_date',  'privilege_keyword'])
                 ->where(['partner_keyword' => $partner_keyword, 'flag' => 'ok'])
                 ->where(DB::raw('BINARY unique_code'), '=', $unique_code)
                 ->first();
-            $privilege = $campaign->privileges()->find($user->privilege_id);
+            $privilege = Privilege::where(['campaign_id' => $campaign->id, 'keyword' => $user->privilege_keyword])->first();
 
             if ($user) {
                 $this->setFirstView($campaign->table_name, $user);

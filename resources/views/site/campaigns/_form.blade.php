@@ -12,15 +12,27 @@
             <div class="col-6">
                 <x-input label="ชื่อแคมเปญ" name="name" :value="$name" required />
             </div>
+            <div class="col">
+                <x-select label="สถานะ" name="status" :src="['active' => 'ใช้งาน', 'inactive' => 'ไม่ใช้งาน']" :value="$status" required />
+            </div>
             @if ($type === 'create')
                 <div class="col-3">
                     <x-input label="คีย์เวิร์ด" name="keyword" :value="$keyword" required max="3" min="3"
                         class="uppercase" />
                 </div>
+                @if ($template_type === 'CTMS')
+                    <div class="col">
+                        <x-select :src="[
+                            'db_storage_code' => 'DB Storage Code',
+                            'db_a' => 'DB Ecoupon A',
+                            'db_b' => 'DB Ecoupon B',
+                        ]" label="Connection" name="connection" :value="$connection" required />
+                    </div>
+                    <div class="col">
+                        <x-input label="ชื่อตาราง" name="table_name"  required />
+                    </div>
+                @endif
             @endif
-            <div class="col">
-                <x-select label="สถานะ" name="status" :src="['active' => 'ใช้งาน', 'inactive' => 'ไม่ใช้งาน']" :value="$status" required />
-            </div>
         </div>
         <div class="row row-cols-1 row-cols-md-2 ">
             <div class="col">

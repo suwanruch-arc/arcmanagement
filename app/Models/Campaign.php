@@ -13,6 +13,7 @@ class Campaign extends Model
         'table_name',
         'name',
         'keyword',
+        'connection',
         'template_type',
         'start_date',
         'end_date',
@@ -25,25 +26,26 @@ class Campaign extends Model
 
     public function getButton($type)
     {
+        $config = json_decode($this->settings);
         if ($type === 'ok') {
             $button = [
-                'color' => $this->redeem_color,
-                'text' => $this->redeem_btn,
+                'color' => $config->color->redeem,
+                'text' => $config->button->redeem,
             ];
         } else if ($type === 'view') {
             $button = [
-                'color' => $this->view_color,
-                'text' => $this->view_btn,
+                'color' => $config->color->view,
+                'text' => $config->button->view,
             ];
         } else if ($type === 'expire') {
             $button = [
-                'color' => $this->expire_color,
-                'text' => $this->expire_btn,
+                'color' => $config->color->expire,
+                'text' => $config->button->expire,
             ];
         } else if ($type === 'already') {
             $button = [
-                'color' => $this->already_color,
-                'text' => $this->already_btn,
+                'color' => $config->color->already,
+                'text' => $config->button->already,
             ];
         }
 

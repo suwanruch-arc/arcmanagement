@@ -27,11 +27,11 @@ class ReportController extends Controller
         $fields = [
             'type' => $type,
             'report_id' => $model->id ?? null,
-            'uuid' => old('uuid') ?? ($model ? $model->uuid : ''),
-            'connection' => old('connection') ?? ($model ? $model->connection : 'main'),
-            'type_query' => old('type_query') ?? ($model ? $model->type_query : 'std'),
-            'name' => old('name') ?? ($model ? $model->name : ''),
-            'description' => old('description') ?? ($model ? $model->description : ''),
+            'uuid' => old('uuid') ?? $model->uuid ?? '',
+            'connection' => old('connection') ?? $model->connection ?? 'main',
+            'type_query' => old('type_query') ?? $model->type_query ?? 'std',
+            'name' => old('name') ?? $model->name ?? '',
+            'description' => old('description') ?? $model->description ?? '',
             'assign_users' => $assign_users ?? [],
         ];
         return $fields;

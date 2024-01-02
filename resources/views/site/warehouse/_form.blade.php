@@ -314,6 +314,10 @@
                         $('#table-generate').append(row);
                         $('#sql-result').append(data.sql + '<br>');
                     });
+                },
+                error: function(res) {
+                    showConsole('เกิดข้อผิดพลาด กรุณาตรวจสอบ Log', 'danger');
+                    $('#btn-generate').attr('disabled', false)
                 }
             });
         }

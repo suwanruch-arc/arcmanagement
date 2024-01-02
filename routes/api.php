@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\DetailController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ImageController;
@@ -16,12 +17,16 @@ use App\Http\Controllers\Api\RedeemController;
 |
 */
 
-Route::controller(RedeemController::class)->group(function () {
-    Route::get('detail','getDetail');
-    Route::post('get-code','getCode');
-    Route::post('view-code','getView');
+Route::controller(DetailController::class)->group(function () {
+
 });
 
-Route::prefix('img')->controller(ImageController::class)->group(function(){
-    Route::get('{partner}','getPartner');
+Route::controller(RedeemController::class)->group(function () {
+    Route::get('detail', 'getDetail');
+    Route::post('get-code', 'getCode');
+    Route::post('view-code', 'getView');
+});
+
+Route::prefix('img')->controller(ImageController::class)->group(function () {
+    Route::get('{partner}', 'getPartner');
 });

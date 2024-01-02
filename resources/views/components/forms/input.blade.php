@@ -24,9 +24,8 @@
                 <span class="input-group-text">{{ $prepend }}</span>
             @endif
 
-            <input @if ($disabled) disabled @endif @if ($readonly) readonly @endif
-                @if ($required) required @endif type="{{ $type }}"
-                name="{{ $name }}" id="{{ $id ?? $name }}"
+            <input @if ($disabled) disabled @endif @if ($required) required @endif
+                type="{{ $type }}" name="{{ $name }}" id="{{ $id ?? $name }}"
                 class="form-control @error($name) is-invalid @enderror @if ($readonly) readonly @endif {{ $class }}"
                 value="{{ $value }}" placeholder="{{ $placeholder }}" min="{{ $min }}"
                 minlength="{{ $min }}" max="{{ $max }}" maxlength="{{ $max }}">

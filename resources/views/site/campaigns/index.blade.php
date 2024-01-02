@@ -78,21 +78,25 @@
                             <td>{{ $campaign->template_type }}</td>
                             <td>{{ $campaign->owner->name }}</td>
                             <td class="fw-bold text-center">
-                                {{ date('d/m/Y H:i', strtotime($campaign->start_date)) }} - {{ date('d/m/Y H:i', strtotime($campaign->end_date)) }}
+                                {{ date('d/m/Y H:i', strtotime($campaign->start_date)) }} -
+                                {{ date('d/m/Y H:i', strtotime($campaign->end_date)) }}
                             </td>
                             <td class="text-center align-middle">
                                 {!! Status::show($campaign->status) !!}
                             </td>
                             <td class="text-center">
                                 <x-action-btn :model="$campaign" route="site.campaigns" :params="['campaign' => $campaign->id]">
-                                    <x-button label='คลังข้อมูล' color="secondary"
-                                        href="{{ route('site.warehouse.index', $campaign->id) }}" class="m-1 text-nowrap">
-                                        <i class="si-archive"></i>
-                                    </x-button>
-                                    <x-button label='Privileges' color="info" class="m-1 text-nowrap"
-                                        href="{{ route('site.campaigns.privileges.index', $campaign->id) }}">
-                                        <i class="si-stack"></i>
-                                    </x-button>
+                                    @if ($campaign->template_type !== 'CTMS')
+                                        <x-button label='คลังข้อมูล' color="secondary"
+                                            href="{{ route('site.warehouse.index', $campaign->id) }}"
+                                            class="m-1 text-nowrap">
+                                            <i class="si-archive"></i>
+                                        </x-button>
+                                        <x-button label='Privileges' color="info" class="m-1 text-nowrap"
+                                            href="{{ route('site.campaigns.privileges.index', $campaign->id) }}">
+                                            <i class="si-stack"></i>
+                                        </x-button>
+                                    @endif
                                 </x-action-btn>
                             </td>
                         </tr>

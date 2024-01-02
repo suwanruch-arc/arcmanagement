@@ -18,7 +18,8 @@ class CreateCampaignsTable extends Migration
             $table->string('table_name');
             $table->string('name');
             $table->string('keyword', 3)->unique();
-            $table->enum('template_type', ["STD", "CTMT","CTMS"]);
+            $table->enum('template_type', ["STD", "CTMT", "CTMS"]);
+            $table->enum('connection', ['db_storage_code', 'db_a', 'db_b']);
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->text('description')->nullable();
