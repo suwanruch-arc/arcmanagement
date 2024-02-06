@@ -18,9 +18,12 @@ class DashboardController extends Controller
             foreach (file($file) as $line) {
                 $line = explode('|', $line);
                 $line_data = json_decode($line[4]);
-                $date = date('Y-m-d', strtotime($line_data->data_access));
-                $time = date('H:i:s', strtotime($line_data->data_access));
-                $data_access[$date][] = $time;
+                if(isset($line_data->data_access)){
+                    $date = date('Y-m-d', strtotime($line_data->data_access));
+                    $time = date('H:i:s', strtotime($line_data->data_access));
+                    $data_access[$date][] = $time;
+                }
+                
             }
         }
 
