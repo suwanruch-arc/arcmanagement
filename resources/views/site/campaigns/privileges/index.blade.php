@@ -2,7 +2,7 @@
 
 @section('title')
     <a class="btn btn-sm btn-outline-secondary mb-2" href="{{ route('site.warehouse.index', $campaign->id) }}">
-        <i data-feather="upload"></i> นำเข้าข้อมูล
+       <b class="material-icons-round fs-5">upload</b> นำเข้าข้อมูล
     </a>
     <h3>
 
@@ -12,28 +12,32 @@
 
 @section('content')
     <x-container fluid>
-        <x-header-btn justify="end" />
+        <div class="d-flex justify-content-end">
+            <a href="{{ route('site.campaigns.privileges.create', $campaign->id) }}"
+                class="text-bg-primary text-decoration-none rounded-top mx-2 ps-2 pe-3 py-1 fs-6"><span class="material-icons-round">add</span>
+                เพิ่ม</a>
+        </div>
         <x-card>
             <x-datatable sort>
                 <thead>
                     <tr>
-                        <th class="search" width="1%">Default Code</th>
+                        <th width="1%">Default Code</th>
                         @switch($campaign->template_type)
                             @case('STD')
-                                <th class="search" width="1%">Banner</th>
+                                <th width="1%">Banner</th>
                             @break
 
                             @case('CTMT')
-                                <th class="search" width="1%">Template</th>
+                                <th width="1%">Template</th>
                             @break
                         @endswitch
-                        <th class="search" width="25%">Shop</th>
-                        <th class="search" width="25%">Title</th>
-                        <th class="search" width="1%">Value</th>
-                        <th class="search" width="15%">Start Date</th>
-                        <th class="search" width="15%">End Date</th>
-                        <th class="search" width="3%">Lot</th>
-                        <th class="search" width="1%">Keyword</th>
+                        <th width="25%">Shop</th>
+                        <th width="25%">Title</th>
+                        <th width="1%">Value</th>
+                        <th width="15%">Start Date</th>
+                        <th width="15%">End Date</th>
+                        <th width="3%">Lot</th>
+                        <th width="1%">Keyword</th>
                         <th width="1%">Status</th>
                         <th width="1%">Action</th>
                     </tr>
@@ -42,29 +46,25 @@
                     @forelse ($privileges as $privilege)
                         <tr>
                             <td class="text-center align-middle">{{ strtoupper($privilege->default_code) }}</td>
-                            <td class="text-center">ดูรูปภาพ</td>
-                            {{-- @switch($campaign->template_type)
-                                @case('STD')
-                                    <td class="text-center">
+                            <td class="text-center">
+                                @switch($campaign->template_type)
+                                    @case('STD')
                                         {!! Image::show($privilege->id, 'privileges', [
                                             'id' => 'banner',
                                             'width' => '100px',
                                             'class' => 'img-thumbnail rounded p-1 img-preview',
                                         ]) !!}
-                                    </td>
-                                @break
+                                    @break
 
-                                @case('CTMT')
-                                    <td class="text-center">
+                                    @case('CTMT')
                                         {!! Image::show($privilege->id, 'privileges', [
                                             'id' => 'template',
                                             'width' => '100px',
                                             'class' => 'img-thumbnail rounded p-1 img-preview',
                                         ]) !!}
-                                    </td>
-                                @break
-                            @endswitch --}}
-
+                                    @break
+                                @endswitch
+                            </td>
                             <td class="align-middle">{{ $privilege->shop->name }}</td>
                             <td class="align-middle">{{ $privilege->title }}</td>
                             <td class="text-end align-middle">{{ number_format($privilege->value, 0) }} ฿</td>

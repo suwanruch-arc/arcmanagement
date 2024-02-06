@@ -6,17 +6,18 @@ use App\Http\Controllers\Sites\CampaignController;
 return [
     'menus' => [
         [
+            'icon' => 'dashboard',
             'text' => 'Dashboard',
             'url' => 'dashboard',
         ],
         [
-            'icon' => 'archive',
+            'icon' => 'campaign',
             'text' => 'Campaigns',
             'url' => 'site/campaigns',
             'child' => 'privileges',
         ],
         [
-            'icon' => 'chart-pie',
+            'icon' => 'pie_chart',
             'text' => 'Reports',
             'url' => 'manage/reports'
         ],
@@ -28,17 +29,17 @@ return [
             'url' => 'manage/map-link'
         ],
         [
-            'icon' => 'bag',
-            'text' => ' Shops',
+            'icon' => 'store',
+            'text' => 'Shops',
             'url' => 'manage/shops'
         ],
         [
-            'icon' => 'backpack',
+            'icon' => 'handshake',
             'text' => 'Partners',
             'url' => 'manage/partners'
         ],
         [
-            'icon' => 'user',
+            'icon' => 'person',
             'text' => 'Users',
             'url' => 'manage/users'
         ]

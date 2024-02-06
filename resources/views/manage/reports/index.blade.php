@@ -23,9 +23,9 @@
                             <td>{{ $report->name }}</td>
                             <td class="text-center">
                                 <x-action-btn :model="$report" route="manage.reports" :params="['report' => $report->id]">
-                                    <x-button label="ดู Report" class="m-1" type="button"
+                                    <x-button label="ดู Report" class="m-1 btn-sm" type="button"
                                         href="{{ route('site.reports.show', $report->uuid) }}" color="info">
-                                        <i data-feather="eye"></i>
+                                        <i class="material-icons-round fs-5">visibility</i>
                                     </x-button>
                                 </x-action-btn>
                             </td>

@@ -11,8 +11,8 @@
             <x-datatable sort>
                 <thead>
                     <tr>
-                        <th class="search" width="15%">Name</th>
-                        <th class="search" width="15%">Keyword</th>
+                        <th width="15%">Name</th>
+                        <th width="15%">Keyword</th>
                         <th width="15%">Template</th>
                         <th width="15%">Banner</th>
                         <th width="30%">Terms and Conditions</th>

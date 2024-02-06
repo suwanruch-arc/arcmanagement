@@ -25,7 +25,6 @@ class Privilege extends Model
         'default_code',
         'has_detail',
         'detail',
-        'has_tandc',
         'tandc',
         'setting',
         'status',

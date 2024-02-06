@@ -21,20 +21,20 @@
                 </thead>
                 <tbody>
                     @forelse ($partners as $partner)
-                        <tr>
-                            <td class="align-middle bg-light">
+                        <tr class="bg-secondary bg-opacity-10">
+                            <td class="align-middle">
                                 <b>{{ $partner->name }}</b>
                             </td>
-                            <td class="align-middle bg-light">
+                            <td class="align-middle">
                                 {{ $partner->keyword }}
                             </td>
                             <td class="text-center">
                                 {!! Status::show($partner->status) !!}
                             </td>
-                            <td class="text-center align-middle bg-light">
+                            <td class="text-center align-middle">
                                 <x-action-btn :model="$partner" route="manage.partners" :params="['partner' => $partner->id]">
-                                    <x-button class="m-1" label="เพิ่ม" :href="route('manage.partners.departments.create', ['partner' => $partner->id])">
-                                        <i class="si-plus"></i>
+                                    <x-button class="m-1  btn-sm" label="เพิ่ม" :href="route('manage.partners.departments.create', ['partner' => $partner->id])">
+                                        <span class="material-icons-round fs-5">add</span>
                                     </x-button>
                                 </x-action-btn>
                             </td>
@@ -47,7 +47,8 @@
                                         'width' => '100px',
                                         'class' => 'img-thumbnail rounded p-1',
                                     ]) !!}
-                                    {{ $department->name }} <i><small>({{ $department->is_main ? 'Main' : '' }})</small></i>
+                                    {{ $department->name }}
+                                    <i><small>{{ $department->is_main === 'yes' ? '(Main)' : '' }}</small></i>
                                 </td>
                                 <td class="align-middle">
                                     {{ $department->keyword }}

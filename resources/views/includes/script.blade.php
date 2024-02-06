@@ -2,18 +2,14 @@
 <script type="text/javascript" src="{{ asset('js/jquery-3.7.0.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('plugins/DataTables/datatables.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/select2.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/feather.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/sweetalert2.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/chart.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/filepond.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/filepond.jquery.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
 <script>
-    feather.replace({
-        'aria-hidden': 'true',
-        'class': 'fade'
-    })
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 

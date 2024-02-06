@@ -17,21 +17,24 @@
                                     <li class="list-group-item d-flex justify-content-between align-items-start">
                                         <div class="ms-2 me-auto">
                                             <div class="fw-bold">{{ $privilege['title'] }} :
-                                                <span class="fw-normal">{{ $shop_keyword }} <span data-bs-toggle="tooltip"
-                                                        data-bs-title="Keyword" class="text-black-50"
-                                                        data-feather="alert-circle"></span></span>
+                                                <span class="fw-normal">{{ $shop_keyword }} <span
+                                                        class="material-icons-round text-black-50 user-select-none fs-6"
+                                                        data-bs-toggle="tooltip" data-bs-title="keyword">error_outline</span></span>
                                             </div>
                                             <ul>
                                                 @foreach ($privilege['list'] as $expire => $item)
-                                                    <li>{{ $expire }} <span data-bs-toggle="tooltip" data-bs-title="Expire"
-                                                            class="text-black-50" data-feather="alert-circle"></span></li>
+                                                    <li>{{ $expire }} <span
+                                                            class="material-icons-round text-black-50 user-select-none fs-6"
+                                                            data-bs-toggle="tooltip" data-bs-title="Expire">error_outline</span>
+                                                    </li>
                                                     <ul>
                                                         @foreach ($item as $value)
-                                                            <li>{{ $value }} ฿ <span data-bs-toggle="tooltip"
-                                                                    data-bs-title="Value" class="text-black-50"
-                                                                    data-feather="alert-circle"></span>&nbsp;<span role="button"
-                                                                    class="text-primary" data-feather="copy"
-                                                                    onclick="copyKeyword('{{ $shop_keyword }}','{{ $value }}','{{ $expire }}')"></span>
+                                                            <li>{{ $value }} ฿ <span
+                                                                    class="material-icons-round text-black-50 user-select-none fs-6"
+                                                                    data-bs-toggle="tooltip"
+                                                                    data-bs-title="Value">error_outline</span>&nbsp;<span
+                                                                    role="button" class="text-primary material-icons-round fs-6"
+                                                                    onclick="copyKeyword('{{ $shop_keyword }}','{{ $value }}','{{ $expire }}')">content_copy</span>
                                                             </li>
                                                         @endforeach
                                                     </ul>
@@ -115,27 +118,27 @@
                 <div class="card-footer">
                     <button type="button" class="btn btn-info" id="btn-format" onclick="checkFormat()"
                         style="display:none">
-                        <span data-feather="search"></span> Check format
+                        <i class="material-icons-round">search</i> Check format
                     </button>
                     <button type="button" class="btn btn-primary" id="btn-generate" onclick="generate()"
                         style="display:none">
-                        <span data-feather="terminal"></span> Generate
+                        <i class="material-icons-round">terminal</i> Generate
                     </button>
                     <button type="button" class="btn btn-outline-success btn-copy" id="btn-copy-data" onclick="copyData()"
                         style="display:none">
-                        <span data-feather="copy"></span> Copy Data
+                        <i class="material-icons-round">copy</i> Copy Data
                     </button>
                     <button type="button" class="btn btn-outline-warning text-orange btn-copy" id="btn-copy-sql"
                         onclick="copySql()" style="display:none">
-                        <span data-feather="copy"></span> Copy SQL
+                        <i class="material-icons-round">copy</i> Copy SQL
                     </button>
                     <button type="button" class="btn btn-success btn-export" id="btn-export-data" onclick="exportData()"
                         style="display:none">
-                        <span data-feather="share"></span> Export Data
+                        <i class="material-icons-round">share</i> Export Data
                     </button>
                     <button type="button" class="btn btn-warning btn-export" id="btn-export-sql" onclick="exportSql()"
                         style="display:none">
-                        <span data-feather="share"></span> Export SQL
+                        <i class="material-icons-round">share</i> Export SQL
                     </button>
                 </div>
             </div>
@@ -204,7 +207,6 @@
 
         const formData = new FormData();
         formData.append('_token', '{{ csrf_token() }}');
-        formData.append('type_split_data', $('[name=type_split_data]:checked').val());
         formData.append('start_date', $('[name=start_date]').val());
         const pond = FilePond.create(document.getElementById('filepond'), {
             server: {
@@ -255,6 +257,8 @@
 
         function checkFormat() {
             showConsole('กำลังตรวจสอบไฟล์...')
+
+            formData.append('type_split_data', $('[name=type_split_data]:checked').val());
             $('#btn-format').attr('disabled', true)
             $.ajax({
                 url: "{{ route('site.warehouse.check-format', $campaign->id) }}",

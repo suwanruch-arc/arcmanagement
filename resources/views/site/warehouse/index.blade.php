@@ -13,7 +13,7 @@
             </a>
             <a href="{{ route('site.warehouse.import', $campaign->id) }}"
                 class="text-bg-primary text-decoration-none rounded-top mx-2 px-3 py-1 fs-6">
-                <span data-feather="upload"></span>&nbsp;นำเข้าข้อมูล
+                <span class="material-icons-round fs-5">upload</span>&nbsp;นำเข้าข้อมูล
             </a>
         </div>
         <x-card>

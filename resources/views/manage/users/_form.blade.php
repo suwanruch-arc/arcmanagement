@@ -21,10 +21,10 @@
 </div>
 <div class="row row-cols-1 row-cols-md-2">
     <div class="col">
-        <x-select label="Position" name="position" :src="['admin' => 'Admin', 'leader' => 'Leader', 'staff' => 'Staff']" :value="$position" required />
+        <x-select label="Position" name="position" :src="['admin' => 'Admin', 'leader' => 'Leader', 'staff' => 'Staff']" :value="$position" />
     </div>
     <div class="col">
-        <x-select label="Role" name="role" :src="['admin' => 'Admin', 'moderator' => 'Moderator', 'user' => 'User']" :value="$role" required />
+        <x-select label="Role" name="role" :src="['admin' => 'Admin', 'moderator' => 'Moderator', 'user' => 'User']" :value="$role" />
     </div>
 </div>
 <div class="row row-cols-1 row-cols-md-2">

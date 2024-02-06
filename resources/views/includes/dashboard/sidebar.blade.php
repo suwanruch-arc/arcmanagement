@@ -18,9 +18,8 @@
                                 <li class="nav-item">
                                     <a class="align-middle nav-link @if (isset($menu['url']) && (Request::is($menu['url']) || str_contains(Request::getRequestUri(), $menu['url']))) active @endif"
                                         href="{{ '/' . (isset($menu['url']) ? $menu['url'] : '#') }}">
-                                        {{-- <span
-                                            data-feather="{{ !isset($menu['icon']) || empty($menu['icon']) ? 'box' : $menu['icon'] }}"></span> --}}
-                                        <span class="si-{{ !isset($menu['icon']) || empty($menu['icon']) ? 'box' : $menu['icon'] }}"></span>
+                                        <span
+                                            class="material-icons-round">{{ !isset($menu['icon']) || empty($menu['icon']) ? 'box' : $menu['icon'] }}</span>
                                         {{ $menu['text'] }}
                                     </a>
                                     @if (isset($menu['child']))

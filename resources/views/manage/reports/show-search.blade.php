@@ -14,13 +14,12 @@
         <div class="row justify-content-center">
             <div class="col-2 text-end">
                 <button type="submit" class="btn btn-primary">
-                    <i data-feather="search"></i>
+                    <i class="material-icons-round fs-6">search</i>
                     ค้นหา
                 </button>
             </div>
             <div class="col-2 text-start">
-                <x-button color="warning" href="{{ route('site.reports.show', $report->uuid) }}">
-                    <i data-feather="x"></i>
+                <x-button color="link" href="{{ route('site.reports.show', $report->uuid) }}">
                     ล้าง
                 </x-button>
             </div>

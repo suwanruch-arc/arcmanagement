@@ -37,7 +37,7 @@
                             </x-select>
                         </div>
                         <div class="col">
-                            <button class="btn btn-sm btn-primary" type="submit">
+                            <button class="btn btn-primary " type="submit">
                                 ค้นหา
                             </button>
                             <button class="btn btn-sm btn-link" type="button"
@@ -51,7 +51,7 @@
         @endif
         <div class="d-flex justify-content-end">
             <a href="{{ route('site.campaigns.pre-create') }}"
-                class="text-bg-primary text-decoration-none rounded-top mx-2 px-3 py-1 fs-6"><i class="si-plus"></i>
+                class="text-bg-primary text-decoration-none rounded-top mx-2 ps-2 pe-3 py-1 fs-6"><span class="material-icons-round">add</span>
                 สร้างแคมเปญ</a>
         </div>
 
@@ -89,12 +89,12 @@
                                     @if ($campaign->template_type !== 'CTMS')
                                         <x-button label='คลังข้อมูล' color="secondary"
                                             href="{{ route('site.warehouse.index', $campaign->id) }}"
-                                            class="m-1 text-nowrap">
-                                            <i class="si-archive"></i>
+                                            class="m-1 text-nowrap btn-sm">
+                                            <i class="material-icons-round fs-6">inventory_2</i>
                                         </x-button>
-                                        <x-button label='Privileges' color="info" class="m-1 text-nowrap"
+                                        <x-button label='Privileges' color="info" class="m-1 text-nowrap btn-sm"
                                             href="{{ route('site.campaigns.privileges.index', $campaign->id) }}">
-                                            <i class="si-stack"></i>
+                                            <i class="material-icons-round fs-6">view_agenda</i>
                                         </x-button>
                                     @endif
                                 </x-action-btn>

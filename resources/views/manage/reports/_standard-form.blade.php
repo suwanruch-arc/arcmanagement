@@ -30,15 +30,9 @@
             <th class="text-center">
                 <button role="button" type="button" class="btn btn-sm btn-outline-primary p-1"
                     onclick="addSelectField()">
-                    <b data-feather="plus"></b>
+                    <b class="material-icons-round fs-5">add</b>
                 </button>
             </th>
         </tr>
     </tbody>
 </table>
-
-<script>
-    feather.replace({
-        'aria-hidden': 'true'
-    })
-</script>

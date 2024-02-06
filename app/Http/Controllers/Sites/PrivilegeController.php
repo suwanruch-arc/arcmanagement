@@ -46,7 +46,6 @@ class PrivilegeController extends Controller
             'description' => old('description') ?? ($model ? $model->description : ''),
             'has_detail' => old('has_detail') ?? ($model ? $model->has_detail == 'yes' : false),
             'detail' => old('detail') ?? ($model ? $model->detail : ''),
-            'has_tandc' => old('has_tandc') ?? ($model ? $model->has_tandc == 'yes' : false),
             'tandc' => old('tandc') ?? ($model ? $model->tandc : ''),
             'status' => old('status') ?? ($model ? $model->status : 'active'),
             'settings' =>  (object) [
@@ -114,8 +113,7 @@ class PrivilegeController extends Controller
             'default_code' => 'required|in:qrcode,barcode,textcode',
             'has_detail' => 'nullable',
             'detail' => 'required_if:has_detail,on',
-            'has_tandc' => 'nullable',
-            'tandc' => 'required_if:has_tandc,on',
+            'tandc' => 'nullable',
             'shop_id' => 'required|exists:shops,id',
             'has_timer' => 'nullable',
             'timer_value' => 'required_if:has_timer,on',
@@ -136,7 +134,6 @@ class PrivilegeController extends Controller
             $privilege->title = $privilege->title ?? "{$shop_keyword}_{$privilege->value}";
             $privilege->skip_confirm = $request->skip_confirm ? 'yes' : 'no';
             $privilege->has_detail = $request->has_detail ? 'yes' : 'no';
-            $privilege->has_tandc = $request->has_tandc ? 'yes' : 'no';
             $privilege->has_timer = $request->has_timer ? 'yes' : 'no';
             $privilege->can_view = $request->can_view ? 'yes' : 'no';
             $privilege->campaign_id = $campaign->id;
@@ -225,8 +222,7 @@ class PrivilegeController extends Controller
             'default_code' => 'required|in:qrcode,barcode,textcode',
             'has_detail' => 'nullable',
             'detail' => 'required_if:has_detail,on',
-            'has_tandc' => 'nullable',
-            'tandc' => 'required_if:has_tandc,on',
+            'tandc' => 'nullable',
             'shop_id' => 'required|exists:shops,id',
             'has_timer' => 'nullable',
             'timer_value' => 'required_if:has_timer,on',
@@ -235,6 +231,10 @@ class PrivilegeController extends Controller
             'settings' => 'array',
             'status' => 'required|in:active,inactive'
         ]);
+        
+        if (Str::contains($request->tandc, '<p><br></p>')) {
+            $validated['tandc'] = null;
+        }
 
         DB::transaction(function () use ($validated, $request, &$privilege) {
             $settings = json_encode($request->settings ?? []);
@@ -242,7 +242,6 @@ class PrivilegeController extends Controller
             $privilege->fill($validated);
             $privilege->skip_confirm = $request->skip_confirm ? 'yes' : 'no';
             $privilege->has_detail = $request->has_detail ? 'yes' : 'no';
-            $privilege->has_tandc = $request->has_tandc ? 'yes' : 'no';
             $privilege->has_timer = $request->has_timer ? 'yes' : 'no';
             $privilege->can_view = $request->can_view ? 'yes' : 'no';
             $privilege->settings = $settings;

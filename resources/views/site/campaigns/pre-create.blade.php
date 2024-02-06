@@ -19,7 +19,7 @@
                                 <x-select label="ผู้ดูแล" name="owner_id" :src="$owner_lists" value="" required />
                             </div>
                         </div>
-                        <button class="btn btn-primary mt-3" type="submit"><i class="si-arrow-right"></i> ต่อไป</button>
+                        <button class="btn btn-primary mt-3" type="submit"><i class="material-icons-round">arrow_forward</i> ต่อไป</button>
                     </form>
                 </x-card>
             </div>

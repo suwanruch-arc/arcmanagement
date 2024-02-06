@@ -34,116 +34,6 @@ class RedeemController extends Controller
         return $response;
     }
 
-    public function getDetail(Request $request)
-    {
-        $now = date('Y-m-d H:i:s');
-        $campaign_keyword = Str::upper($request->c);
-        $partner_keyword = Str::upper($request->p);
-        $unique_code = $request->u;
-
-        $logs['request'] = ['campaign' => $request->c, 'partner' => $request->p, 'unique' => $request->u];
-        $logs['data_access'] = $now;
-
-        $campaign = Campaign::where(['keyword' => $campaign_keyword, 'status' => 'active'])->first();
-        $user = DB::connection('db_storage_code')
-            ->table($campaign->table_name)->select(['code', 'is_use', 'expire_date', 'start_date', 'first_view_date', 'privilege_keyword'])
-            ->where(['partner_keyword' => $partner_keyword, 'flag' => 'ok'])
-            ->where(DB::raw('BINARY unique_code'), '=', $unique_code)
-            ->first();
-
-        if ($user && $now >= $user->start_date) {
-            $privilege = Privilege::where(['campaign_id' => $campaign->id, 'keyword' => $user->privilege_keyword])->first();
-            $config = json_decode($campaign->settings);
-            switch ($campaign->template_type) {
-                case 'STD':
-                    $banner = Image::getUrl($privilege->id, 'privileges', 'banner');
-                    $shop = $privilege->shop;
-                    if ($now <= $user->expire_date) {
-                        if ($privilege->can_view === 'yes' && $privilege->skip_confirm === 'yes') {
-                            $flag = 'view';
-                        } elseif ($privilege->can_view === 'yes' && $privilege->skip_confirm === 'no') {
-                            if ($user->is_use === 'yes') {
-                                $flag = 'already';
-                            } else {
-                                $flag = 'ok';
-                            }
-                        } elseif ($privilege->can_view === 'no' && $privilege->skip_confirm === 'yes') {
-                            if ($user->is_use === 'yes') {
-                                $flag = 'already';
-                            } else {
-                                $flag = 'view';
-                            }
-                        } elseif ($privilege->can_view === 'no' && $privilege->skip_confirm === 'no') {
-                            if ($user->is_use === 'yes') {
-                                $flag = 'already';
-                            } else {
-                                $flag = 'ok';
-                            }
-                        }
-                    } else {
-                        $flag = 'expire';
-                    }
-                    $res = [
-                        'banner' => $banner,
-                        'btn'    => $campaign->getButton($flag),
-                        'config' => [
-                            'alert' => [
-                                'status' => $privilege->skip_confirm === 'no',
-                                'title' => $config->alert->title,
-                                'desc'  => $config->alert->description
-                            ],
-                            'themes' => [
-                                'main'      => $config->color->main,
-                                'secondary' => $config->color->secondary,
-                            ],
-                            'timer' => [
-                                'status' => $privilege->has_timer === 'yes',
-                                'value' => $privilege->timer_value
-                            ]
-                        ],
-                        'flag'      => $flag,
-                        'status'    => true,
-                        'shop'      => [
-                            'name' => $shop->name
-                        ],
-                        'privilege' => [
-                            'title'       => $privilege->title,
-                            'description' => $privilege->description,
-                            'has_detail'  => $privilege->has_detail === 'yes',
-                            'detail'      => $privilege->detail,
-                            'has_tandc'   => $privilege->has_tandc === 'yes',
-                            'tandc'       => $privilege->tandc,
-                            'default_code' => $privilege->default_code,
-                            'expire_date' => $privilege->end_date
-                        ],
-                        'template_type' => $campaign->template_type,
-                    ];
-                    break;
-                case 'CTMT':
-                    $template = Image::getUrl($privilege->id, 'privileges', 'template');
-                    $res = [
-                        'code' => $user->code,
-                        'code_type' => $privilege->default_code,
-                        'settings' => $privilege->settings,
-                        'status' => true,
-                        'flag' => 'ok',
-                        'template' => $template,
-                        'template_type' => $campaign->template_type,
-                    ];
-                    break;
-            }
-        } else {
-            $res['status'] = false;
-        }
-
-        $date = date('Ymd');
-        Log::build([
-            'driver' => 'single',
-            'path' => storage_path("logs/redeem/{$date}.log"),
-        ])->info("Type:getDetail|Unique:{$unique_code}|Ip:{$request->ip()}|UserAgent:{$request->server('HTTP_USER_AGENT')}|Data:" . json_encode($logs) . "|Flag:" . json_encode($res['flag']));
-        return response()->json($res);
-    }
-
     public function getCode(Request $request)
     {
         $now = date('Y-m-d H:i:s');
@@ -194,7 +84,7 @@ class RedeemController extends Controller
         Log::build([
             'driver' => 'single',
             'path' => storage_path("logs/redeem/{$date}.log"),
-        ])->info("Type:getCode|Unique:{$unique_code}|Ip:{$request->ip()}|UserAgent:{$request->server('HTTP_USER_AGENT')}|Data:" . json_encode($logs) . "|Return:" . json_encode($res));
+        ])->info("Type:getCode|Unique:{$unique_code}|Ip:{$request->ip()}|UserAgent:{$request->server('HTTP_USER_AGENT')}|" . json_encode($logs) . "|Return:" . json_encode($res));
         return response()->json($res);
     }
 
@@ -245,7 +135,7 @@ class RedeemController extends Controller
         Log::build([
             'driver' => 'single',
             'path' => storage_path("logs/redeem/{$date}.log"),
-        ])->info("Type:getView|Unique:{$unique_code}|Ip:{$request->ip()}|UserAgent:{$request->server('HTTP_USER_AGENT')}|Data:" . json_encode($logs) . "|Return:" . json_encode($res));
+        ])->info("Type:getView|Unique:{$unique_code}|Ip:{$request->ip()}|UserAgent:{$request->server('HTTP_USER_AGENT')}|" . json_encode($logs) . "|Return:" . json_encode($res));
         return response()->json($res);
     }
 

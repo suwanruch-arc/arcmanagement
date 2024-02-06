@@ -29,7 +29,6 @@ class CreatePrivilegesTable extends Migration
             $table->enum('default_code', ["qrcode", "barcode", "textcode"]);
             $table->enum('has_detail', ['yes', 'no']);
             $table->text('detail')->nullable();
-            $table->enum('has_tandc', ['yes', 'no']);
             $table->text('tandc')->nullable();
             $table->text('settings')->nullable();
             $table->enum('status', ["active", "inactive"]);

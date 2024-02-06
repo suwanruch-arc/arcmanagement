@@ -184,6 +184,7 @@ class CampaignController extends Controller
                     $table->dateTime('start_date');
                     $table->dateTime('update_date')->nullable();
                     $table->dateTime('first_view_date')->nullable();
+                    $table->dateTime('last_view_date')->nullable();
                     $table->dateTime('redeem_date')->nullable();
                     $table->dateTime('expire_date')->nullable();
                     $table->enum('flag', ["ok", "cancel", "deviate"]);

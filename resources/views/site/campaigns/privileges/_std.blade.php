@@ -36,7 +36,9 @@
         <x-input type="area" class="editor" name="detail" :value="$detail" />
     </div>
     <div class="col">
-        <x-input type="switch" label="เงื่อนไขการใช้งาน" name="has_tandc" :value="$has_tandc" />
+        <label for="tandc" class="form-label">
+            เงื่อนไขและข้อตกลง
+        </label>
         <x-input type="area" class="editor" name="tandc" :value="$tandc" />
     </div>
 </div>

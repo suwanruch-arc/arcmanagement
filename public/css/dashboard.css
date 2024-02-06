@@ -2,11 +2,6 @@ body {
     font-size: 0.875rem;
 }
 
-.feather {
-    width: 16px;
-    height: 16px;
-}
-
 /*
  * Sidebar
  */
@@ -38,7 +33,7 @@ body {
     color: #333;
 }
 
-.sidebar .nav-link .feather {
+.sidebar .nav-link {
     margin-right: 4px;
     color: #727272;
 }
@@ -52,8 +47,8 @@ body {
     padding-left: 12px;
 }
 
-.sidebar .nav-link:hover .feather,
-.sidebar .nav-link.active .feather {
+.sidebar .nav-link:hover ,
+.sidebar .nav-link.active  {
     color: inherit;
 }
 
