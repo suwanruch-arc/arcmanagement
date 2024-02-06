@@ -53,6 +53,7 @@ class DetailController extends Controller
             $config = json_decode($campaign->settings);
             switch ($campaign->template_type) {
                 case 'STD':
+                    $logo = Image::getUrl($privilege->owner_id,'departments','logo');
                     $banner = Image::getUrl($privilege->id, 'privileges', 'banner') ?? Image::getUrl($privilege->shop->id, 'shops', 'banner');
                     $shop = $privilege->shop;
                     if ($now <= $user->expire_date) {
@@ -81,6 +82,7 @@ class DetailController extends Controller
                         $flag = 'expire';
                     }
                     $res = [
+                        'logo'   => $logo,
                         'banner' => $banner,
                         'btn'    => $campaign->getButton($flag),
                         'config' => [
