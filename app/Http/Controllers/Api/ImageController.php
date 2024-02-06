@@ -9,6 +9,9 @@ use App\Models\Department;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Image;
+use App\Models\Campaign;
+use App\Models\Privilege;
+use Illuminate\Support\Facades\DB;
 
 class ImageController extends Controller
 {
