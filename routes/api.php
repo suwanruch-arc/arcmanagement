@@ -27,5 +27,6 @@ Route::controller(RedeemController::class)->group(function () {
 });
 
 Route::prefix('img')->controller(ImageController::class)->group(function () {
+    Route::get('logo', 'getLogoPartner');
     Route::get('{partner}', 'getPartner');
 });
