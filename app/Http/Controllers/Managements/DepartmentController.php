@@ -22,6 +22,7 @@ class DepartmentController extends Controller
             'status' => old('status') ?? $model->status ?? 'active',
             'name' => old('name') ?? $model->name ?? '',
             'keyword' => old('keyword') ?? $model->keyword ?? '',
+            'logo_width' => old('logo_width') ?? $model->logo_width ?? 40
         ];
 
         return $fields;
@@ -63,6 +64,7 @@ class DepartmentController extends Controller
             'name' => 'required|max:255',
             'keyword' => 'required|max:10|unique:departments,keyword',
             'status' => 'required|in:active,inactive',
+            'logo_width' => 'nullable'
         ]);
 
         DB::transaction(function () use ($validated, $request, &$partner, &$department) {
@@ -129,6 +131,7 @@ class DepartmentController extends Controller
             'name' => 'required|max:255',
             'keyword' => 'required|max:10|unique:departments,id,' . $department->id,
             'status' => 'required|in:active,inactive',
+            'logo_width' => 'nullable'
         ]);
 
         DB::transaction(function () use ($validated, $request, &$partner, &$department) {

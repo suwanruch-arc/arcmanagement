@@ -13,6 +13,7 @@ class Department extends Model
         'partner_id',
         'name',
         'keyword',
+        'logo_width',
         'status'
     ];
 

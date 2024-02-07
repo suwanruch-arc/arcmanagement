@@ -8,6 +8,9 @@
     <div class="col-3">
         <x-select label="Status" name="status" :src="['active' => 'ใช้งาน', 'inactive' => 'ไม่ใช้งาน']" :value="$status" required />
     </div>
+    <div class="col">
+        <x-input label="Logo width" name="logo_width" :value="$logo_width" required />
+    </div>
 </div>
 <div class="row">
     <div class="col">

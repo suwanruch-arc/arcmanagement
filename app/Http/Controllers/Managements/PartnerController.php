@@ -81,6 +81,7 @@ class PartnerController extends Controller
             $department->name = $validated['department_name'] ?? "{$partner->name}-main";
             $department->keyword = Str::upper($validated['department_keyword'] ?? $partner->keyword);
             $department->is_main = 'yes';
+            $department->logo_width = 40;
             $department->save();
 
             if ($request->hasFile('logo')) {

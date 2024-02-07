@@ -35,7 +35,8 @@ class ImageController extends Controller
             ->where(DB::raw('BINARY unique_code'), '=', $unique_code)
             ->first();
         $privilege = Privilege::where(['campaign_id' => $campaign->id, 'keyword' => $user->privilege_keyword])->first();
-        $logo = Image::getUrl($privilege->campaign->owner_id,'departments','logo');
-        return response()->json($logo);
+        $res['logo'] = Image::getUrl($privilege->campaign->owner_id,'departments','logo');
+        $res['width'] = Department::where('id', $campaign->owner_id)->value('logo_width');
+        return response()->json($res);
     }
 }
