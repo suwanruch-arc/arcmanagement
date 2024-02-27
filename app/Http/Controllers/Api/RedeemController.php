@@ -46,7 +46,7 @@ class RedeemController extends Controller
         $logs['data_access'] = $now;
 
         $recapt = $this->validateCaptcha($response_recaptcha);
-        if ($recapt->success && $recapt->score > 0.7) {
+        if ($recapt && $recapt->success) {
             $campaign = Campaign::where(['keyword' => $campaign_keyword, 'status' => 'active'])->first();
             $user = DB::connection('db_storage_code')
                 ->table($campaign->table_name)->select(['id', 'code', 'is_use', 'expire_date', 'start_date', 'first_view_date',  'privilege_keyword'])
@@ -84,7 +84,7 @@ class RedeemController extends Controller
         Log::build([
             'driver' => 'single',
             'path' => storage_path("logs/redeem/{$date}.log"),
-        ])->info("Type:getCode|Unique:{$unique_code}|Ip:{$request->ip()}|UserAgent:{$request->server('HTTP_USER_AGENT')}|" . json_encode($logs) . "|Return:" . json_encode($res));
+        ])->info("Type:getCode|Unique:{$unique_code}|Ip:{$request->ip()}|UserAgent:{$request->server('HTTP_USER_AGENT')}|" . json_encode($logs) . "|Return:" . json_encode($res)."|Recaptcha:".$recapt);
         return response()->json($res);
     }
 
