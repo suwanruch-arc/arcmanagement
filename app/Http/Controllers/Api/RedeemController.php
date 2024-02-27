@@ -84,7 +84,7 @@ class RedeemController extends Controller
         Log::build([
             'driver' => 'single',
             'path' => storage_path("logs/redeem/{$date}.log"),
-        ])->info("Type:getCode|Unique:{$unique_code}|Ip:{$request->ip()}|UserAgent:{$request->server('HTTP_USER_AGENT')}|" . json_encode($logs) . "|Return:" . json_encode($res)."|Recaptcha:".$recapt);
+        ])->info("Type:getCode|Unique:{$unique_code}|Ip:{$request->ip()}|UserAgent:{$request->server('HTTP_USER_AGENT')}|" . json_encode($logs) . "|Return:" . json_encode($res)."|Recaptcha:".json_encode($recapt));
         return response()->json($res);
     }
 
