@@ -17,13 +17,15 @@ class DashboardController extends Controller
         foreach (glob(storage_path("logs/redeem/*.*")) as $file) {
             foreach (file($file) as $line) {
                 $line = explode('|', $line);
-                $line_data = json_decode($line[4]);
-                if(isset($line_data->data_access)){
-                    $date = date('Y-m-d', strtotime($line_data->data_access));
-                    $time = date('H:i:s', strtotime($line_data->data_access));
-                    $data_access[$date][] = $time;
+                if(isset($line[4])){
+                    $line_data = json_decode($line[4]);
+                    if(isset($line_data->data_access)){
+                        $date = date('Y-m-d', strtotime($line_data->data_access));
+                        $time = date('H:i:s', strtotime($line_data->data_access));
+                        $data_access[$date][] = $time;
+                    }
                 }
-                
+
             }
         }
 
