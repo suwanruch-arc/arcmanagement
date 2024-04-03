@@ -24,6 +24,11 @@ return [
     ],
     'management' => [
         [
+            'icon' => 'handyman',
+            'text' => 'เครื่องมือสร้างข้อมูล',
+            'url' => 'manage/generator'
+        ],
+        [
             'icon' => 'code',
             'text' => 'Maplink',
             'url' => 'manage/map-link'
