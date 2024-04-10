@@ -15,12 +15,13 @@ class GenerateQrcode extends Component
 
     public function generate()
     {
-        $currentDir = getcwd();
-        chdir('../../ecoupon_test/image-code');
+        dd(123);
+        // $currentDir = getcwd();
+        // chdir('../../ecoupon_test/image-code');
         $data   = rand('6600000000000000', '6699999999999999');
 
         $unique = Str::random(16);
-        $tempDir = './qrcode/';
+        $tempDir = './';
         $fileName = $unique . '.jpg';
         $outerFrame = 1;
         $pixelPerPoint = 12;
@@ -66,6 +67,6 @@ class GenerateQrcode extends Component
         imagedestroy($base_image);
         imagejpeg($target_image, $tempDir . $fileName, $jpegQuality);
         imagedestroy($target_image);
-        chdir($currentDir);
+        // chdir($currentDir);
     }
 }

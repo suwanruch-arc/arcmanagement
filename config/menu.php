@@ -4,56 +4,71 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Sites\CampaignController;
 
 return [
-    'menus' => [
-        [
-            'icon' => 'dashboard',
-            'text' => 'Dashboard',
-            'url' => 'dashboard',
-        ],
-        [
-            'icon' => 'campaign',
-            'text' => 'Campaigns',
-            'url' => 'site/campaigns',
-            'child' => 'privileges',
-        ],
-        [
-            'icon' => 'pie_chart',
-            'text' => 'Reports',
-            'url' => 'manage/reports'
+    [
+        'label' => 'Menus',
+        'children' => [
+            [
+                'label' => 'แดชบอร์ด',
+                'icon' => 'dashboard',
+                'url' => '/',
+            ],
+            [
+                'icon' => 'campaign',
+                'label' => 'แคมเปญ',
+                'url' => '/site/campaigns',
+                'can' => ['admin']
+            ],
+            [
+                'icon' => 'pie_chart',
+                'label' => 'รายงาน',
+                'url' => '',
+            ]
         ],
     ],
-    'management' => [
-        [
-            'icon' => 'handyman',
-            'text' => 'เครื่องมือสร้างข้อมูล',
-            'url' => 'manage/generator'
-        ],
-        [
-            'icon' => 'code',
-            'text' => 'Maplink',
-            'url' => 'manage/map-link'
-        ],
-        [
-            'icon' => 'store',
-            'text' => 'Shops',
-            'url' => 'manage/shops'
-        ],
-        [
-            'icon' => 'handshake',
-            'text' => 'Partners',
-            'url' => 'manage/partners'
-        ],
-        [
-            'icon' => 'person',
-            'text' => 'Users',
-            'url' => 'manage/users'
+    [
+        'label' => 'Managements',
+        'can' => ['admin', 'moderator'],
+        'children' => [
+            [
+                'icon' => 'handyman',
+                'label' => 'เครื่องมือสร้างข้อมูล',
+                'url' => '',
+                'can' => ['admin', 'moderator']
+            ],
+            [
+                'icon' => 'store',
+                'label' => 'ร้านค้า',
+                'url' => '/manage/shops',
+                'can' => ['admin']
+            ],
+            [
+                'icon' => 'handshake',
+                'label' => 'Partner / Department',
+                'url' => '/manage/partners',
+                'can' => ['admin']
+            ],
+            [
+                'icon' => 'person',
+                'label' => 'ผู้ใช้งาน',
+                'url' => '/manage/users',
+                'can' => ['admin']
+            ],
+            [
+                'icon' => 'format_list_bulleted',
+                'label' => 'จัดการเมนู',
+                'url' => '/manage/menus',
+                'can' => ['admin']
+            ]
         ]
     ],
-    'account' => [
-        [
-            'icon' => 'lock',
-            'text' => 'Change Password',
-            'url' => 'account/change-password'
+    [
+        'label' => 'Account',
+        'children' => [
+            [
+                'icon' => 'password',
+                'label' => 'เปลี่ยนรหัสผ่าน',
+                'url' => '/account/change-password'
+            ]
         ]
-    ],
+    ]
 ];

@@ -18,6 +18,7 @@ class CreateDepartmentsTable extends Migration
             $table->foreignId('partner_id')->constrained('partners');
             $table->string('name', 255);
             $table->string('keyword', 10);
+            $table->integer('logo_width')->nullable();
             $table->enum('is_main', ['yes', 'no']);
             $table->enum('status', ["active", "inactive"]);
             $table->timestamps();

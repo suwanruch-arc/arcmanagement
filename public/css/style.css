@@ -1,16 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;700&display=swap");
 
-@keyframes fadeInAnimation {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
 html,
 body {
     font-family: "Noto Sans Thai", sans-serif !important;
+
+}
+
+main {
+    font-size: 14px !important;
 }
 
 .note-frame {
@@ -19,16 +16,6 @@ body {
 
 .text-orange {
     color: #fd7e14 !important;
-}
-
-.card {
-    box-shadow: 2px 2px 0.5rem 0px rgba(204, 204, 204.48);
-}
-
-.fade {
-    animation: fadeInAnimation ease 1000ms;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
 }
 
 /* #mainSection,
@@ -78,5 +65,13 @@ table tbody tr td {
 }
 
 .material-icons-round {
-    font-size: 16px ;
+    font-size: 16px;
+}
+
+.toast {
+    opacity: 1 !important;
+}
+
+#toast-container > div {
+    opacity: 1 !important;
 }

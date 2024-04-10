@@ -7,18 +7,21 @@ use Illuminate\View\Component;
 class Card extends Component
 {
     public $class;
-    public $color;
-    public $outline;
+    public $attributes;
 
-    public function __construct($class = '', $color = null, $outline = false)
+    public function __construct($class = null, $attributes = null)
     {
         $this->class = $class;
-        $this->color = $color;
-        $this->outline = $outline;
+        $this->attributes = $attributes;
     }
 
+    /**
+     * Get the view / contents that represent the component.
+     *
+     * @return \Illuminate\Contracts\View\View|\Closure|string
+     */
     public function render()
     {
-        return view('components.card');
+        return view('components.cards.card');
     }
 }
