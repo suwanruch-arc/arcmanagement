@@ -14,7 +14,7 @@ class Container extends Component
     public $class;
 
 
-    public function __construct($fluid = false, $cols = '12', $class = null, $sm = null, $md = null, $lg = null)
+    public function __construct($fluid = false, $cols = null, $class = null, $sm = null, $md = null, $lg = null)
     {
         $this->fluid = $fluid;
         $this->cols = $cols;

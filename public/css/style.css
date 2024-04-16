@@ -1,16 +1,25 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch&family=Noto+Sans+Thai+Looped:wght@100;200;300;400;500;600;700;800;900&family=Noto+Sans+Thai:wdth,wght@62.5..100,100..900&display=swap");
 
-@keyframes fadeInAnimation {
+/* @keyframes fadeInAnimation {
     0% {
         opacity: 0;
     }
     100% {
         opacity: 1;
     }
-}
+} */
 html,
-body {
+body,
+.filepond--root {
     font-family: "Noto Sans Thai", sans-serif !important;
+}
+
+.font-logger {
+    font-family: "Chakra Petch", sans-serif !important;
+}
+
+main {
+    font-size: 14px !important;
 }
 
 .note-frame {
@@ -21,15 +30,11 @@ body {
     color: #fd7e14 !important;
 }
 
-.card {
-    box-shadow: 2px 2px 0.5rem 0px rgba(204, 204, 204.48);
-}
-
-.fade {
+/* .fade {
     animation: fadeInAnimation ease 1000ms;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
-}
+} */
 
 /* #mainSection,
 #sidebarMenu {
@@ -78,5 +83,5 @@ table tbody tr td {
 }
 
 .material-icons-round {
-    font-size: 16px ;
+    font-size: 16px;
 }

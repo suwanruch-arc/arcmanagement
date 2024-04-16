@@ -8,8 +8,14 @@
 @endphp --}}
 @section('content')
     <x-container fluid>
-        <x-header-btn justify="end" />
         <x-card>
+            <x-card-header class="d-flex align-item-center justify-content-between">
+                <div class="fs-5">
+                    Partner / Departments
+                </div>
+                <x-header-btn justify="end" />
+            </x-card-header>
+            <x-card-body>
             <x-datatable>
                 <thead>
                     <tr>
@@ -66,6 +72,7 @@
                     @endforelse
                 </tbody>
             </x-datatable>
-        </x-card>
+        </x-card-body>
+    </x-card>
     </x-container>
 @endsection

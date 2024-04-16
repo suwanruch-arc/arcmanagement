@@ -4,13 +4,13 @@
 <head>
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Login</title>
-    @include('includes.head')
+    @include('layouts.includes.head')
     <link href="{{ asset('css/auth.css') }}" rel="stylesheet" />
 </head>
 
-<body class="text-center">
+<body class="d-flex align-items-center py-4 bg-body-tertiary">
     @yield('content')
-    @include('includes.script')
+    @include('layouts.includes.script')
 </body>
 
 </html>

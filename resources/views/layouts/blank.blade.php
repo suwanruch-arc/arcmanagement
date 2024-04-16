@@ -4,15 +4,13 @@
 <head>
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>ARCManagement</title>
-    @include('includes.head')
-    <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet" />
+    @include('layouts.includes.head')
     @yield('css')
 </head>
 
 <body>
     @yield('content')
-    <script type="text/javascript" src="{{ asset('js/dashboard.js') }}"></script>
-    @include('includes.script')
+    @include('layouts.includes.script')
     @yield('js')
 </body>
 

@@ -4,8 +4,11 @@
     <main class="form-signin w-100 m-auto">
         <form action="{{ route('auth.login') }}" method="POST">
             @csrf
-            <img src="{{ asset('arcinnovative.svg') }}" alt="" width="50%" height="50%">
-            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+            <h4>
+                <b class="text-orange">ARC</b>Management
+            </h4>
+
+            <hr />
 
             @if ($errors->any())
                 <div class="alert alert-danger" role="alert">
@@ -13,22 +16,24 @@
                 </div>
             @endif
             <div class="form-floating">
-                <input type="text" class="form-control" id="username"
-                    name="username" placeholder="Username" value="{{ old('username') }}">
-                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Username"
+                    value="{{ old('username') }}">
+                <label for="username">ชื่อผู้ใช้งาน</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control" id="password" name="password" placeholder="Password" >
-                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                <label for="password">รหัสผ่าน</label>
             </div>
 
             <div class="checkbox mb-3">
                 <label>
-                    <input type="checkbox" id="rememberme" name="rememberme" checked> Remember me
+                    <input type="checkbox" id="rememberme" name="rememberme" checked> จดจำการเข้าสู่ระบบ
                 </label>
             </div>
-            <button class="w-100 btn btn-lg btn-primary" type="submit"><i class="material-icons-round">login</i> Sign in</button>
-            <p class="mt-5 mb-3 text-muted">&copy; {{date('Y')}}</p>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">
+                <i class="material-icons-round">login</i>
+                เข้าสู่ระบบ
+            </button>
         </form>
     </main>
 @endsection

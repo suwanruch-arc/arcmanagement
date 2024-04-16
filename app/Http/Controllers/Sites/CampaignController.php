@@ -123,7 +123,7 @@ class CampaignController extends Controller
         $type = $_GET['template_type'];
 
         return view('components.views.create', [
-            'title' => 'Campaign',
+            'title' => 'แคมเปญ - 2/2',
             'route' => 'site.campaigns',
             'fields' => $this->fields(),
             'cols' => $type === 'STD' ? 12 : 6
