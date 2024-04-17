@@ -118,7 +118,7 @@ class Toolcontroller extends Controller
             $contents = explode(PHP_EOL, $temp_file_content);
             $currentDir = getcwd();
             $path = "{$type}/{$date_s}/";
-            $full_path = "https://a.yllo.in/ecode/{$path}";
+            $full_path = "https://a.yllo.in/e-code/{$path}";
 
             $ecode_data = Ecode::where('type', $type)->pluck('code');
 
