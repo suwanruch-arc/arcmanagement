@@ -10,7 +10,6 @@ class Make
         $date_now = date('Ym');
         $path = "{$type}/$date_now/";
 
-        chdir('../../ecoupon/e-code/');
         if(!file_exists($path)){
             mkdir($path, 0777);
             return self::getPath($type);

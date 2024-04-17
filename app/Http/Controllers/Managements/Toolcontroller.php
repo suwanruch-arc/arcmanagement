@@ -116,13 +116,14 @@ class Toolcontroller extends Controller
         if ($temp_file_content) {
             $date_s = date('Ym');
             $contents = explode(PHP_EOL, $temp_file_content);
-            $currentDir = getcwd();
             $path = "{$type}/{$date_s}/";
             $full_path = "https://a.yllo.in/e-code/{$path}";
 
             $ecode_data = Ecode::where('type', $type)->pluck('code');
 
             list($success, $skip) = [0, 0];
+            $currentDir = getcwd();
+            chdir('../../ecoupon/e-code/');
             foreach ($contents as $index => $content) {
                 list($code, $value) = explode('|', $content);
                 if (!$ecode_data->contains('qweqwe')) {
