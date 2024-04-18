@@ -97,7 +97,7 @@
         const pond = FilePond.create(inputFile, {
             labelIdle: "ลากและวางไฟล์ของคุณ หรือ <u><b>เลือกไฟล์</b></u><br><br><small class='font-monospace'>Format file : [code|value</small>]",
             server: {
-                url: "{{ route('manage.tools.load') }}",
+                url: "{{ route('site.ecode.load') }}",
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },

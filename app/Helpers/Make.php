@@ -46,7 +46,7 @@ class Make
             }
         }
 
-        $pixelPerPoint = 12;
+        $pixelPerPoint = 8.1;
         // saving to file
         $target_image = imagecreate($imgW * $pixelPerPoint, $imgH * $pixelPerPoint);
         imagecopyresized(
