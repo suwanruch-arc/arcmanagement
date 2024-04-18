@@ -295,9 +295,9 @@ class EcodeController extends Controller
         $path = $data->path;
         $data->delete();
 
-        if (app()->isProduction()) {
-            File::delete($path);
-        }
+        // if (app()->isProduction()) {
+        //     File::delete($path);
+        // }
 
         return redirect()->route("site.ecode.dashboard", $campaign_id)->with('success', __('message.deleted'));
     }
