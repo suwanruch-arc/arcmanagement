@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Ecode;
+use App\Models\EcodeWarehouse;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use Illuminate\Contracts\View\View;
@@ -12,18 +12,26 @@ use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
 
 class EcodeExport extends DefaultValueBinder implements FromView, WithCustomValueBinder
 {
-    protected $date_lot;
-    protected $number_lot;
-    public function __construct(string $date_lot, string $number_lot)
+    protected $lot;
+    protected $campaign_id;
+    public function __construct(string $lot, string $campaign_id)
     {
-        $this->date_lot = $date_lot;
-        $this->number_lot = $number_lot;
+        $this->lot = $lot;
+        $this->campaign_id = $campaign_id;
     }
     public function view(): View
     {
+        if ($this->lot !== 'all') {
+            list($date_lot, $number_lot) = explode('-', $this->lot);
+        }
+        if (isset($date_lot) && isset($number_lot)) {
+            $data = EcodeWarehouse::where(['campaign_id' => $this->campaign_id, 'date_lot' => $date_lot, 'number_lot' => $number_lot])->get();
+        } else {
+            $data = EcodeWarehouse::where(['campaign_id' => $this->campaign_id])->get();
+        }
 
         return view('exports.ecode', [
-            'content' => Ecode::where(['date_lot' => $this->date_lot, 'number_lot' => $this->number_lot])->get()
+            'content' => $data
         ]);
     }
 

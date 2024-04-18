@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Managements\Toolcontroller;
+use App\Http\Controllers\Sites\EcodeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\LoginController;
@@ -71,21 +72,37 @@ Route::middleware('auth')->group(function () {
                 Route::get('change-privilege', 'changePrivilege')->name('change-privilege');
                 Route::post('change-privilege', 'storeChange')->name('save-change');
             });
+
+            Route::resource('ecode', EcodeController::class)->parameters([
+                'ecode' => 'campaign'
+            ])->except(['show']);
+
+            Route::controller(EcodeController::class)->prefix('ecode')->name('ecode.')->group(function () {
+                Route::prefix('{campaign}')->group(function () {
+                    Route::get('dashboard', 'dashboard')->name('dashboard');
+                    Route::get('import', 'import')->name('import');
+                });
+                Route::post('load', 'load')->name('load');
+                Route::get('check', 'check')->name('check');
+                Route::post('generate', 'generate')->name('generate');
+                Route::get('export', 'export')->name('export');
+                Route::post('remove','remove')->name('remove');
+            });
         });
     });
 
     Route::middleware('admin')->group(function () {
         Route::prefix('manage')->name('manage.')->group(function () {
-            Route::controller(Toolcontroller::class)->prefix('tools')->name('tools.')->group(function () {
-                Route::get('', 'main')->name('main');
-                Route::get('{type}/dashboard', 'dashboard')->name('dashboard');
-                Route::get('{type}/import', 'import')->name('import');
-                Route::post('load', 'load')->name('load');
-                Route::get('check', 'check')->name('check');
-                Route::post('generate', 'generate')->name('generate');
-                Route::get('export', 'export')->name('export');
-                Route::delete('load', 'delete');
-            });
+            // Route::controller(Toolcontroller::class)->prefix('tools')->name('tools.')->group(function () {
+            //     Route::get('', 'main')->name('main');
+            //     Route::get('dashboard', 'dashboard')->name('dashboard');
+            //     Route::get('import', 'import')->name('import');
+            //     Route::post('load', 'load')->name('load');
+            //     Route::get('check', 'check')->name('check');
+            //     Route::post('generate', 'generate')->name('generate');
+            //     Route::get('export', 'export')->name('export');
+            //     Route::delete('load', 'delete');
+            // });
             Route::controller(StatusController::class)->prefix('status')->name('status.')->group(function () {
                 Route::get('detail', 'detail')->name('detail');
                 Route::post('disable', 'disable')->name('disable');

@@ -25,7 +25,7 @@ class Toolcontroller extends Controller
         return view('manage.tools.index');
     }
 
-    public function dashboard($type)
+    public function dashboard()
     {
         $data = Ecode::orderByDesc('date_lot')->orderByDesc('number_lot')->orderByDesc('id')->get();
         $lot = Ecode::select('date_lot', 'number_lot')->groupBy('date_lot', 'number_lot')->get();
@@ -35,24 +35,18 @@ class Toolcontroller extends Controller
         }
 
         return view('manage.tools.dashboard', [
-            'type' => $type,
+            'type' => $type ?? '',
             'data' => $data,
             'array_lot' => json_encode($array_lot, JSON_UNESCAPED_SLASHES || JSON_UNESCAPED_UNICODE)
         ]);
     }
 
-    public function import($type)
+    public function import()
     {
         $this->delete();
-
-        $deps = Department::where(['status' => 'active'])->get();
-        foreach ($deps as $dep) {
-            $departments[$dep->partner->name][$dep->id] = $dep->name;
-        }
         $shops = Shop::where(['status' => 'active'])->get();
         return view('manage.tools.import', [
-            'type' => $type,
-            'owner_lists' => $departments ?? [],
+            'type' => $type ?? '',
             'shops' => $shops ?? [],
         ]);
     }

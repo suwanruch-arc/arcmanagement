@@ -5,11 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Ecode extends Model
+class EcodeWarehouse extends Model
 {
     use HasFactory;
-
-    protected $table = 'warehouse_ecode';
 
     protected $fillable = [
         'date_lot',
@@ -18,20 +16,16 @@ class Ecode extends Model
         'code',
         'value',
         'unique',
+        'file_name',
         'path',
-        'full_path',
         'expire_date',
         'description',
-        'owner_id',
         'shop_id',
-        'created_by',
-        'updated_by',
+        'campaign_id',
+        'import_by',
     ];
-
-    public function shop(){
+    public function shop()
+    {
         return $this->belongsTo(Shop::class);
-    }
-    public function owner(){
-        return $this->belongsTo(Department::class);
     }
 }

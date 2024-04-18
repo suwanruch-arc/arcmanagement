@@ -13,22 +13,21 @@ class CreateWarehouseTable extends Migration
      */
     public function up()
     {
-        Schema::create('warehouse_ecode', function (Blueprint $table) {
+        Schema::create('ecode_warehouses', function (Blueprint $table) {
             $table->id();
-            $table->string('date_lot',10)->index();
+            $table->integer('campaign_id');
+            $table->integer('shop_id');
+            $table->string('date_lot')->index();
             $table->integer('number_lot')->index();
-            $table->string('type',10)->index();
-            $table->string('code', 255)->unique();
+            $table->string('type')->index();
+            $table->string('code');
             $table->integer('value');
-            $table->string('unique', 255)->unique();
-            $table->string('path',255)->index();
-            $table->string('full_path',255)->index();
+            $table->string('unique')->unique();
+            $table->string('file_name');
+            $table->string('path');
             $table->dateTime('expire_date');
             $table->text('description')->nullable();
-            $table->integer('owner_id')->nullable()->unsigned();
-            $table->integer('shop_id')->nullable()->unsigned();
-            $table->integer('created_by')->nullable()->unsigned();
-            $table->integer('updated_by')->nullable()->unsigned();
+            $table->integer('import_by');
             $table->timestamps();
         });
     }

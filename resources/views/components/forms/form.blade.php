@@ -3,7 +3,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         <ul class="m-0">
             @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
+                <li>{!! $error !!}</li>
             @endforeach
         </ul>
     </div>
@@ -12,7 +12,7 @@
     @csrf
     {{ $slot }}
     <hr />
-    <button class="ms-2 btn btn-sm btn-primary d-flex align-items-center gap-2" type="submit">
+    <button class="btn btn-sm btn-primary d-flex align-items-center gap-2" type="submit">
         <i class="material-icons-round fs-6">save</i>
         บันทึก
     </button>

@@ -17,7 +17,7 @@
                 <td>{{ $data->code }}</td>
                 <td>{{ $data->expire_date }}</td>
                 <td>{{ $data->unique }}.jpg</td>
-                <td>{{ $data->full_path }}</td>
+                <td>{{ $data->path }}</td>
             </tr>
         @endforeach
     </tbody>

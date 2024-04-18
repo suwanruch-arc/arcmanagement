@@ -1,4 +1,4 @@
-@extends('layouts.master', ['route' => route('manage.tools.dashboard',$type)])
+@extends('layouts.master', ['route' => route('site.ecode.dashboard', $campaign->id)])
 
 @section('content')
     <x-container fluid>
@@ -28,36 +28,28 @@
                     </div>
                     <div class="col">
                         <div class="card h-100">
-                            <div class="card-body font-logger"
-                                style="height: 128px;overflow-y: auto;">
+                            <div class="card-body font-logger" style="height: 128px;overflow-y: auto;">
                                 <ul class="p-0 m-0" id="logger">
                                     <li>กรุณาเลือกไฟล์...</li>
                                 </ul>
                             </div>
-                            <div class="card-footer p-2">
+                            <div class="card-footer p-3">
                                 <div class="row">
                                     <div class="col">
-                                        <label for="owner" class="form-label">Partner / Department</label>
-                                        <select class="select2 form-select" id="owner">
-                                            <option value="0" selected disabled="disabled">กรุณาเลือก</option>
-                                            @forelse ($owner_lists as $partner=>$departments)
-                                                <optgroup label="{{ $partner }}">
-                                                    @forelse ($departments as $id => $name)
-                                                        <option value="{{ $id }}">{{ $name }}</option>
-                                                    @empty
-                                                        <option value disabled>ไม่พบข้อมูล</option>
-                                                    @endforelse
-                                                </optgroup>
-                                            @empty
-                                                <option value disabled>ไม่พบข้อมูล</option>
-                                            @endforelse
+                                        <label for="type" class="form-label">
+                                            ประเภท Code <span class="text-danger">*</span>
+                                            <small class="font-monospace text-black-50"><i>[Default : QRCode]</i></small>
+                                        </label>
+                                        <select class="select2 form-select" id="type">
+                                            <option value="qrcode" selected>QRCode</option>
+                                            <option value="barcode">Barcode</option>
                                         </select>
                                     </div>
                                     <div class="col">
                                         <label for="shop" class="form-label">ร้านค้า <span
                                                 class="text-danger">*</span></label>
-                                        <select class="select2 form-select" id="shop">
-                                            <option value  selected disabled="disabled">กรุณาเลือก</option>
+                                        <select class="select2 form-select" id="shop_id" autofocus>
+                                            <option value selected disabled="disabled">กรุณาเลือก</option>
                                             @forelse ($shops as $id => $shop)
                                                 <option value="{{ $shop->id }}">[{{ $shop->keyword }}]
                                                     {{ $shop->name }}</option>
@@ -74,12 +66,19 @@
                                     </div>
                                 </div>
                                 <hr />
-                                <button id="btnMakeData" class="btn btn-info"
-                                    onclick="checkData('{{ $type }}')">ตรวจสอบข้อมูล</button>
-                                <button id="btnMakeData" class="btn btn-primary"
-                                    onclick="makeData('{{ $type }}')">สร้างชุดข้อมูล</button>
-                                <button id="btnExportExcel" class="btn btn-success">ส่งออกข้อมูล Excel</button>
-                                {{-- <button class="btn btn-outline-danger">ลบไฟล์ข้อมูลนำเข้า</button> --}}
+                                <div class="d-flex gap-2">
+                                    <button id="btnMakeData" class="btn btn-info" onclick="checkData()">
+                                        1. ตรวจสอบข้อมูล
+                                    </button>
+                                    <button id="btnMakeData" class="btn btn-primary" onclick="makeData()">
+                                        2. สร้างชุดข้อมูล
+                                    </button>
+                                    <button id="btnExportExcel" class="btn btn-success" onclick="exportData()">
+                                        3. ส่งออกข้อมูล Excel <small>(<i>เฉพาะ Lot</i>)</small>
+                                    </button>
+                                    <input type="text" class="form-control" id="lot_syntax" readonly
+                                        style="width: 150px">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -96,7 +95,7 @@
         const inputFile = document.querySelector('.filepond');
 
         const pond = FilePond.create(inputFile, {
-            labelIdle: "ลากและวางไฟล์ของคุณ หรือ <u><b>เลือกไฟล์</b></u>",
+            labelIdle: "ลากและวางไฟล์ของคุณ หรือ <u><b>เลือกไฟล์</b></u><br><br><small class='font-monospace'>Format file : [code|value</small>]",
             server: {
                 url: "{{ route('manage.tools.load') }}",
                 headers: {
@@ -136,43 +135,18 @@
             format: 'Y-m-d 23:59:59',
         });
 
-        function checkData(type) {
-            $.ajax({
-                type: "GET",
-                url: "{{ route('manage.tools.check') }}",
-                data: {
-                    "type": type
-                },
-                dataType: "JSON",
-                success: function(response) {
-                    const res = response
-                    if (res.status === 'error') {
-                        logger.clear()
-                        $.each(res.error, function(i, v) {
-                            logger.error(v)
-                        });
-                    } else {
-                        logger.succ('ไฟล์ข้อมูลถูกต้อง สามารถทำการสร้างชุดข้อมูลได้')
-                    }
-                }
-            });
-        }
 
-        function makeData(type) {
-            const owner = $('#owner').val()
-            const shop = $('#shop').val()
+        function checkData() {
+            const type = $('#type').val()
+            const shop = $('#shop_id').val()
             const expire = $('#expire').val()
 
             if (shop && expire) {
                 $.ajax({
-                    type: "POST",
-                    url: "{{ route('manage.tools.generate') }}",
+                    type: "GET",
+                    url: "{{ route('site.ecode.check') }}",
                     data: {
-                        "_token": "{{ csrf_token() }}",
-                        "type": type,
-                        'owner': owner,
-                        'shop': shop,
-                        'expire': expire
+                        "type": type
                     },
                     dataType: "JSON",
                     success: function(response) {
@@ -183,6 +157,46 @@
                                 logger.error(v)
                             });
                         } else {
+                            logger.succ('ไฟล์ข้อมูลถูกต้อง สามารถทำการสร้างชุดข้อมูลได้')
+                        }
+                    }
+                });
+            } else {
+                if (!shop) {
+                    alert('กรุณาเลือกร้านค้า')
+                }
+                if (!expire) {
+                    alert('กรุณากำหนดวันหมดอายุ')
+                }
+            }
+        }
+
+        function makeData() {
+            const type = $('#type').val()
+            const shop = $('#shop_id').val()
+            const expire = $('#expire').val()
+
+            if (shop && expire) {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('site.ecode.generate') }}",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        "type": type,
+                        'shop': shop,
+                        'expire': expire,
+                        'campaign_id': '{{ $campaign->id }}'
+                    },
+                    dataType: "JSON",
+                    success: function(response) {
+                        const res = response
+                        if (res.status === 'error') {
+                            logger.clear()
+                            $.each(res.error, function(i, v) {
+                                logger.error(v)
+                            });
+                        } else {
+                            $('#lot_syntax').val(res.lot);
                             $.each(res.data, function(i, v) {
                                 logger.succ(v)
                             });
@@ -198,6 +212,11 @@
                     alert('กรุณากำหนดวันหมดอายุ')
                 }
             }
+        }
+
+        function exportData() {
+            const lot = $('#lot_syntax').val();
+            window.open('{{ route('site.ecode.export') }}?campaign_id={{ $campaign->id }}&lot=' + lot, '_blank');
         }
     </script>
 @endsection
