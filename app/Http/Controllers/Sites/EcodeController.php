@@ -293,18 +293,16 @@ class EcodeController extends Controller
         $data = EcodeWarehouse::find($request->id);
         $path = parse_url($data->path, PHP_URL_PATH);
         $pathWithoutSlash = substr($path, 1);
-        Log::info($pathWithoutSlash);
-        exit;
         // $campaign_id = $data->campaign_id;
         // $file_name = $data->file_name;
         // $data->delete();
 
-        // if (app()->isProduction()) {
-        //     $currentDir = getcwd();
-        //     chdir('../../ecoupon/e-code/');
-        //     File::delete($file_name);
-        //     chdir($currentDir);
-        // }
+        if (app()->isProduction()) {
+            $currentDir = getcwd();
+            chdir('../../ecoupon/');
+            File::delete($pathWithoutSlash);
+            chdir($currentDir);
+        }
 
         return redirect()->route("site.ecode.dashboard", $campaign_id)->with('success', __('message.deleted'));
     }
