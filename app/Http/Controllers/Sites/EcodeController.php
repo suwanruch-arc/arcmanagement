@@ -113,6 +113,7 @@ class EcodeController extends Controller
             $ecode_data = EcodeWarehouse::where('type', $type)->pluck('code');
 
             list($success, $skip, $error) = [0, 0, 0];
+            $error_data = [];
             $currentDir = getcwd();
             chdir('../../ecoupon/e-code/');
             foreach ($contents as $index => $content) {
@@ -120,9 +121,14 @@ class EcodeController extends Controller
                 $value = intval(trim($value));
                 if (!$ecode_data->contains($code)) {
                     $unique = "STB_{$value}B_{$date_lot}" . Str::random(12);
-                    $qrcode = Make::QRcode($code, $unique);
 
-                    if ($qrcode) {
+                    if ($type === 'qrcode') {
+                        $returnEcode = Make::QRcode($code, $unique);
+                    } else {
+                        $returnEcode = Make::Barcode($code, $unique);
+                    }
+
+                    if ($returnEcode) {
                         EcodeWarehouse::create([
                             'campaign_id' => $campaign_id,
                             'date_lot' => $date_lot,
@@ -130,9 +136,9 @@ class EcodeController extends Controller
                             'type' => $type,
                             'code' => $code,
                             'value' => $value,
-                            'unique' => $qrcode->unique,
-                            'file_name' => $qrcode->fileName,
-                            'path' => $full_path . $qrcode->fileName,
+                            'unique' => $returnEcode->unique,
+                            'file_name' => $returnEcode->fileName,
+                            'path' => $full_path . $returnEcode->fileName,
                             'expire_date' => $expire_date,
                             'shop_id' => $shop->id,
                             'import_by' => auth()->id(),
@@ -140,13 +146,15 @@ class EcodeController extends Controller
                         $success++;
                     } else {
                         $error++;
+                        $error_data[] = 'บันทึกข้อมูลไม่สำเร็จ';
                     }
                 } else {
                     $skip++;
+                    $error_data[] = $code;
                 }
             }
             chdir($currentDir);
-            return response()->json(['status' => 'ok', 'lot' => $lot_syntax, 'data' => ["นำเข้าข้อมูลเรียบร้อยแล้ว Lot : {$lot_syntax}", "นำเข้าสำเร็จ : $success , ข้าม : $skip , มีปัญหา : $error"]]);
+            return response()->json(['status' => 'ok', 'lot' => $lot_syntax, 'error' => $error_data, 'data' => ["นำเข้าข้อมูลเรียบร้อยแล้ว Lot : {$lot_syntax}", "นำเข้าสำเร็จ : $success , ข้าม : $skip , มีปัญหา : $error"]]);
         } else {
             return response()->json(['status' => 'error', 'error' => ['ไม่พบไฟล์ข้อมูล']]);
         }

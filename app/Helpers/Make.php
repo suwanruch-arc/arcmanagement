@@ -95,7 +95,7 @@ class Make
 
         // Output or save the image as JPEG
         header('Content-Type: image/jpeg');
-        $tempDir = './barcode/';
+        $tempDir = self::getPath('barcode');
         $fileName = $unique . '.jpg';
         $path = $tempDir . $fileName;
 

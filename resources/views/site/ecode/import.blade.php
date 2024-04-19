@@ -200,6 +200,9 @@
                             $.each(res.data, function(i, v) {
                                 logger.succ(v)
                             });
+                            $.each(res.error, function(i, v) {
+                                logger.error(v)
+                            });
 
                         }
                     }
