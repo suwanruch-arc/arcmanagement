@@ -38,7 +38,7 @@
                                         <i class="material-icons-round fs-6">edit</i>
                                     </a>
                                     <form data-bs-toggle="tooltip" data-bs-placement="top" class="d-inline" method="post"
-                                        action="{{ route('site.ecode.destroy', $campaign->id) }}">
+                                        action="{{ route('site.ecode.destroy', $campaign->id) }}" id="delete-campaign">
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-sm btn-danger m-1" type="submit" data-bs-toggle="tooltip"
@@ -60,7 +60,7 @@
 @section('js')
     <script>
         $(document).ready(function() {
-            $('form').submit(function(e) {
+            $('form#delete-campaign').submit(function(e) {
                 e.preventDefault();
                 Swal.fire({
                     title: 'คุณแน่ใจใช่ไหม?',

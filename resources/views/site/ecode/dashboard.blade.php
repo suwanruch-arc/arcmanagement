@@ -45,7 +45,7 @@
                                 <td><a target="_blank" href="{{ $item->path }}">{{ $item->file_name }}</a></td>
                                 <td>
                                     <form data-bs-toggle="tooltip" data-bs-placement="top" class="d-inline" method="post"
-                                        action="{{ route('site.ecode.remove') }}">
+                                        action="{{ route('site.ecode.remove') }}" id="remove-data">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $item->id }}" />
                                         <button class="btn btn-sm btn-danger m-1" type="submit" data-bs-toggle="tooltip"
@@ -66,7 +66,7 @@
 @endsection
 @section('js')
     <script>
-        $('form').submit(function(e) {
+        $('form#remove-data').submit(function(e) {
             e.preventDefault();
             Swal.fire({
                 title: 'คุณแน่ใจใช่ไหม?',

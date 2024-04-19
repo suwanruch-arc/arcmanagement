@@ -79,10 +79,6 @@ class Make
 
     public static function Barcode(string $code, string $unique)
     {
-        $currentDir = getcwd();
-        chdir(self::getPath());
-
-
         $generator = new BarcodeGeneratorJPG();
         $barcodeHtml = $generator->getBarcode($code, $generator::TYPE_CODE_128);
         // Convert HTML to image
@@ -104,11 +100,10 @@ class Make
         $path = $tempDir . $fileName;
 
         imagejpeg($newBarcodeImg, $path, 100); // Quality set to 100 (highest)
+        chmod($path, 0777);
 
         // Free up memory
         imagedestroy($newBarcodeImg);
-
-        chdir($currentDir);
 
         return (object) ['code' => $code, 'unique' => $unique, 'fileName' => $fileName];
     }

@@ -27,7 +27,7 @@ class EcodeController extends Controller
     public function dashboard(EcodeCampaign $campaign)
     {
         $ecode_data = EcodeWarehouse::where('campaign_id', $campaign->id)->get();
-        $lot = EcodeWarehouse::select('date_lot', 'number_lot')->groupBy('date_lot', 'number_lot')->get();
+        $lot = EcodeWarehouse::select('date_lot', 'number_lot')->where('campaign_id', $campaign->id)->groupBy('date_lot', 'number_lot')->get();
         $array_lot = ['all' => 'ทั้งหมด'];
         foreach ($lot as $value) {
             $array_lot[$value->date_lot]["{$value->date_lot}-" . str_pad($value->number_lot, 3, 0, STR_PAD_LEFT)] = $value->number_lot;
@@ -118,7 +118,7 @@ class EcodeController extends Controller
             foreach ($contents as $index => $content) {
                 list($code, $value) = explode('|', $content);
                 $value = intval(trim($value));
-                if (!$ecode_data->contains('qweqwe')) {
+                if (!$ecode_data->contains($code)) {
                     $unique = "STB_{$value}B_{$date_lot}" . Str::random(12);
                     $qrcode = Make::QRcode($code, $unique);
 
@@ -292,12 +292,15 @@ class EcodeController extends Controller
     {
         $data = EcodeWarehouse::find($request->id);
         $campaign_id = $data->campaign_id;
-        $path = $data->path;
+        $file_name = $data->file_name;
         $data->delete();
 
-        // if (app()->isProduction()) {
-        //     File::delete($path);
-        // }
+        if (app()->isProduction()) {
+            $currentDir = getcwd();
+            chdir('../../ecoupon/e-code/');
+            File::delete($file_name);
+            chdir($currentDir);
+        }
 
         return redirect()->route("site.ecode.dashboard", $campaign_id)->with('success', __('message.deleted'));
     }
