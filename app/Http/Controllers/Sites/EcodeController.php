@@ -120,7 +120,7 @@ class EcodeController extends Controller
                 list($code, $value) = explode('|', $content);
                 $value = intval(trim($value));
                 if (!$ecode_data->contains($code)) {
-                    $unique = "STB_{$value}B_{$date_lot}" . Str::random(12);
+                    $unique = "{$shop->keyword}_{$value}B_{$date_lot}" . Str::random(12);
 
                     if ($type === 'qrcode') {
                         $returnEcode = Make::QRcode($code, $unique);
