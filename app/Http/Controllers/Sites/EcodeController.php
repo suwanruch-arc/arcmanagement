@@ -293,9 +293,8 @@ class EcodeController extends Controller
         $data = EcodeWarehouse::find($request->id);
         $path = parse_url($data->path, PHP_URL_PATH);
         $pathWithoutSlash = substr($path, 1);
-        // $campaign_id = $data->campaign_id;
-        // $file_name = $data->file_name;
-        // $data->delete();
+        $campaign_id = $data->campaign_id;
+        $data->delete();
 
         if (app()->isProduction()) {
             $currentDir = getcwd();
