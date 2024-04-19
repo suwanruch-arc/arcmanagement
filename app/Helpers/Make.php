@@ -10,8 +10,9 @@ class Make
         $date_now = date('Ym');
         $path = "{$type}/$date_now/";
 
-        if(!file_exists($path)){
+        if (!file_exists($path)) {
             mkdir($path, 0777);
+            chmod($path, 0777);
             return self::getPath($type);
         }
 
@@ -70,6 +71,7 @@ class Make
         $path = $tempDir . $fileName;
 
         imagejpeg($target_image, $path, $jpegQuality);
+        chmod($path, 0777);
         imagedestroy($target_image);
 
         return (object) ['code' => $code, 'unique' => $unique, 'fileName' => $fileName];
@@ -110,5 +112,4 @@ class Make
 
         return (object) ['code' => $code, 'unique' => $unique, 'fileName' => $fileName];
     }
-
 }
