@@ -16,7 +16,6 @@ class UserFactory extends Factory
      */
     public function definition()
     {
-        $partner_id = rand(1, 2);
         return [
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
@@ -24,8 +23,6 @@ class UserFactory extends Factory
             'username' => $this->faker->unique()->userName(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
-            'partner_id' => $partner_id,
-            'department_id' => $partner_id  == 1 ? rand(1, 2) : rand(3, 6),
         ];
     }
 

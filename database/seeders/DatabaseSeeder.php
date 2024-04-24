@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -46,5 +48,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'), // password
             'remember_token' => Str::random(10),
         ]]);
+
+        User::factory(7500)->create();
     }
 }

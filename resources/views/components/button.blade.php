@@ -1,7 +1,13 @@
-<a type="{{ $type }}" href="{{ $href }}" class="btn btn-{{ $color }} {{ $class }}"
-    data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ $label }}">
+<a @if ($tooltip) data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ $tooltip }}" @endif
+    type="{{ $type }}" href="{{ $href }}"
+    class="btn btn-{{ $color }} {{ $class }} d-flex align-item-center gap-1">
+    @if ($icon)
+        <span class="material-icons-round">
+            {{ $icon }}
+        </span>
+    @endif
     @if (empty($slot->toHtml()))
-        {{ $text }}
+        {{ $label }}
     @else
         {{ $slot }}
     @endif

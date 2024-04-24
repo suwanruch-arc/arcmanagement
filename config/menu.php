@@ -22,7 +22,7 @@ return [
                 'icon' => 'qr_code',
                 'label' => 'E-Code',
                 'url' => '/site/ecode',
-                'can' => ['admin','moderator']
+                'can' => ['admin', 'moderator']
             ],
             [
                 'icon' => 'pie_chart',
@@ -33,14 +33,14 @@ return [
     ],
     [
         'label' => 'Managements',
-        'can' => ['admin', 'moderator'],
+        'can' => ['admin'],
         'children' => [
-            // [
-            //     'icon' => 'handyman',
-            //     'label' => 'เครื่องมือสร้างข้อมูล',
-            //     'url' => '/manage/tools',
-            //     'can' => ['admin', 'moderator']
-            // ],
+            [
+                'icon' => 'handyman',
+                'label' => 'เครื่องมือสร้างข้อมูล',
+                'url' => '/manage/tools/dashboard',
+                'can' => ['admin']
+            ],
             [
                 'icon' => 'store',
                 'label' => 'ร้านค้า',

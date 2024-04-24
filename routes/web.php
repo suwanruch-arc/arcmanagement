@@ -86,23 +86,22 @@ Route::middleware('auth')->group(function () {
                 Route::get('check', 'check')->name('check');
                 Route::post('generate', 'generate')->name('generate');
                 Route::get('export', 'export')->name('export');
-                Route::post('remove','remove')->name('remove');
+                Route::post('remove', 'remove')->name('remove');
             });
         });
     });
 
     Route::middleware('admin')->group(function () {
         Route::prefix('manage')->name('manage.')->group(function () {
-            // Route::controller(Toolcontroller::class)->prefix('tools')->name('tools.')->group(function () {
-            //     Route::get('', 'main')->name('main');
-            //     Route::get('dashboard', 'dashboard')->name('dashboard');
-            //     Route::get('import', 'import')->name('import');
-            //     Route::post('load', 'load')->name('load');
-            //     Route::get('check', 'check')->name('check');
-            //     Route::post('generate', 'generate')->name('generate');
-            //     Route::get('export', 'export')->name('export');
-            //     Route::delete('load', 'delete');
-            // });
+            Route::controller(Toolcontroller::class)->prefix('tools')->name('tools.')->group(function () {
+                Route::get('dashboard', 'dashboard')->name('dashboard');
+                Route::get('upload', 'upload')->name('upload');
+                Route::post('process', 'process')->name('process');
+                // Route::get('check', 'check')->name('check');
+                // Route::post('generate', 'generate')->name('generate');
+                // Route::get('export', 'export')->name('export');
+                // Route::delete('load', 'delete');
+            });
             Route::controller(StatusController::class)->prefix('status')->name('status.')->group(function () {
                 Route::get('detail', 'detail')->name('detail');
                 Route::post('disable', 'disable')->name('disable');

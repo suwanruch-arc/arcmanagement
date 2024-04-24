@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Partner;
 use App\Models\Department;
+use App\Traits\DataTableTrait;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
+    use DataTableTrait;
+
     public function fields($model = null)
     {
         $type = $model ? 'update' : 'create';
@@ -33,16 +36,61 @@ class UserController extends Controller
         return $fields;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public static function columns()
     {
-        $users = User::orderBy('status')->orderBy('name')->get();
+        return [
+            ['title' => 'ชื่อ', 'data' => 'name'],
+            ['title' => 'อีเมล', 'data' => 'email'],
+            ['title' => 'ชื่อผู้ใช้งาน', 'data' => 'username'],
+            ['title' => 'เบอร์ติดต่อ', 'data' => 'contact_number'],
+            ['title' => 'Partner', 'data' => 'partner', 'ref' => ['name', 'keyword']],
+            ['title' => 'Department', 'data' => 'department', 'ref' => ['name', 'keyword']],
+            ['title' => 'ตำแหน่ง', 'data' => 'position'],
+            ['title' => 'สิทธิ์', 'data' => 'role'],
+            ['title' => 'ข้อมูลจาก', 'data' => 'from'],
+            ['title' => 'สถานะ', 'data' => 'status'],
+        ];
+    }
 
-        return view('manage.users.index', compact('users'));
+    public function index(Request $request)
+    {
+        if ($request->ajax()) {
+            // $query = User::query();
+            // $recordsTotal = $query->count();
+            // $recordsFiltered = $recordsTotal;
+
+            // if ($request->has('search') && !empty($request->search['value'])) {
+            //     $searchValue = $request->search['value'];
+            //     $query->where(function ($q) use ($searchValue) {
+            //         $q->where('id', '=',  $searchValue);
+            //         foreach (self::columns() as $column) {
+            //             if (!isset($column['ref'])) {
+            //                 $q->orWhere($column['data'], 'like', '%' . $searchValue . '%');
+            //             }
+            //         }
+            //     });
+
+            //     $data = $query->get();
+
+            //     dd($data->slice($offset)->take($limit));
+            // }
+
+            $query = User::query();
+            $recordsTotal = $query->count();
+            $recordsFiltered = $request->length;
+
+            $result = [
+                "draw" => $request->draw,
+                "recordsTotal" => intval($recordsTotal),
+                "recordsFiltered" => intval($recordsFiltered),
+            ];
+
+            return json_encode($result);
+        }
+
+        return view('manage.users.index')->with([
+            'columns' => self::columns()
+        ]);
     }
 
     /**
