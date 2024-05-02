@@ -1,14 +1,26 @@
 <div>
-    <div class="mb-2">
-        <button type="button" class="btn btn-sm btn-primary" id="editBtn" onclick="editData()">แก้ไข</button>
-        <button type="button" class="btn btn-sm btn-danger" id="delBtn">ลบข้อมูล</button>
-    </div>
-    <table id="myTable" class="table table-bordered nowrap"> </table>
+    {{-- <x-card>
+        <x-card.header class="justify-content-between pe-2">
+            <div class="fs-5">
+                {{ $label }}
+            </div>
+            <div class="d-flex justify-content-end gap-2 ">
+                <button type="button" class="btn btn-warning" id="editBtn" onclick="editData()"
+                    style="display: none;">แก้ไข</button>
+                <button type="button" class="btn btn-danger" id="deactiveBtn" onclick="deactiveData()"
+                    style="display: none;">ปิดการใช้งาน</button>
+                <a type="button" class="btn btn-primary" id="createBtn" href="/{{ $path }}/create">เพิ่ม</a>
+            </div>
+        </x-card.header>
+        <x-card.body>
+            <table id="myTable" class="table table-bordered nowrap"></table>
+        </x-card.body>
+    </x-card> --}}
+    <table id="myTable" class="table table-bordered nowrap"></table>
 </div>
 
 
 @section('js')
-    @parent
     <script>
         let table = new DataTable('#myTable', {
             columns: {!! json_encode($columns) !!},
@@ -21,18 +33,18 @@
             fixedHeader: true,
             responsive: true,
             order: [],
-            ordering: true,
+            ordering: false,
             language: {
                 url: "{{ asset('plugins/DataTables/th.json') }}",
             },
-            dom: '<"row mb-2"<"col d-flex gap-2"fl><"col"p>>rt<"row"<"col"i><"col"p>>',
+            dom: '<"row"<"col d-flex gap-2"fl><"col">><"row"<"col"i><"col"p>>rt<"row"<"col"i><"col"p>>',
             aLengthMenu: [
                 [10, 25, 50, 100, 200, -1],
                 [10, 25, 50, 100, 200, "ทั้งหมด"]
             ],
             iDisplayLength: 25,
             rowCallback: function(row, data) {
-                $(row).attr('data-id', data.id);
+                $(row).attr('data-id', data.id).attr('data-status', data.status);
             },
             initComplete: function() {
                 // $('#loading').remove()
@@ -40,13 +52,76 @@
             },
         });
 
+        table.on('select', function(e) {
+            const btn = $('#myTable tbody tr.selected');
+            if (btn.hasClass('selected')) {
+                var status = btn.attr('data-status');
+                if (status !== 'inactive') {
+                    $('#deactiveBtn').show();
+                }
+            }
+            $('#editBtn').show();
+        });
+
+        table.on('deselect', function(e) {
+            $('#editBtn').hide();
+            $('#deactiveBtn').hide();
+        });
+
+
         function editData() {
-            if ($('#myTable tbody tr.selected').hasClass('selected')) {
-                var id = $('tr.selected').attr('data-id');
-                console.log(id);
+            const btn = $('#myTable tbody tr.selected');
+            if (btn.hasClass('selected')) {
+                var id = btn.attr('data-id');
+                window.location = '/{!! $path !!}/' + id + '/edit';
+            }
+        }
+
+        function deactiveData() {
+            const btn = $('#myTable tbody tr.selected');
+            if (btn.hasClass('selected')) {
+                var id = btn.attr('data-id');
+                Swal.fire({
+                    title: 'คุณแน่ใจใช่ไหม?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'ปิดการใช้งาน',
+                    cancelButtonText: 'ย้อนกลับ',
+                    focusConfirm: false,
+                    focusCancel: true,
+                    showClass: {
+                        popup: "animate__animated animate__headShake animate__faster"
+                    },
+                }).then((action) => {
+                    if (action.isConfirmed) {
+                        $.ajax({
+                            url: "/{!! $path !!}/" + id,
+                            type: 'DELETE',
+                            dataType: "JSON",
+                            data: {
+                                "id": id,
+                                "_token": '{{ csrf_token() }}',
+                            },
+                            success: function(res) {
+                                swal.fire({
+                                    icon: 'success',
+                                    title: 'การแจ้งเตือน',
+                                    html: res.message,
+                                    confirmButtonColor: "#0D6EFD",
+                                })
+                                table.rows().deselect();
+                                table.ajax.reload();
+
+                            }
+                        });
+                    }
+                })
             }
         }
     </script>
+    @parent
 @endsection
 
 @section('css')

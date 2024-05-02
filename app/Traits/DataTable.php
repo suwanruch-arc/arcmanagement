@@ -40,8 +40,6 @@ trait DataTable
             $sortBy = isset($order[0]['column']) ? $columns[$order[0]['column']]['data'] : 'id'; // Default sort by id
             $sortDir = isset($order[0]['dir']) ? $order[0]['dir'] : 'asc'; // Default sort order ascending
 
-            // $query = $query->orderBy($sortBy, $sortDir);
-
             $query = $query->offset($start)->limit($length);
 
             $fetch = $query->get();

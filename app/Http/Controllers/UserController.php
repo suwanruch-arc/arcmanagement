@@ -6,6 +6,10 @@ use App\Models\User;
 use App\Models\Partner;
 use App\Models\Department;
 use App\Traits\DataTable;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Response;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,43 +40,43 @@ class UserController extends Controller
         return $fields;
     }
 
-    public function columns()
-    {
-        return [
-            ['title' => 'ชื่อ', 'data' => 'name'],
-            ['title' => 'อีเมล', 'data' => 'email'],
-            ['title' => 'ชื่อผู้ใช้งาน', 'data' => 'username'],
-            ['title' => 'เบอร์ติดต่อ', 'data' => 'contact_number'],
-            ['title' => 'Partner', 'data' => 'partner', 'ref' => 'partners:name,keyword'],
-            ['title' => 'Department', 'data' => 'department', 'ref' => 'departments:name,keyword'],
-            ['title' => 'ตำแหน่ง', 'data' => 'position'],
-            ['title' => 'สิทธิ์', 'data' => 'role'],
-            ['title' => 'ข้อมูลจาก', 'data' => 'from'],
-            ['title' => 'สถานะ', 'data' => 'status'],
-        ];
-    }
-
     public function index(Request $request)
     {
-        DataTable::getData(User::query(), self::columns(), function ($v) {
-            return [
-                'id' => $v->id,
-                'name' => $v->name,
-                'email' => $v->email,
-                'username' => $v->username,
-                'contact_number' => $v->contact_number,
-                'partner' => $v->partner['name'],
-                'department' => $v->department['name'],
-                'position' => $v->position,
-                'role' => $v->role,
-                'from' => $v->from,
-                'status' => $v->status,
-            ];
-        });
+        $users = User::paginate(25);
 
-        return view('manage.users.index')->with([
-            'columns' => self::columns()
-        ]);
+        return view('manage.users.index', compact('users'));
+        // $columns = [
+        //     ['title' => 'ชื่อ', 'data' => 'name'],
+        //     ['title' => 'อีเมล', 'data' => 'email'],
+        //     ['title' => 'ชื่อผู้ใช้งาน', 'data' => 'username'],
+        //     ['title' => 'เบอร์ติดต่อ', 'data' => 'contact_number'],
+        //     ['title' => 'Partner', 'data' => 'partner', 'ref' => 'partners:name,keyword'],
+        //     ['title' => 'Department', 'data' => 'department', 'ref' => 'departments:name,keyword'],
+        //     ['title' => 'ตำแหน่ง', 'data' => 'position'],
+        //     ['title' => 'สิทธิ์', 'data' => 'role'],
+        //     ['title' => 'ข้อมูลจาก', 'data' => 'from'],
+        //     ['title' => 'สถานะ', 'data' => 'status'],
+        // ];
+
+        // DataTable::getData(User::query(), $columns, function ($v) {
+        //     return [
+        //         'id' => $v->id,
+        //         'name' => $v->name,
+        //         'email' => $v->email,
+        //         'username' => $v->username,
+        //         'contact_number' => $v->contact_number,
+        //         'partner' => $v->partner['name'],
+        //         'department' => $v->department['name'],
+        //         'position' => $v->position,
+        //         'role' => $v->role,
+        //         'from' => $v->from,
+        //         'status' => $v->status,
+        //     ];
+        // });
+
+        // return view('manage.users.index')->with([
+        //     'columns' => $columns
+        // ]);
     }
 
     /**
@@ -80,7 +84,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         return view('components.views.create', [
             'title' => 'User',
@@ -95,7 +99,7 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'name' => 'required|max:255',
@@ -130,7 +134,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit(User $user): View
     {
         return view('components.views.update', [
             'title' => $user->name,
@@ -147,7 +151,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user): RedirectResponse
     {
         $validated = $request->validate([
             'name' => 'required|max:255',
@@ -194,12 +198,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, User $user)
+    public function destroy(Request $request, User $user): JsonResponse
     {
-        dd($request->all());
-        $name = $user->name;
         $user->update(['status' => 'inactive']);
 
-        return redirect()->route("manage.users.index")->with('success', __('message.disabled', ['name' => $name]));
+        return response()->json(['status' => 'ok', 'message' => __('message.disabled', ['name' => $user->name])]);
     }
 }

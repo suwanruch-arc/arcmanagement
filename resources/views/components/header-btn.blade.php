@@ -6,6 +6,6 @@
     @endforeach
     <a href="{{ url()->current() }}/create" class="ms-2 btn btn-sm btn-primary d-flex align-items-center gap-2">
         <span class="material-icons-round">add</span>
-        สร้าง
+        เพิ่ม
     </a>
 </div>

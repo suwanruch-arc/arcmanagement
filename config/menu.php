@@ -15,19 +15,19 @@ return [
             [
                 'icon' => 'campaign',
                 'label' => 'แคมเปญ',
-                'url' => '/site/campaigns',
+                'url' => '/site/campaigns/',
                 'can' => ['admin']
             ],
             [
                 'icon' => 'qr_code',
                 'label' => 'E-Code',
-                'url' => '/site/ecode',
+                'url' => '/site/ecode/',
                 'can' => ['admin', 'moderator']
             ],
             [
                 'icon' => 'pie_chart',
                 'label' => 'รายงาน',
-                'url' => '/manage/reports',
+                'url' => '/manage/reports/',
             ]
         ],
     ],
@@ -38,7 +38,7 @@ return [
             [
                 'icon' => 'handyman',
                 'label' => 'เครื่องมือสร้างข้อมูล',
-                'url' => '/manage/tools/dashboard',
+                'url' => '/manage/tools/dashboard/',
                 'can' => ['admin']
             ],
             [
@@ -50,7 +50,7 @@ return [
             [
                 'icon' => 'handshake',
                 'label' => 'Partner / Department',
-                'url' => '/manage/partners',
+                'url' => '/manage/partners/',
                 'can' => ['admin']
             ],
             [

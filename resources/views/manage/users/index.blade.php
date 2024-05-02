@@ -2,7 +2,36 @@
 
 @section('content')
     <x-container fluid>
-        <x-card>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col" width="1%">#</th>
+                <th scope="col" width="15%">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col" width="10%">Username</th>
+            </tr>
+            </thead>
+            <tbody>
+                @foreach($users as $user)
+                    <tr>
+                        <th scope="row">{{ $user->id }}</th>
+                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->username }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <div class="d-flex">
+            {!! $users->links() !!}
+        </div>
+        {{-- <x-table label="ผู้ใช้งาน" :columns="$columns">
+            <x-slot name="btn">
+                asd
+            </x-slot>
+        </x-table> --}}
+        {{-- <x-card>
             <x-card.header class="justify-content-between pe-2">
                 <div class="fs-5">
                     ผู้ใช้งาน
@@ -12,7 +41,7 @@
             <x-card.body>
                 <x-table :columns="$columns"/>
             </x-card.body>
-        </x-card>
+        </x-card> --}}
     </x-container>
 @endsection
 
