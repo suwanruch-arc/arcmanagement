@@ -9,7 +9,7 @@
 <script type="text/javascript" src="{{ asset('js/filepond.jquery.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/logger.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/clipboard.min.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.js"></script>
 
 <script>
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')

@@ -11,4 +11,4 @@
 <link href="{{ asset('css/filepond.css') }}" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round"
       rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.css" rel="stylesheet">

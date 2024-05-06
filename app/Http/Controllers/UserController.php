@@ -44,39 +44,9 @@ class UserController extends Controller
     {
         $users = User::paginate(25);
 
-        return view('manage.users.index', compact('users'));
-        // $columns = [
-        //     ['title' => 'ชื่อ', 'data' => 'name'],
-        //     ['title' => 'อีเมล', 'data' => 'email'],
-        //     ['title' => 'ชื่อผู้ใช้งาน', 'data' => 'username'],
-        //     ['title' => 'เบอร์ติดต่อ', 'data' => 'contact_number'],
-        //     ['title' => 'Partner', 'data' => 'partner', 'ref' => 'partners:name,keyword'],
-        //     ['title' => 'Department', 'data' => 'department', 'ref' => 'departments:name,keyword'],
-        //     ['title' => 'ตำแหน่ง', 'data' => 'position'],
-        //     ['title' => 'สิทธิ์', 'data' => 'role'],
-        //     ['title' => 'ข้อมูลจาก', 'data' => 'from'],
-        //     ['title' => 'สถานะ', 'data' => 'status'],
-        // ];
-
-        // DataTable::getData(User::query(), $columns, function ($v) {
-        //     return [
-        //         'id' => $v->id,
-        //         'name' => $v->name,
-        //         'email' => $v->email,
-        //         'username' => $v->username,
-        //         'contact_number' => $v->contact_number,
-        //         'partner' => $v->partner['name'],
-        //         'department' => $v->department['name'],
-        //         'position' => $v->position,
-        //         'role' => $v->role,
-        //         'from' => $v->from,
-        //         'status' => $v->status,
-        //     ];
-        // });
-
-        // return view('manage.users.index')->with([
-        //     'columns' => $columns
-        // ]);
+        return view('manage.users.index', [
+            'data' => $users
+        ]);
     }
 
     /**

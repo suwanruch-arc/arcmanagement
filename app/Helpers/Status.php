@@ -6,10 +6,10 @@ class Status
     {
         switch ($status) {
             case 'active':
-                $status = "<i class='status-icon text-success material-icons-round fs-3'>task_alt</i>";
+                $status = "<i class='status-icon text-success material-icons-round fs-3'>circle</i>";
                 break;
             case 'inactive':
-                $status = "<i class='status-icon text-danger material-icons-round fs-3'>highlight_off</i>";
+                $status = "<i class='status-icon text-danger material-icons-round fs-3'>circle</i>";
                 break;
         }
         return $status;

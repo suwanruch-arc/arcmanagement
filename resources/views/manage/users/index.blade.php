@@ -2,36 +2,7 @@
 
 @section('content')
     <x-container fluid>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col" width="1%">#</th>
-                <th scope="col" width="15%">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col" width="10%">Username</th>
-            </tr>
-            </thead>
-            <tbody>
-                @foreach($users as $user)
-                    <tr>
-                        <th scope="row">{{ $user->id }}</th>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>{{ $user->username }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-
-        <div class="d-flex">
-            {!! $users->links() !!}
-        </div>
-        {{-- <x-table label="ผู้ใช้งาน" :columns="$columns">
-            <x-slot name="btn">
-                asd
-            </x-slot>
-        </x-table> --}}
-        {{-- <x-card>
+        <x-card>
             <x-card.header class="justify-content-between pe-2">
                 <div class="fs-5">
                     ผู้ใช้งาน
@@ -39,9 +10,82 @@
                 <x-header-btn justify="end" />
             </x-card.header>
             <x-card.body>
-                <x-table :columns="$columns"/>
+                <x-search :fields="[
+                    ['label' => 'ชื่อ - นามสกุล', 'field' => 'name'],
+                    ['label' => 'อีเมล', 'field' => 'email'],
+                    ['label' => 'ชื่อผู้ใช้งาน', 'field' => 'username'],
+                    ['label' => 'เบอร์ติดต่อ', 'field' => 'contact_number'],
+                    ['label' => 'Partner', 'field' => 'partner',],
+                    ['label' => 'Department', 'field' => 'email'],
+                    ['label' => 'ตำแหน่ง', 'field' => 'email'],
+                    ['label' => 'สิทธิ์', 'field' => 'email'],
+                    ['label' => 'ข้อมูลจาก', 'field' => 'email'],
+                ]" />
+                <hr>
+                <x-table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th width="1%">สถานะ</th>
+                            <th width="10%">ชื่อ</th>
+                            <th width="10%">อีเมล</th>
+                            <th width="10%">ชื่อผู้ใช้งาน</th>
+                            <th width="10%">เบอร์ติดต่อ</th>
+                            <th width="10%">Partner</th>
+                            <th width="10%">Department</th>
+                            <th width="5%">ตำแหน่ง</th>
+                            <th width="5%">สิทธิ์</th>
+                            <th width="5%">ข้อมูลจาก</th>
+                            <th width="5%">รหัสผ่าน</th>
+                            <th width="9%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($data as $value)
+                            <tr>
+                                <td class="text-center">
+                                    {!! Status::show($value->status) !!}
+                                </td>
+                                <td>{{ $value->name }}</td>
+                                <td>{{ Str::mask($value->email, '*', -21, 3) }}</td>
+                                <td>{{ $value->username }}</td>
+                                <td class="text-center">
+                                    {{ Str::mask($value->contact_number, '*', 7) }}
+                                </td>
+                                <td>
+                                    {!! $value->partner->name ?? '<i>ไม่ได้ตั้งค่า</i>' !!}
+                                </td>
+                                <td>
+                                    {!! $value->department->name ?? '<i>ไม่ได้ตั้งค่า</i>' !!}
+                                </td>
+                                <td class="fw-bold text-capitalize text-center">
+                                    {{ $value->position }}
+                                </td>
+                                <td class="fw-bold text-capitalize text-center">
+                                    {{ $value->role }}
+                                </td>
+                                <td class="fw-bold text-uppercase text-center">
+                                    {{ $value->from }}
+                                </td>
+                                <td class=" text-center">
+                                    <button class="btn btn-link"
+                                        onclick="resetPassword({{ $value->id }})">รีเซ็ต</button>
+                                </td>
+                                <td class="text-center">
+                                    <x-action-btn :model="$value" route="manage.users" :params="['user' => $value->id]" />
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="12">ไม่มีข้อมูล</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </x-table>
+                <div class="d-flex justify-content-end">
+                    {{ $data->onEachSide(1)->links() }}
+                </div>
             </x-card.body>
-        </x-card> --}}
+        </x-card>
     </x-container>
 @endsection
 
