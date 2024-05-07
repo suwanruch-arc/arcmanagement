@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Partner;
 use App\Models\Department;
 use App\Traits\DataTable;
+use App\Traits\Search;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
-    use DataTable;
+    use Search;
 
     public function fields($model = null)
     {
@@ -42,18 +43,25 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $users = User::paginate(25);
+        $query = User::query();
+        $query = Search::getData($query, [
+            ['field' => 'name'],
+            ['field' => 'email'],
+            ['field' => 'username'],
+            ['field' => 'contact_number'],
+            ['field' => 'position'],
+            ['field' => 'role'],
+            ['field' => ['name', 'keyword'], 'ref' => 'partner'],
+            ['field' => ['name', 'keyword'], 'ref' => 'department']
+        ]);
+
+        $data = $query->paginate(25);
 
         return view('manage.users.index', [
-            'data' => $users
+            'data' => $data
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create(): View
     {
         return view('components.views.create', [
@@ -63,12 +71,6 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -98,12 +100,6 @@ class UserController extends Controller
             ->with('success', __('message.created', ['name' => $name]));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit(User $user): View
     {
         return view('components.views.update', [
@@ -114,13 +110,6 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, User $user): RedirectResponse
     {
         $validated = $request->validate([
@@ -144,12 +133,6 @@ class UserController extends Controller
             ->with('success', __('message.updated', ['name' => $name]));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show(User $user)
     {
         $data = [

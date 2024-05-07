@@ -86,23 +86,3 @@ table tbody tr td {
 .material-icons-round {
     font-size: 16px;
 }
-
-tr:first-child th:first-child {
-    border-radius: 0.375rem 0 0 0 !important;
-}
-
-tr:first-child th:last-child {
-    border-radius: 0 0.375rem 0 0 !important;
-}
-
-tr:last-child td:first-child {
-    border-radius: 0 0 0 0.375rem !important;
-}
-
-tr:last-child td:last-child {
-    border-radius: 0 0 0.375rem 0 !important;
-}
-
-.dataTables_empty {
-    border-radius: 0 0 0.375rem 0.375rem !important;
-}

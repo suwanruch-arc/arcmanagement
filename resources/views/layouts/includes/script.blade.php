@@ -101,6 +101,7 @@
         });
     });
 
+
     function showTandC(html) {
         Swal.fire({
             html: html,
