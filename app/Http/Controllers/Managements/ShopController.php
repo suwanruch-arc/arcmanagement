@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Managements;
 
 use App\Models\Shop;
+use App\Traits\Search;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,27 +13,40 @@ use App\Providers\FileServiceProvider;
 
 class ShopController extends Controller
 {
+    use Search;
     public function fields($model = null)
     {
 
         $type = $model ? 'update' : 'create';
         $fields = [
-            'type'         => $type,
-            'id'           => $model->id ?? '',
+            'type' => $type,
+            'id' => $model->id ?? '',
             'has_template' => old('has_template') ?? $model->has_template ?? 'no',
-            'name'         => old('name') ?? $model->name ?? '',
-            'keyword'      => old('keyword') ?? $model->keyword ?? '',
-            'tandc'        => old('tandc') ?? $model->tandc ?? '',
-            'status'       => old('status') ?? $model->status ?? 'active',
+            'name' => old('name') ?? $model->name ?? '',
+            'keyword' => old('keyword') ?? $model->keyword ?? '',
+            'tandc' => old('tandc') ?? $model->tandc ?? '',
+            'status' => old('status') ?? $model->status ?? 'active',
         ];
         return $fields;
     }
 
     public function index()
     {
-        $shops = Shop::all();
+        $query = Shop::query();
+        $query = Search::getData($query, [
+            ['field' => 'name'],
+            ['field' => 'email'],
+            ['field' => 'username'],
+            ['field' => 'contact_number'],
+            ['field' => 'position'],
+            ['field' => 'role'],
+            ['field' => ['name', 'keyword'], 'ref' => 'partner'],
+            ['field' => ['name', 'keyword'], 'ref' => 'department']
+        ]);
 
-        return view('manage.shops.index', compact('shops'));
+        $data = $query->paginate(25);
+
+        return view('manage.shops.index', compact('data'));
     }
 
     public function create()
@@ -71,7 +85,7 @@ class ShopController extends Controller
                 $field_template = 'template';
 
                 $path_template = "{$path_shop}/template";
-                FileServiceProvider::store($file_template, $path_template, $id, $table,  $field_template);
+                FileServiceProvider::store($file_template, $path_template, $id, $table, $field_template);
             }
 
             if ($request->hasFile('banner')) {
@@ -79,7 +93,7 @@ class ShopController extends Controller
                 $field_banner = 'banner';
 
                 $path_banner = "{$path_shop}/banner";
-                FileServiceProvider::store($file_banner, $path_banner, $id, $table,  $field_banner);
+                FileServiceProvider::store($file_banner, $path_banner, $id, $table, $field_banner);
             }
         });
 
@@ -123,7 +137,7 @@ class ShopController extends Controller
                 $field_template = 'template';
 
                 $path_template = "{$path_shop}/template";
-                FileServiceProvider::update($file_template, $path_template, $id, $table,  $field_template);
+                FileServiceProvider::update($file_template, $path_template, $id, $table, $field_template);
             }
 
             if ($request->hasFile('banner')) {
@@ -131,7 +145,7 @@ class ShopController extends Controller
                 $field_banner = 'banner';
 
                 $path_banner = "{$path_shop}/banner";
-                FileServiceProvider::update($file_banner, $path_banner, $id, $table,  $field_banner);
+                FileServiceProvider::update($file_banner, $path_banner, $id, $table, $field_banner);
             }
         });
 

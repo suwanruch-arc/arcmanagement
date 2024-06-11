@@ -1,6 +1,6 @@
 <header class="navbar bg-dark flex-md-nowrap p-0 d-flex" data-bs-theme="dark">
     <a class="order-2 order-md-1 navbar-brand col-md-3 col-lg-2 me-auto me-md-0 px-3 fs-6 text-white"
-        href="#">
+        href="/">
         <b class="text-orange">ARC</b>Management
     </a>
     <div class="me-md-auto order-1 order-md-1">

@@ -115,6 +115,9 @@ Route::middleware('auth')->group(function () {
             Route::resource('shops', ShopController::class);
             Route::resource('partners', PartnerController::class);
             Route::resource('partners.departments', DepartmentController::class);
+            Route::controller(UserController::class)->prefix('users')->name('users.')->group(function () {
+                Route::post('restore', 'restore')->name('restore');
+            });
             Route::resource('users', UserController::class);
         });
     });

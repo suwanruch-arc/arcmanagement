@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master', ['route' => url()->previous()])
 
 @section('content')
     <x-container fluid>
@@ -8,7 +8,7 @@
                     <div class="fs-5">
                         ผู้ใช้งาน
                     </div>
-                    <x-button label="เพิ่มผู้ใช้งาน" icon="add" color="outline-secondary" size="sm"
+                    <x-button label="เพิ่มผู้ใช้งาน" icon="add" color="secondary" size="sm"
                         :href="route('manage.users.create')" />
                 </div>
                 <hr />
@@ -49,12 +49,12 @@
                             @forelse ($data as $value)
                                 <tr>
                                     <td class="text-center">
-                                        {!! Status::show($value->status) !!}
+                                        {!! Status::show($value) !!}
                                     </td>
                                     <td>{{ $value->name }}</td>
                                     <td>{{ Str::mask($value->email, '*', -21, 3) }}</td>
                                     <td>{{ $value->username }}</td>
-                                    <td class="text-center">
+                                    <td class="text-start">
                                         {{ Str::mask($value->contact_number, '*', 7) }}
                                     </td>
                                     <td>

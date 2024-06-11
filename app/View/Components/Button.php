@@ -6,6 +6,7 @@ use Illuminate\View\Component;
 
 class Button extends Component
 {
+    public $isButton;
     public $size;
     public $type;
     public $href;
@@ -16,7 +17,7 @@ class Button extends Component
     public $icon;
     public $prependIcon;
 
-    public function __construct($size = null, $type = 'button', $href = '#', $color = null, $label = '', $tooltip = null, $class = null, $icon = null, $prependIcon = null)
+    public function __construct($isButton = false, $size = null, $type = 'button', $href = '#', $color = null, $label = '', $tooltip = null, $class = null, $icon = null, $prependIcon = null)
     {
         $arr_class = [
             $color ? 'btn-' . $color : '',
@@ -25,9 +26,10 @@ class Button extends Component
         $string_class = implode(' ', $arr_class);
         $this->class = "d-flex align-item-center gap-2 btn " . $string_class;
 
+        $this->isButton = $isButton;
         $this->type = $type;
         $this->href = $href;
-        $this->tooltip = $tooltip ? 'data-bs-toggle=tooltip data-bs-placement=top data-bs-title=' . $tooltip  : '';
+        $this->tooltip = $tooltip ? 'data-bs-toggle=tooltip data-bs-placement=top data-bs-title=' . $tooltip : '';
         $this->label = $label;
         $this->icon = $icon;
         $this->size = $size;

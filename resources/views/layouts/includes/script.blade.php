@@ -16,8 +16,8 @@
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
     $.datetimepicker.setLocale('th');
-    $(document).ready(function() {
-        $('form#change-status-form').submit(function(e) {
+    $(document).ready(function () {
+        $('form#change-status-form').submit(function (e) {
             e.preventDefault();
             const id = $(this).data("id")
             const model = $(this).data("model")
@@ -29,7 +29,7 @@
                     model: model
                 },
                 dataType: "html",
-                success: function(response) {
+                success: function (response) {
                     Swal.fire({
                         title: 'คุณแน่ใจใช่ไหม?',
                         html: response,
@@ -47,7 +47,7 @@
                     }).then((action) => {
                         if (action.isConfirmed) {
                             var disableId = [];
-                            $.each($('[id="disable-id"]'), function(indexInArray,
+                            $.each($('[id="disable-id"]'), function (indexInArray,
                                 input) {
                                 disableId.push({
                                     table: input.name,
@@ -64,7 +64,7 @@
                                     data: disableId
                                 },
                                 dataType: "JSON",
-                                success: function(response) {
+                                success: function (response) {
                                     if (response.status === 'ok') {
                                         location.reload()
                                     }
@@ -76,7 +76,7 @@
             });
         });
 
-        $('.uppercase').keyup(function(e) {
+        $('.uppercase').keyup(function (e) {
             const value = this.value.toUpperCase()
             $(this).val(value);
         });
@@ -85,7 +85,7 @@
             dropdownAutoWidth: 'true'
         });
 
-        $('.numberonly').keypress(function(e) {
+        $('.numberonly').keypress(function (e) {
 
             var charCode = (e.which) ? e.which : event.keyCode
 
@@ -100,8 +100,7 @@
             height: 250
         });
     });
-
-
+    
     function showTandC(html) {
         Swal.fire({
             html: html,

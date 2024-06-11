@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Managements;
 use App\Models\File;
 use App\Models\Partner;
 use App\Models\Department;
+use App\Traits\Search;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 class PartnerController extends Controller
 {
+    use Search;
     public function fields($model = null)
     {
         $type = $model ? 'update' : 'create';
@@ -36,7 +38,20 @@ class PartnerController extends Controller
      */
     public function index()
     {
-        $partners = Partner::all();
+        $query = Partner::query();
+        $query = Search::getData($query, [
+            ['field' => 'name'],
+            ['field' => 'email'],
+            ['field' => 'username'],
+            ['field' => 'contact_number'],
+            ['field' => 'position'],
+            ['field' => 'role'],
+            ['field' => ['name', 'keyword'], 'ref' => 'partner'],
+            ['field' => ['name', 'keyword'], 'ref' => 'department']
+        ]);
+
+        $partners = $query->get();
+
         return view('manage.partners.index')->with(compact('partners'));
     }
 

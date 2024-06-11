@@ -1,4 +1,4 @@
-<a class="{{ $class }}" {{ $tooltip }} type="{{ $type }}" href="{{ $href }}">
+<{{$isButton ? 'button' : 'a'}} class="{{ $class }}" {{ $tooltip }} type="{{ $type }}" href="{{ $href }}">
     @if ($icon)
         <span class="material-icons-round {{ $size === 'sm' ? 'fs-5' : '' }} {{ $size === 'lg' ? 'fs-3' : '' }}">
             {{ $icon }}
@@ -14,4 +14,4 @@
             {{ $prependIcon }}
         </span>
     @endif
-</a>
+</{{$isButton ? 'button' : 'a'}}>

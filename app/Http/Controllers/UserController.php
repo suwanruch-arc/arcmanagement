@@ -43,7 +43,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $query = User::query();
+        $query = User::query()->withTrashed();
         $query = Search::getData($query, [
             ['field' => 'name'],
             ['field' => 'email'],
@@ -57,9 +57,7 @@ class UserController extends Controller
 
         $data = $query->paginate(25);
 
-        return view('manage.users.index', [
-            'data' => $data
-        ]);
+        return view('manage.users.index', compact('data'));
     }
 
     public function create(): View
@@ -144,17 +142,21 @@ class UserController extends Controller
         ])->with(compact('data'));
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request, User $user): JsonResponse
+    public function destroy(Request $request, User $user): RedirectResponse
     {
-        $user->update(['status' => 'inactive']);
+        $user->delete();
 
-        return response()->json(['status' => 'ok', 'message' => __('message.disabled', ['name' => $user->name])]);
+        return redirect()->route("manage.users.index")
+            ->with('success', __('message.deleted', ['name' => $user->name]));
+    }
+
+    public function restore(Request $request): RedirectResponse
+    {
+        $id = $request->id;
+        $user = User::withTrashed()->find($id);
+        $user->restore();
+
+        return redirect()->route("manage.users.index")
+            ->with('success', __('message.restored', ['name' => $user->name]));
     }
 }
