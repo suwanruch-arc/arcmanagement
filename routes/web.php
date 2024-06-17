@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('/', function () {
+    return redirect()->route('dashboard');
+});
 
 Route::prefix('auth')->name('auth.')->group(function () {
     Route::controller(AuthController::class)->group(function () {
@@ -29,5 +31,5 @@ Route::prefix('auth')->name('auth.')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
-    });
+    })->name('dashboard');
 });

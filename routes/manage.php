@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Managements\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ManageController;
 
@@ -15,6 +16,11 @@ use App\Http\Controllers\ManageController;
 */
 Route::middleware('manage')->group(function () {
     Route::get('/dashboard', [ManageController::class, 'dashboard'])->name('manage.dashboard');
-    Route::get('/settings', [ManageController::class, 'settings'])->name('manage.settings');
-    // เพิ่มเส้นทางอื่นๆ ของ ManageController ที่นี่
+
+    Route::name('manage.')->group(function(){
+        //users
+        Route::resources([
+            'users' => UserController::class
+        ]);
+    });
 });
