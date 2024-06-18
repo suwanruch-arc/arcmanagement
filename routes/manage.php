@@ -23,7 +23,7 @@ Route::middleware('manage')->group(function () {
             'users' => UserController::class
         ]);
         Route::prefix('users')->name('users.')->group(function () {
-            Route::put('/{user}/restore', [UserController::class, 'restore'])->name('restore');
+            Route::post('/restore', [UserController::class, 'restore'])->name('restore');
             Route::put('/{user}/reset-password', [UserController::class, 'resetPassword'])->name('reset-password');
         });
     });

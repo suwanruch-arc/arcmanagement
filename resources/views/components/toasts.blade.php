@@ -24,10 +24,10 @@
         Swal.fire({
             toast: true,
             title: 'การแจ้งเตือน',
-            text: "{!! $message !!}",
+            html: "{!! $message !!}",
             icon: '{{ $type }}',
             position: "top-end",
-            timer: 3000,
+            timer: 5000,
             timerProgressBar: true,
             showConfirmButton: false,
         })

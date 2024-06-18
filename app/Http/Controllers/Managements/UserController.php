@@ -97,10 +97,25 @@ class UserController extends Controller
      */
     public function destroy(User $user): RedirectResponse
     {
-        // $user->status = 'inactive';
-        // $user->delete();
+        $user->status = 'inactive';
+        $user->delete();
 
-        return redirect()->route("manage.users.index")
+        return redirect()->to(url()->previous())
             ->with('success', __('message.deleted', ['name' => $user->name]));
+    }
+
+    public function restore(Request $request)
+    {
+        $user = User::onlyTrashed()->find($request->id);
+        if ($user) {
+            $user->update(['status' => 'active']);
+            if ($user->trashed()) {
+                $user->restore();
+            }
+            return redirect()->to(url()->previous())
+                ->with('success', __('message.restored', ['name' => $user->name]));
+        }
+        return redirect()->to(url()->previous())
+            ->with('error', __('message.update_failed'));
     }
 }
