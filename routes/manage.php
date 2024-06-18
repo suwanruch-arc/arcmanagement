@@ -17,10 +17,14 @@ use App\Http\Controllers\ManageController;
 Route::middleware('manage')->group(function () {
     Route::get('/dashboard', [ManageController::class, 'dashboard'])->name('manage.dashboard');
 
-    Route::name('manage.')->group(function(){
+    Route::name('manage.')->group(function () {
         //users
         Route::resources([
             'users' => UserController::class
         ]);
+        Route::prefix('users')->name('users.')->group(function () {
+            Route::put('/{user}/restore', [UserController::class, 'restore'])->name('restore');
+            Route::put('/{user}/reset-password', [UserController::class, 'resetPassword'])->name('reset-password');
+        });
     });
 });

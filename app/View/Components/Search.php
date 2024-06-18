@@ -4,21 +4,16 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class ActionButton extends Component
+class Search extends Component
 {
-    public $route;
-    public $params;
-    public $id;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($id, $route, $params = [])
+    public function __construct()
     {
-        $this->id = $id;
-        $this->route = $route;
-        $this->params = $params;
+        //
     }
 
     /**
@@ -28,6 +23,6 @@ class ActionButton extends Component
      */
     public function render()
     {
-        return view('components.action-button');
+        return view('components.search');
     }
 }

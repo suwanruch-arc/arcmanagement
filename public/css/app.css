@@ -2111,7 +2111,7 @@ progress {
 .form-control {
   display: block;
   width: 100%;
-  padding: 0.3rem 0.6rem;
+  padding: 0.3rem 0.8rem;
   font-size: 0.9rem;
   font-weight: 400;
   line-height: 1.5;
@@ -2165,9 +2165,9 @@ progress {
   opacity: 1;
 }
 .form-control::file-selector-button {
-  padding: 0.3rem 0.6rem;
-  margin: -0.3rem -0.6rem;
-  margin-inline-end: 0.6rem;
+  padding: 0.3rem 0.8rem;
+  margin: -0.3rem -0.8rem;
+  margin-inline-end: 0.8rem;
   color: var(--bs-body-color);
   background-color: var(--bs-tertiary-bg);
   pointer-events: none;
@@ -2267,7 +2267,7 @@ textarea.form-control-lg {
   --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
   display: block;
   width: 100%;
-  padding: 0.3rem 1.8rem 0.3rem 0.6rem;
+  padding: 0.3rem 2.4rem 0.3rem 0.8rem;
   font-size: 0.9rem;
   font-weight: 400;
   line-height: 1.5;
@@ -2278,7 +2278,7 @@ textarea.form-control-lg {
   background-color: var(--bs-body-bg);
   background-image: var(--bs-form-select-bg-img), var(--bs-form-select-bg-icon, none);
   background-repeat: no-repeat;
-  background-position: right 0.6rem center;
+  background-position: right 0.8rem center;
   background-size: 16px 12px;
   border: var(--bs-border-width) solid rgba(0, 0, 0, 0.1);
   border-radius: var(--bs-border-radius);
@@ -2295,7 +2295,7 @@ textarea.form-control-lg {
   box-shadow: 0 0 0 0.25rem rgba(69, 130, 236, 0.25);
 }
 .form-select[multiple], .form-select[size]:not([size="1"]) {
-  padding-right: 0.6rem;
+  padding-right: 0.8rem;
   background-image: none;
 }
 .form-select:disabled {
@@ -2565,7 +2565,7 @@ textarea.form-control-lg {
   left: 0;
   z-index: 2;
   height: 100%;
-  padding: 1rem 0.6rem;
+  padding: 1rem 0.8rem;
   overflow: hidden;
   text-align: start;
   text-overflow: ellipsis;
@@ -2582,7 +2582,7 @@ textarea.form-control-lg {
 }
 .form-floating > .form-control,
 .form-floating > .form-control-plaintext {
-  padding: 1rem 0.6rem;
+  padding: 1rem 0.8rem;
 }
 .form-floating > .form-control::-moz-placeholder, .form-floating > .form-control-plaintext::-moz-placeholder {
   color: transparent;
@@ -2623,7 +2623,7 @@ textarea.form-control-lg {
 }
 .form-floating > .form-control:not(:-moz-placeholder-shown) ~ label::after {
   position: absolute;
-  inset: 1rem 0.3rem;
+  inset: 1rem 0.4rem;
   z-index: -1;
   height: 1.5em;
   content: "";
@@ -2635,7 +2635,7 @@ textarea.form-control-lg {
 .form-floating > .form-control-plaintext ~ label::after,
 .form-floating > .form-select ~ label::after {
   position: absolute;
-  inset: 1rem 0.3rem;
+  inset: 1rem 0.4rem;
   z-index: -1;
   height: 1.5em;
   content: "";
@@ -2689,7 +2689,7 @@ textarea.form-control-lg {
 .input-group-text {
   display: flex;
   align-items: center;
-  padding: 0.3rem 0.6rem;
+  padding: 0.3rem 0.8rem;
   font-size: 0.9rem;
   font-weight: 400;
   line-height: 1.5;
@@ -2721,7 +2721,7 @@ textarea.form-control-lg {
 
 .input-group-lg > .form-select,
 .input-group-sm > .form-select {
-  padding-right: 2.4rem;
+  padding-right: 3.2rem;
 }
 
 .input-group:not(.has-validation) > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating),
@@ -2801,8 +2801,8 @@ textarea.form-control-lg {
 }
 .was-validated .form-select:valid:not([multiple]):not([size]), .was-validated .form-select:valid:not([multiple])[size="1"], .form-select.is-valid:not([multiple]):not([size]), .form-select.is-valid:not([multiple])[size="1"] {
   --bs-form-select-bg-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2302b875' d='M2.3 6.73.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
-  padding-right: 3.3rem;
-  background-position: right 0.6rem center, center right 1.8rem;
+  padding-right: 4.4rem;
+  background-position: right 0.8rem center, center right 2.4rem;
   background-size: 16px 12px, calc(0.75em + 0.3rem) calc(0.75em + 0.3rem);
 }
 .was-validated .form-select:valid:focus, .form-select.is-valid:focus {
@@ -2891,8 +2891,8 @@ textarea.form-control-lg {
 }
 .was-validated .form-select:invalid:not([multiple]):not([size]), .was-validated .form-select:invalid:not([multiple])[size="1"], .form-select.is-invalid:not([multiple]):not([size]), .form-select.is-invalid:not([multiple])[size="1"] {
   --bs-form-select-bg-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23d9534f'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23d9534f' stroke='none'/%3e%3c/svg%3e");
-  padding-right: 3.3rem;
-  background-position: right 0.6rem center, center right 1.8rem;
+  padding-right: 4.4rem;
+  background-position: right 0.8rem center, center right 2.4rem;
   background-size: 16px 12px, calc(0.75em + 0.3rem) calc(0.75em + 0.3rem);
 }
 .was-validated .form-select:invalid:focus, .form-select.is-invalid:focus {
@@ -2930,7 +2930,7 @@ textarea.form-control-lg {
 }
 
 .btn {
-  --bs-btn-padding-x: 0.6rem;
+  --bs-btn-padding-x: 0.8rem;
   --bs-btn-padding-y: 0.3rem;
   --bs-btn-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   --bs-btn-font-size: 0.875rem;
@@ -3728,8 +3728,8 @@ textarea.form-control-lg {
 }
 
 .dropdown-toggle-split {
-  padding-right: 0.45rem;
-  padding-left: 0.45rem;
+  padding-right: 0.6rem;
+  padding-left: 0.6rem;
 }
 .dropdown-toggle-split::after, .dropup .dropdown-toggle-split::after, .dropend .dropdown-toggle-split::after {
   margin-left: 0;

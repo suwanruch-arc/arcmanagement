@@ -6,19 +6,32 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Models\User;
+use App\Traits\Search;
+use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
 {
+    use Search;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(): View
+    public function index(Request $request): View
     {
         $query = User::query()->withTrashed();
-        $data = $query->paginate(25);
-        return view('manage.users.index', compact('data'));
+        $query = Search::getData($query, [
+            ['field' => 'name'],
+            ['field' => 'email'],
+            ['field' => 'username'],
+            ['field' => 'contact_number'],
+            ['field' => 'position'],
+            ['field' => 'role'],
+            ['field' => ['name', 'keyword'], 'ref' => 'partner'],
+            ['field' => ['name', 'keyword'], 'ref' => 'department']
+        ]);
+        $users = $query->paginate(25);
+        return view('manage.users.index', compact('users'));
     }
 
     /**
@@ -82,8 +95,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user): RedirectResponse
     {
-        //
+        // $user->status = 'inactive';
+        // $user->delete();
+
+        return redirect()->route("manage.users.index")
+            ->with('success', __('message.deleted', ['name' => $user->name]));
     }
 }

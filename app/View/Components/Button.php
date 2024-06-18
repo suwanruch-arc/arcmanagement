@@ -6,6 +6,7 @@ use Illuminate\View\Component;
 
 class Button extends Component
 {
+    public $onclick;
     public $type;
     public $size;
     public $color;
@@ -22,7 +23,7 @@ class Button extends Component
      *
      * @return void
      */
-    public function __construct($tooltip = '', $size = null, $color = null, $type = 'button', $label = null, $href = '#', $class = null, $style = '', $icon = '', $iconPosition = 'prepend', $iconSize = '24')
+    public function __construct($onclick = null, $tooltip = '', $size = null, $color = null, $type = 'button', $label = null, $href = '#', $class = null, $style = '', $icon = '', $iconPosition = 'prepend', $iconSize = '24')
     {
         $arr_class = [
             $color ? "btn-{$color}" : '',
@@ -38,6 +39,7 @@ class Button extends Component
         $this->iconPosition = $iconPosition;
         $this->iconSize = "{$iconSize}px";
         $this->tooltip = $tooltip ? 'data-bs-toggle=tooltip data-bs-title=' . $tooltip : '';
+        $this->onclick = $onclick ? "onclick={$onclick}" : '';
     }
 
     /**

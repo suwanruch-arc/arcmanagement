@@ -24,8 +24,10 @@ class DatabaseSeeder extends Seeder
                 'username' => 'suwanruchs',
                 'password' => Hash::make('password'), // password
                 'remember_token' => Str::random(10),
+                'position' => 'admin',
+                'role' => 'admin'
             ]
         ]);
-        \App\Models\User::factory(1000)->create();
+        \App\Models\User::factory(49)->create();
     }
 }
