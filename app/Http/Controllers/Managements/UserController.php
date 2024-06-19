@@ -30,7 +30,7 @@ class UserController extends Controller
             ['field' => ['name', 'keyword'], 'ref' => 'partner'],
             ['field' => ['name', 'keyword'], 'ref' => 'department']
         ]);
-        $users = $query->paginate(25);
+        $users = $query->orderBy('status')->paginate(25);
         return view('manage.users.index', compact('users'));
     }
 
@@ -39,9 +39,13 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
-        //
+        $this->authorize('create');
+
+        return view('manage.users._form', [
+            'model' => null
+        ]);
     }
 
     /**
@@ -72,9 +76,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user): View
     {
-        //
+        $this->authorize('update', $user);
+
+        return view('manage.users._form', [
+            'model' => $user
+        ]);
     }
 
     /**
@@ -97,7 +105,10 @@ class UserController extends Controller
      */
     public function destroy(User $user): RedirectResponse
     {
+        $this->authorize('delete', $user);
+
         $user->status = 'inactive';
+        $user->save();
         $user->delete();
 
         return redirect()->to(url()->previous())
@@ -106,12 +117,14 @@ class UserController extends Controller
 
     public function restore(Request $request)
     {
-        $user = User::onlyTrashed()->find($request->id);
+        $id = $request->id;
+        $user = User::onlyTrashed()->find($id);
         if ($user) {
-            $user->update(['status' => 'active']);
             if ($user->trashed()) {
                 $user->restore();
             }
+            User::where('id', $id)->update(['status' => 'active']);
+
             return redirect()->to(url()->previous())
                 ->with('success', __('message.restored', ['name' => $user->name]));
         }

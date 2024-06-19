@@ -30,7 +30,7 @@ class Button extends Component
             $size ? "btn-{$size}" : '',
         ];
         $string_class = implode(' ', $arr_class);
-        $this->class = "d-flex align-items-center gap-2 btn " . $string_class . " {$class}";
+        $this->class = "d-flex align-items-center gap-2 " . $string_class . " {$class}";
         $this->type = $type;
         $this->label = $label;
         $this->href = $href;

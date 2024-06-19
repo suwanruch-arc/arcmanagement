@@ -10,3 +10,12 @@ td.td-center {
     text-align: center !important;
     vertical-align: middle !important;
 }
+
+::placeholder {
+    color: grey !important;
+    opacity: 0.5 !important;
+}
+
+::-ms-input-placeholder {
+    color: grey !important;
+}

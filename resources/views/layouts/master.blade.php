@@ -35,10 +35,18 @@
 </head>
 
 <body>
-    <header class="navbar bg-dark flex-md-nowrap p-0" data-bs-theme="dark">
-        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#">Company name</a>
-
-        <ul class="navbar-nav flex-row d-md-none">
+    <header class="navbar bg-dark flex-md-nowrap p-0 d-flex" data-bs-theme="dark">
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#"> <b
+                class="text-orange">ARC</b>Management</a>
+        <div class="me-md-auto order-1 order-md-1">
+            @if (isset($prev_route))
+                <a class="m-2 text-decoration-none text-white d-flex gap-2 justify-content-center"
+                    href="{{ $prev_route }}">
+                    <span class="material-symbols-rounded">undo</span> ย้อนกลับ
+                </a>
+            @endif
+        </div>
+        <ul class="order-3 navbar-nav flex-row d-md-none">
             <li class="nav-item text-nowrap">
                 <button class="nav-link px-3 text-white d-flex" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
@@ -58,10 +66,9 @@
 
     <div class="container-fluid">
         <div class="row">
-
             @include('layouts.dashboard.sidebar')
-
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pb-4">
+                <x-breadcrumb :links="$breadcrumb ?? null" />
                 @yield('content')
             </main>
         </div>
@@ -71,7 +78,7 @@
     <script src="{{ mix('js/sweetalert2.all.min.js') }}"></script>
     @yield('script')
 
-    <x-toasts/>
+    <x-toasts />
 </body>
 
 </html>
