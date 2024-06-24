@@ -1,5 +1,5 @@
-<div class="sidebar col-md-3 col-lg-2 p-0 ">
-    <div class="offcanvas-md offcanvas-end p-md-2 border bg-body-tertiary" tabindex="-1" id="sidebarMenu"
+<div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+    <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu"
         aria-labelledby="sidebarMenuLabel">
         <div class="offcanvas-header">
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu"
@@ -8,11 +8,11 @@
         <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="#">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{{route('dashboard')}}">
                         <span class="material-symbols-rounded">
                             dashboard
                         </span>
-                        Dashboard
+                        แดชบอร์ด
                     </a>
                 </li>
             </ul>
@@ -27,7 +27,23 @@
                         <span class="material-symbols-rounded">
                             group
                         </span>
+                        พาร์ทเนอร์
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{{route('manage.users.index')}}">
+                        <span class="material-symbols-rounded">
+                            group
+                        </span>
                         ผู้ใช้งาน
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{{route('manage.routes.index')}}">
+                        <span class="material-symbols-rounded">
+                            route
+                        </span>
+                        รายการเส้นทาง
                     </a>
                 </li>
             </ul>

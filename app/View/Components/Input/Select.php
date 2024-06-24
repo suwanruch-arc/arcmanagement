@@ -1,29 +1,31 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Input;
 
 use Illuminate\View\Component;
 
 class Select extends Component
 {
+    public $label;
     public $name;
+    public $id;
     public $options;
     public $selected;
     public $placeholder;
-    public $class;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($name, $options = [], $selected = null, $placeholder = null, $class = 'form-control')
+    public function __construct($label, $name, $id = null, $options = [], $selected = null, $placeholder = 'กรุณาเลือกข้อมูล')
     {
-        $this->name = $name;
+        $this->label = $label;
         $this->options = $options;
         $this->selected = $selected;
         $this->placeholder = $placeholder;
-        $this->class = $class;
+        $this->name = $name;
+        $this->id = $id ?? $name;
     }
 
     /**
@@ -33,6 +35,8 @@ class Select extends Component
      */
     public function render()
     {
-        return view('components.select');
+        return view('components.input.select', [
+            'hasError' => session()->get('errors') ? session()->get('errors')->has($this->name) : false
+        ]);
     }
 }

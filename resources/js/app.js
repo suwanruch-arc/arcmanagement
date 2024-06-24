@@ -1,7 +1,5 @@
 require("./bootstrap");
 
-window.$ = window.jQuery = require("jquery");
-
 import * as bootstrap from "bootstrap";
 
 import Swal from "sweetalert2";
@@ -32,4 +30,8 @@ $(document).ready(function () {
             }
         });
     });
+    
+    $('.select2').select2({
+        themes: 'bootstrap-5',
+    })
 });

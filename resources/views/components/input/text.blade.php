@@ -12,7 +12,12 @@
         type="{{ $type }}"
         name="{{ $name }}"
         id="{{ $id }}"
-        {{ $attributes->merge(['class' => 'form-control']) }}
+        {{ $attributes->class(['is-invalid' => $hasError])->merge(['class' => 'form-control']) }}
         {{ $attributes }}
     />
+    @error($name)
+        <small class="ps-2 text-danger">
+            {!! $errors->first($name) !!}
+        </small>
+    @enderror
 </div>

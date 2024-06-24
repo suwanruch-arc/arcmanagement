@@ -12,10 +12,16 @@ const mix = require("laravel-mix");
  */
 
 mix.js("resources/js/app.js", "public/js")
-    .postCss("resources/css/app.css","public/css")
-    .postCss("resources/css/sign-in.css","public/css")
-    .postCss("resources/css/dashboard.css","public/css")
+    .postCss("resources/css/app.css", "public/css")
+    .postCss("resources/css/sign-in.css", "public/css")
+    .postCss("resources/css/dashboard.css", "public/css")
     .sass("resources/sass/app.scss", "public/css")
-    .copy('node_modules/sweetalert2/dist/sweetalert2.min.css', 'public/css/sweetalert2.min.css')
-    .copy('node_modules/sweetalert2/dist/sweetalert2.all.min.js', 'public/js/sweetalert2.all.min.js')
+    .copy(
+        "node_modules/sweetalert2/dist/sweetalert2.min.css",
+        "public/css/sweetalert2.min.css"
+    )
+    .copy(
+        "node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+        "public/js/sweetalert2.all.min.js"
+    )
     .sourceMaps();

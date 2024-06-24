@@ -31,19 +31,22 @@
         defer />
     <link href="{{ mix('css/dashboard.css') }}" rel="stylesheet">
     <link href="{{ mix('css/sweetalert2.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
     @yield('style')
 </head>
 
 <body>
-    <header class="navbar bg-dark flex-md-nowrap p-0 d-flex" data-bs-theme="dark">
-        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#"> <b
-                class="text-orange">ARC</b>Management</a>
+    <header class="navbar bg-dark flex-md-nowrap p-0 d-flex fixed-top" data-bs-theme="dark">
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#">
+            <b class="text-orange">ARC</b>Management
+        </a>
         <div class="me-md-auto order-1 order-md-1">
             @if (isset($prev_route))
-                <a class="m-2 text-decoration-none text-white d-flex gap-2 justify-content-center"
-                    href="{{ $prev_route }}">
-                    <span class="material-symbols-rounded">undo</span> ย้อนกลับ
-                </a>
+            <a class="m-2 text-decoration-none text-white d-flex gap-2 justify-content-center" href="{{ $prev_route }}">
+                <span class="material-symbols-rounded">undo</span> ย้อนกลับ
+            </a>
             @endif
         </div>
         <ul class="order-3 navbar-nav flex-row d-md-none">
@@ -57,15 +60,10 @@
                 </button>
             </li>
         </ul>
-
-        <div id="navbarSearch" class="navbar-search w-100 collapse">
-            <input class="form-control w-100 rounded-0 border-0" type="text" placeholder="Search"
-                aria-label="Search" />
-        </div>
     </header>
 
-    <div class="container-fluid">
-        <div class="row">
+    <div class="container-fluid h-100 pt-md-5">
+        <div class="row h-100">
             @include('layouts.dashboard.sidebar')
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pb-4">
                 <x-breadcrumb :links="$breadcrumb ?? null" />
@@ -74,10 +72,11 @@
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ mix('js/app.js') }}" defer></script>
     <script src="{{ mix('js/sweetalert2.all.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
     @yield('script')
-
     <x-toasts />
 </body>
 

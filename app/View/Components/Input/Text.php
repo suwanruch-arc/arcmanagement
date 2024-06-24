@@ -1,10 +1,10 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Input;
 
 use Illuminate\View\Component;
 
-class Input extends Component
+class Text extends Component
 {
     public $label;
     public $name;
@@ -30,6 +30,8 @@ class Input extends Component
      */
     public function render()
     {
-        return view('components.input');
+        return view('components.input.text', [
+            'hasError' => session()->get('errors') ? session()->get('errors')->has($this->name) : false
+        ]);
     }
 }
