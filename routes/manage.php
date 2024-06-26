@@ -25,6 +25,13 @@ Route::middleware('manage')->group(function () {
             Route::put('/{user}/reset-password', [UserController::class, 'resetPassword'])->name('reset-password');
         });
 
+        Route::prefix('partners')->name('partners.')->group(function () {
+            Route::post('/restore', [PartnerController::class, 'restore'])->name('restore');
+            Route::prefix('departments')->name('departments.')->group(function () {
+                Route::post('/restore', [DepartmentController::class, 'restore'])->name('restore');
+            });
+        });
+
         Route::resources([
             'users' => UserController::class,
             'partners' => PartnerController::class,
@@ -40,7 +47,7 @@ Route::middleware('manage')->group(function () {
                 'action' => $route->getActionName(),
                 'methods' => $route->methods(),
             ];
-        })->sortBy('name');
+        });
 
         return view('routes', compact('routes'));
     })->name('manage.routes.index');

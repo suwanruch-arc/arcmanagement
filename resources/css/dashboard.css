@@ -19,6 +19,11 @@ body {
     }
 }
 
+.sidebar {
+    position: fixed;
+    height: 100%;
+}
+
 .sidebar .nav-link {
     font-size: 0.875rem;
     font-weight: 500;

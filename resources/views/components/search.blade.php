@@ -4,7 +4,7 @@
             <input type="text" class="form-control" placeholder="ค้นหา" name="search"
                 value="{{ $_GET['search'] ?? '' }}" />
             <x-button type="submit" icon="search" icon-size="20" color="outline-primary" />
-            @if (isset($_GET['search']))
+            @if (isset($_GET['search']) && !empty($_GET['search']))
                 <x-button icon="close" icon-size="20" color="outline-danger"
                     onclick="window.location.href='{{ request()->fullUrlWithQuery(['search' => null]) }}'" />
             @endif

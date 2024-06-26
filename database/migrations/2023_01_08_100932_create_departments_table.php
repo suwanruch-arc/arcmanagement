@@ -21,6 +21,7 @@ class CreateDepartmentsTable extends Migration
             $table->enum('is_main', ['yes', 'no']);
             $table->enum('status', ["active", "inactive"])->default('active');
             $table->foreignId('partner_id')->constrained('partners');
+            $table->foreignId('file_id')->nullable()->constrained('files');
             $table->softDeletes();
             $table->timestamps();
         });

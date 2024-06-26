@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Department;
+use App\Models\Partner;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -21,6 +23,7 @@ class UserFactory extends Factory
             'username'=> $this->faker->userName(),
             'password' => Hash::make('password'), // password
             'remember_token' => Str::random(10),
+
         ];
     }
 

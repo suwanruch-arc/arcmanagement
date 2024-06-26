@@ -20,7 +20,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request): View
+    public function index(): View
     {
         $query = User::query()->withTrashed();
         $query = Search::getData($query, [
@@ -30,7 +30,7 @@ class UserController extends Controller
             ['field' => 'contact_number'],
             ['field' => 'position'],
             ['field' => 'role'],
-            ['field' => ['name', 'keyword'], 'ref' => 'partner'],
+            ['field' => 'name', 'ref' => 'partner'],
             ['field' => ['name', 'keyword'], 'ref' => 'department']
         ]);
 

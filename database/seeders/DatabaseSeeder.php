@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Department;
+use App\Models\Partner;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -28,6 +31,23 @@ class DatabaseSeeder extends Seeder
                 'role' => 'admin'
             ]
         ]);
-        \App\Models\User::factory(49)->create();
+
+        $partners = Partner::factory()->count(5)->create();
+
+        // Create 10 departments and associate them with the partners
+        $departments = collect();
+        foreach ($partners as $partner) {
+            $departments = $departments->merge(
+                Department::factory()->count(2)->create(['partner_id' => $partner->id])
+            );
+        }
+
+        // Create 49 users and associate them with the departments and partners
+        User::factory()->count(49)->create()->each(function ($user) use ($departments) {
+            $department = $departments->random();
+            $user->department_id = $department->id;
+            $user->partner_id = $department->partner_id;
+            $user->save();
+        });
     }
 }

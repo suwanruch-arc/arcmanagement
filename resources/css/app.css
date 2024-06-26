@@ -19,3 +19,12 @@ td.td-center {
 ::-ms-input-placeholder {
     color: grey !important;
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.file-pond{
+    margin-bottom: 1.5rem !important;
+}

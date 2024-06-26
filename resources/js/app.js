@@ -34,4 +34,7 @@ $(document).ready(function () {
     $('.select2').select2({
         themes: 'bootstrap-5',
     })
+
+    $.fn.filepond.registerPlugin(FilePondPluginImagePreview);
+    $('.file-pond').filepond();
 });

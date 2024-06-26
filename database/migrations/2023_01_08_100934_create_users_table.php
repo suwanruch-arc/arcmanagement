@@ -30,9 +30,6 @@ class CreateUsersTable extends Migration
             $table->foreignId('partner_id')->nullable()->constrained('partners')->cascadeOnUpdate()->nullOnDelete();    
             $table->foreignId('department_id')->nullable()->constrained('departments')->cascadeOnUpdate()->nullOnDelete();
 
-            $table->foreignId('created_by')->nullable()->constrained('users');
-            $table->foreignId('updated_by')->nullable()->constrained('users');
-
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();

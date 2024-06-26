@@ -31,6 +31,10 @@
         defer />
     <link href="{{ mix('css/dashboard.css') }}" rel="stylesheet">
     <link href="{{ mix('css/sweetalert2.min.css') }}" rel="stylesheet">
+
+    <link href="{{ asset('css/filepond.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/filepond-plugin-image-preview.css') }}" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
@@ -44,9 +48,10 @@
         </a>
         <div class="me-md-auto order-1 order-md-1">
             @if (isset($prev_route))
-            <a class="m-2 text-decoration-none text-white d-flex gap-2 justify-content-center" href="{{ $prev_route }}">
-                <span class="material-symbols-rounded">undo</span> ย้อนกลับ
-            </a>
+                <a class="m-2 text-decoration-none text-white d-flex gap-2 justify-content-center"
+                    href="{{ $prev_route }}">
+                    <span class="material-symbols-rounded">undo</span> ย้อนกลับ
+                </a>
             @endif
         </div>
         <ul class="order-3 navbar-nav flex-row d-md-none">
@@ -75,6 +80,13 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ mix('js/app.js') }}" defer></script>
     <script src="{{ mix('js/sweetalert2.all.min.js') }}"></script>
+
+    <script src="{{ asset('js/filepond.min.js') }}"></script>
+    <script src="{{ asset('js/filepond.jquery.js') }}"></script>
+    <script src="{{ asset('js/filepond-plugin-image-preview.min.js') }}"></script>
+    <script src="{{ asset('js/filepond-plugin-file-validate-size.min.js') }}"></script>
+    <script src="{{ asset('js/filepond-plugin-file-validate-type.min.js') }}"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
     @yield('script')
     <x-toasts />

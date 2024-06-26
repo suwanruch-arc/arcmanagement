@@ -8,12 +8,12 @@
         <x-slot name="title">
             @if (isset($model))
                 <span class="material-symbols-rounded">
-                    person_edit
+                    edit
                 </span>
                 แก้ไขผู้ใช้งาน : {{ $model->name }}
             @else
                 <span class="material-symbols-rounded">
-                    person_add
+                    add
                 </span>
                 เพิ่มผู้ใช้งาน
             @endif
@@ -22,85 +22,43 @@
             <div class="col-6">
                 <div class="card">
                     <div class="card-body">
-                        <x-form
-                            :model="$model"
-                            route="manage.users"
-                            :params="$model->id ?? null"
-                        >
+                        <x-form :model="$model" route="manage.users" :params="$model->id ?? null">
                             <div class="row row-cols-1 row-cols-md-2">
                                 <div class="col">
-                                    <x-input.text
-                                        placeholder="ชื่อ - นามสกุล"
-                                        label="ชื่อ"
-                                        name="name"
-                                        :value="old('name') ?? ($model->name ?? null)"
-                                        required
-                                    />
+                                    <x-input.text placeholder="ชื่อ - นามสกุล" label="ชื่อ" name="name"
+                                        :value="old('name') ?? ($model->name ?? null)" required />
                                 </div>
                                 <div class="col">
-                                    <x-input.text
-                                        placeholder="example@mail.com"
-                                        label="อีเมล"
-                                        name="email"
-                                        type="email"
-                                        :value="old('email') ?? ($model->email ?? null)"
-                                        required
-                                    />
+                                    <x-input.text placeholder="example@mail.com" label="อีเมล" name="email"
+                                        type="email" :value="old('email') ?? ($model->email ?? null)" required />
                                 </div>
-                                    <div class="col">
-                                    <x-input.text
-                                        label="เบอร์โทรศัพท์"
-                                        name="contact_number"
-                                        type="tel"
-                                        :value="old('contact_number') ?? ($model->contact_number ?? null)"
-                                        required
-                                    />
+                                <div class="col">
+                                    <x-input.text placeholder="091-888-8888" label="เบอร์โทรศัพท์" name="contact_number"
+                                        type="tel" :value="old('contact_number') ?? ($model->contact_number ?? null)" required />
                                 </div>
                             </div>
                             @if (is_null($model))
                                 <div class="row row-cols-1 row-cols-md-2">
                                     <div class="col">
-                                        <x-input.text
-                                            autocomplete="off"
-                                            placeholder="username"
-                                            label="ชื่อผู้ใช้งาน"
-                                            name="username"
-                                            :value="old('username') ?? null"
-                                            required
-                                        />
+                                        <x-input.text autocomplete="off" placeholder="username" label="ชื่อผู้ใช้งาน"
+                                            name="username" :value="old('username') ?? null" required />
                                     </div>
                                     <div class="col">
-                                        <x-input.text
-                                            autocomplete="off"
-                                            placeholder="password"
-                                            type="password"
-                                            label="รหัสผ่าน"
-                                            name="password"
-                                            required
-                                        />
+                                        <x-input.text autocomplete="off" placeholder="password" type="password"
+                                            label="รหัสผ่าน" name="password" required />
                                     </div>
                                 </div>
                             @endif
                             <div class="row row-cols-1 row-cols-md-2">
                                 <div class="col">
-                                    <x-input.select
-                                        label="ตำแหน่ง"
-                                        name="position"
-                                        :options="['admin' => 'Admin', 'leader' => 'Leader', 'employee' => 'Employee']"
+                                    <x-input.select label="ตำแหน่ง" name="position" :options="['admin' => 'Admin', 'leader' => 'Leader', 'employee' => 'Employee']"
                                         selected="{{ old('position') ?? ($model->position ?? 'employee') }}"
-                                        placeholder="กรุณาเลือกตำแหน่ง"
-                                        class="select2"
-                                    />
+                                        placeholder="กรุณาเลือกตำแหน่ง" class="select2" />
                                 </div>
                                 <div class="col">
-                                    <x-input.select
-                                        label="สิทธิ์"
-                                        name="role"
-                                        :options="['admin' => 'Admin', 'moderator' => 'Moderator', 'user' => 'User']"
+                                    <x-input.select label="สิทธิ์" name="role" :options="['admin' => 'Admin', 'moderator' => 'Moderator', 'user' => 'User']"
                                         selected="{{ old('role') ?? ($model->role ?? 'user') }}"
-                                        placeholder="กรุณาเลือกสิทธิ์"
-                                        class="select2"
-                                    />
+                                        placeholder="กรุณาเลือกสิทธิ์" class="select2" />
                                 </div>
                             </div>
                         </x-form>

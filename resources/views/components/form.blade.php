@@ -21,6 +21,7 @@
         action="{{ route($route, $params) }}"
         method="POST"
         autocomplete="off"
+        enctype="multipart/form-data"
     >
         @csrf
         @if ($method === 'PUT')
