@@ -50,7 +50,7 @@
                                             <!-- Action-Button -->
                                             @can('update', $partner)
                                                 <x-button type="a" tooltip="แก้ไข" size="sm" icon="edit"
-                                                    icon-size="20" color="warning" :href="route('manage.users.edit', $partner->id)" />
+                                                    icon-size="20" color="warning" :href="route('manage.partners.edit', $partner->id)" />
                                             @endcan
                                             @if ($partner->deleted_at)
                                                 @can('restore')
@@ -77,26 +77,42 @@
                                         </div>
                                     </td>
                                 </tr>
-                                @forelse ($partner->departments as $department)
+                                @forelse ($partner->departments_with_trashed as $department)
                                     <tr>
                                         <td class="td-center">
                                             <x-status :s="$department->status" />
                                         </td>
                                         <td class="align-middle">
-                                            {{ $department->name }}
+                                            <div class="d-flex align-items-center gap-2">
+                                                {{ $department->name }}
+                                                @if ($department->getFilePath())
+                                                    <span class="material-symbols-rounded text-primary user-select-none"
+                                                        data-bs-toggle="tooltip" data-bs-html="true"
+                                                        data-bs-custom-class="custom-tooltip"
+                                                        data-bs-title="<img width='128px' src='{{ $department->getFilePath() }}'/>">
+                                                        image
+                                                    </span>
+                                                @endif
+                                            </div>
                                         </td>
                                         <td class="align-middle">
                                             {{ $department->keyword }}
                                         </td>
-                                        <td>
+                                        <td class="td-center">
                                             <div class="hstack justify-content-start d-flex gap-1">
                                                 <!-- Custom-Button -->
-
+                                                @can('update', $partner)
+                                                    <x-button tooltip="ตั้งค่าสิทธิ์" size="sm" icon="manage_accounts"
+                                                        icon-size="20" color="info" />
+                                                @endcan
                                                 <!-- Custom-Button -->
                                                 <!-- Action-Button -->
                                                 @can('update', $department)
                                                     <x-button type="a" tooltip="แก้ไข" size="sm" icon="edit"
-                                                        icon-size="20" color="warning" :href="route('manage.users.edit', $department->id)" />
+                                                        icon-size="20" color="warning" :href="route('manage.partners.departments.edit', [
+                                                            'partner' => $partner->id,
+                                                            'department' => $department->id,
+                                                        ])" />
                                                 @endcan
                                                 @if ($department->deleted_at)
                                                     @can('restore')
@@ -140,4 +156,13 @@
             </div>
         </div>
     </x-section>
+@endsection
+
+@section('style')
+    <style>
+        .custom-tooltip {
+            --bs-tooltip-bg: var(--bs-light);
+            --bs-tooltip-color: var(--bs-white);
+        }
+    </style>
 @endsection

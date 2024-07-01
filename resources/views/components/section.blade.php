@@ -7,6 +7,26 @@
             {{ $toolbar }}
         </div>
     </div>
+    {{-- <div>
+        <div class="d-block d-sm-none">
+            Visible only on xs
+        </div>
+        <div class="d-none d-sm-block d-md-none">
+            Visible only on sm
+        </div>
+        <div class="d-none d-md-block d-lg-none">
+            Visible only on md
+        </div>
+        <div class="d-none d-lg-block d-xl-none">
+            Visible only on lg
+        </div>
+        <div class="d-none d-xl-block d-xxl-none">
+            Visible only on xl
+        </div>
+        <div class="d-none d-xxl-block">
+            Visible only on xxl
+        </div>
+    </div> --}}
     <div>
         {{ $slot }}
     </div>

@@ -70,11 +70,16 @@
                                         {{ $user->from }}
                                     </td>
                                     <td class="td-center">
-                                        <div class="hstack justify-content-start d-flex gap-1">
+                                        <div class="hstack justify-content-start d-flex gap-1 ">
                                             <!-- Custom-Button -->
                                             @can('update', $user)
-                                                <x-button tooltip="รีเซ็ตรหัสผ่าน" size="sm" icon="lock_reset"
-                                                    icon-size="20" color="secondary" :href="route('manage.users.reset-password', $user->id)" />
+                                                <form class="form-restore" method="POST"
+                                                    action="{{ route('manage.users.reset-password') }}">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $user->id }}" />
+                                                    <x-button type="submit" tooltip="รีเซ็ตรหัสผ่าน" size="sm"
+                                                        icon="lock_reset" icon-size="20" color="secondary" />
+                                                </form>
                                             @endcan
                                             <!-- Custom-Button -->
                                             <!-- Action-Button -->
@@ -138,7 +143,7 @@
             position: sticky;
             right: 0;
             z-index: 1;
-            border: 1px;
+            border: 1px
         }
     </style>
 @endsection

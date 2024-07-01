@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Managements;
 
 use App\Http\Controllers\Controller;
+use App\Models\Department;
+use App\Models\Partner;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -48,8 +50,23 @@ class UserController extends Controller
     {
         $this->authorize('create');
 
+        $partners = Partner::with([
+            'departments' => function ($query) {
+                $query->where('status', 'active');
+            }
+        ])->get();
+
+        $partner_lists = $partners->mapWithKeys(function ($partner) {
+            $departments = $partner->departments->mapWithKeys(function ($department) {
+                return [$department->id => $department->name];
+            });
+
+            return [$partner->name => $departments];
+        })->toArray();
+
         return view('manage.users._form', [
-            'model' => null
+            'model' => null,
+            'partner_lists' => $partner_lists
         ]);
     }
 
@@ -67,8 +84,7 @@ class UserController extends Controller
             'username' => 'required|unique:users|min:8|max:255',
             'contact_number' => 'required|max:255',
             'password' => 'required|min:6|max:16',
-            'partner_id' => 'exists:partners,id',
-            'department_id' => 'exists:departments,id',
+            'department_id' => 'required|exists:departments,id',
             'position' => 'required|in:admin,leader,employee',
             'role' => 'required|in:admin,moderator,user'
         ]);
@@ -78,6 +94,9 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->from = 'ecp';
         $user->remember_token = Str::random(10);
+        $department = Department::find($validated['department_id']);
+        $user->partner_id = $department->partner_id;
+        $user->department_id = $department->id;
         $user->save();
 
         return redirect()->route('manage.users.index')
@@ -105,8 +124,23 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
+        $partners = Partner::with([
+            'departments' => function ($query) {
+                $query->where('status', 'active');
+            }
+        ])->get();
+
+        $partner_lists = $partners->mapWithKeys(function ($partner) {
+            $departments = $partner->departments->mapWithKeys(function ($department) {
+                return [$department->id => $department->name];
+            });
+
+            return [$partner->name => $departments];
+        })->toArray();
+
         return view('manage.users._form', [
-            'model' => $user
+            'model' => $user,
+            'partner_lists' => $partner_lists
         ]);
     }
 
@@ -119,18 +153,21 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user): RedirectResponse
     {
+        $this->authorize('update', $user);
+
         $validated = $request->validate([
             'name' => 'required|max:255',
             'email' => 'required|max:255',
             'contact_number' => 'required|max:255',
-            'partner_id' => 'exists:partners,id',
             'department_id' => 'exists:departments,id',
             'position' => 'required|in:admin,leader,employee',
             'role' => 'required|in:admin,moderator,user'
         ]);
 
         $user->fill($validated);
-        $user->updated_by = Auth::id();
+        $department = Department::find($validated['department_id']);
+        $user->partner_id = $department->partner_id;
+        $user->department_id = $department->id;
         $user->save();
 
         return redirect()->route('manage.users.index')
@@ -168,7 +205,18 @@ class UserController extends Controller
             return redirect()->to(url()->previous())
                 ->with('success', __('message.restored', ['name' => $user->name]));
         }
+
         return redirect()->to(url()->previous())
             ->with('error', __('message.update_failed'));
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $user = User::find($request->id);
+        $user->password = Hash::make('P@ssw0rd');
+        $user->save();
+
+        return redirect()->to(url()->previous())
+            ->with('success', __('message.reset-password', ['name' => $user->name]));
     }
 }

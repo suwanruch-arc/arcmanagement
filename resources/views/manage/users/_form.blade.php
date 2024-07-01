@@ -10,7 +10,7 @@
                 <span class="material-symbols-rounded">
                     edit
                 </span>
-                แก้ไขผู้ใช้งาน : {{ $model->name }}
+                แก้ไขข้อมูล : {{ $model->name }}
             @else
                 <span class="material-symbols-rounded">
                     add
@@ -19,7 +19,7 @@
             @endif
         </x-slot>
         <div class="container d-flex justify-content-center">
-            <div class="col-6">
+            <div class="col-md-12 col-lg-10 col-xl-8">
                 <div class="card">
                     <div class="card-body">
                         <x-form :model="$model" route="manage.users" :params="$model->id ?? null">
@@ -35,6 +35,11 @@
                                 <div class="col">
                                     <x-input.text placeholder="091-888-8888" label="เบอร์โทรศัพท์" name="contact_number"
                                         type="tel" :value="old('contact_number') ?? ($model->contact_number ?? null)" required />
+                                </div>
+                                <div class="col">
+                                    <x-input.select class="select2" label="พาร์ทเนอร์" name="department_id"
+                                        :options="$partner_lists"
+                                        selected="{{ old('department_id') ?? ($model->department_id ?? null) }}" required/>
                                 </div>
                             </div>
                             @if (is_null($model))

@@ -40,7 +40,7 @@
                         @foreach ($data as $value => $label)
                             <option
                                 value="{{ $value }}"
-                                {{ $label == $selected ? 'selected' : '' }}
+                                {{ $value == $selected ? 'selected' : '' }}
                             >
                                 {!! $label !!}
                             </option>

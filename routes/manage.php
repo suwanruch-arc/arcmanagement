@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Managements\DepartmentController;
 use App\Http\Controllers\Managements\PartnerController;
+use App\Http\Controllers\Managements\PermissionController;
 use App\Http\Controllers\Managements\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ManageController;
@@ -16,13 +17,17 @@ use App\Http\Controllers\ManageController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::middleware('manage')->group(function () {
+Route::middleware(['manage', 'auth'])->group(function () {
     Route::get('/dashboard', [ManageController::class, 'dashboard'])->name('manage.dashboard');
 
     Route::name('manage.')->group(function () {
+        Route::prefix('menus')->name('menus')->group(function () {
+            Route::get('', [PermissionController::class, 'index'])->name('index');
+        });
+
         Route::prefix('users')->name('users.')->group(function () {
             Route::post('/restore', [UserController::class, 'restore'])->name('restore');
-            Route::put('/{user}/reset-password', [UserController::class, 'resetPassword'])->name('reset-password');
+            Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('reset-password');
         });
 
         Route::prefix('partners')->name('partners.')->group(function () {

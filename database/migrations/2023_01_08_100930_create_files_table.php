@@ -15,15 +15,15 @@ class CreateFilesTable extends Migration
     {
         Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255);
-            $table->string('old_name', 255)->nullable();
+            $table->string('file_name', 255);
             $table->string('origin_name', 255);
-            $table->string('type', 255);
+            $table->string('extension', 255);
             $table->string('path', 255);
             $table->integer('size');
             $table->bigInteger('table_id')->index();
             $table->string('table_name', 255)->index();
-            $table->enum('status', ["active","inactive"]);
+            $table->string('type', 255);
+            $table->enum('status', ["active", "inactive"])->default('active');
             $table->softDeletes();
             $table->timestamps();
         });

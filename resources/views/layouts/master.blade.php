@@ -70,7 +70,7 @@
     <div class="container-fluid h-100 pt-md-5">
         <div class="row h-100">
             @include('layouts.dashboard.sidebar')
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pb-4">
+            <main class="col-md-9 col-lg-10 ms-sm-auto pt-sm-5 pt-md-0">
                 <x-breadcrumb :links="$breadcrumb ?? null" />
                 @yield('content')
             </main>
