@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Managements\PermissionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->name('api.user');
+
+Route::prefix('api')->name('api.')->group(function () {
+    Route::controller(PermissionController::class)->prefix('search')->name('search.')->group(function () {
+        Route::get('user', 'getUser')->name('get-user');
+    });
 });

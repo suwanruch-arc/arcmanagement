@@ -34,11 +34,12 @@
 
     <link href="{{ asset('css/filepond.css') }}" rel="stylesheet">
     <link href="{{ asset('css/filepond-plugin-image-preview.css') }}" rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
     @yield('style')
+    @livewireStyles
 </head>
 
 <body>
@@ -80,15 +81,16 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ mix('js/app.js') }}" defer></script>
     <script src="{{ mix('js/sweetalert2.all.min.js') }}"></script>
-
+    
     <script src="{{ asset('js/filepond.min.js') }}"></script>
     <script src="{{ asset('js/filepond.jquery.js') }}"></script>
     <script src="{{ asset('js/filepond-plugin-image-preview.min.js') }}"></script>
     <script src="{{ asset('js/filepond-plugin-file-validate-size.min.js') }}"></script>
     <script src="{{ asset('js/filepond-plugin-file-validate-type.min.js') }}"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
     @yield('script')
+    @livewireScripts
     <x-toasts />
 </body>
 

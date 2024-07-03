@@ -32,10 +32,10 @@ class UserController extends Controller
             ['field' => 'contact_number'],
             ['field' => 'position'],
             ['field' => 'role'],
-            ['field' => 'name', 'ref' => 'partner'],
-            ['field' => ['name', 'keyword'], 'ref' => 'department']
+            ['field' => 'name', 'ref' => 'partner', 'withTrashed' => true],
+            ['field' => ['name', 'keyword'], 'ref' => 'department', 'withTrashed' => true]
         ]);
-
+        
         $users = $query->orderByRaw("id = ? DESC", [auth()->user()->id])->orderBy('status')->orderByDesc('created_at')->paginate(25);
 
         return view('manage.users.index', compact('users'));

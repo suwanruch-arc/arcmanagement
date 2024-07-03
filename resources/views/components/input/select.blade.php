@@ -58,34 +58,3 @@
         </small>
     @enderror
 </div>
-
-@section('style')
-    <style>
-        .is-invalid~.select2 .select2-selection__rendered {
-            border: 1px solid red;
-            border-radius: var(--bs-border-radius) !important;
-        }
-
-        .select2-selection,
-        .select2-dropdown {
-            border: var(--bs-border-width) solid var(--bs-border-color) !important;
-        }
-
-        .select2-container .select2-results__option,
-        .select2-container .select2-selection .select2-selection__rendered {
-            padding: 0.375rem 2.25rem 0.375rem 0.75rem !important;
-        }
-
-        .select2-container .select2-selection {
-            height: auto !important;
-        }
-
-        .select2-container--default {
-            border-radius: var(--bs-border-radius) !important;
-        }
-
-        .select2-selection__arrow {
-            top: 10px !important;
-        }
-    </style>
-@endsection

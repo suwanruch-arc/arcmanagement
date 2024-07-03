@@ -3,56 +3,66 @@
 return [
     [
         'label' => 'Menus',
+        'id' => 'menus',
         'children' => [
             [
                 'label' => 'แดชบอร์ด',
+                'id' => 'dashboard',
                 'icon' => 'dashboard',
                 'url' => '/',
             ],
             [
-                'icon' => 'campaign',
                 'label' => 'แคมเปญ',
+                'id' => 'campaign',
+                'icon' => 'campaign',
                 'url' => '/site/campaigns/'
             ],
             [
-                'icon' => 'qr_code',
                 'label' => 'E-Code',
+                'id' => 'ecode',
+                'icon' => 'qr_code',
                 'url' => '/site/ecode/'
             ],
             [
-                'icon' => 'pie_chart',
                 'label' => 'รายงาน',
+                'id' => 'report',
+                'icon' => 'pie_chart',
                 'url' => '/manage/reports/',
             ]
         ],
     ],
     [
         'label' => 'Managements',
-        'can' => ['admin'],
+        'id' => 'management',
         'children' => [
             [
-                'icon' => 'store',
                 'label' => 'ร้านค้า',
+                'id' => 'shop',
+                'icon' => 'store',
                 'url' => '/manage/shops'
             ],
             [
-                'icon' => 'handshake',
                 'label' => 'Partner / Department',
+                'id' => 'partner',
+                'icon' => 'handshake',
                 'url' => '/manage/partners/'
             ],
             [
-                'icon' => 'person',
                 'label' => 'ผู้ใช้งาน',
+                'id' => 'user',
+                'icon' => 'person',
                 'url' => '/manage/users'
             ],
             [
-                'icon' => 'format_list_bulleted',
                 'label' => 'จัดการสิทธิ์',
-                'url' => '/manage/menus'
+                'id' => 'permission',
+                'icon' => 'format_list_bulleted',
+                'url' => '/manage/permissions'
             ],
             [
-                'icon' => 'route',
                 'label' => 'รายการเส้นทาง',
+                'id' => 'route',
+                'icon' => 'route',
                 'url' => '/manage/routes'
             ]
         ]
@@ -61,8 +71,9 @@ return [
         'label' => 'Account',
         'children' => [
             [
-                'icon' => 'password',
                 'label' => 'เปลี่ยนรหัสผ่าน',
+                'id' => 'change_password',
+                'icon' => 'password',
                 'url' => '/account/change-password'
             ]
         ]

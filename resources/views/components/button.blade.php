@@ -27,7 +27,7 @@
         @endif
     </button>
 @else
-    <button type="{{ $type }}" class="btn {{ $class }}" style="{{ $style }}" {{$tooltip}} {{ $onclick }}>
+    <button type="{{ $type }}" class="btn {{ $class }}" style="{{ $style }}" {{$tooltip}} {{ $onclick }}  {{ $attributes }}>
         @if ($icon && $iconPosition === 'prepend')
             <span class="material-symbols-rounded m-auto" style="font-size: {{ $iconSize }};">
                 {{ $icon }}

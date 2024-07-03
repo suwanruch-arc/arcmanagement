@@ -21,7 +21,7 @@ Route::middleware(['manage', 'auth'])->group(function () {
     Route::get('/dashboard', [ManageController::class, 'dashboard'])->name('manage.dashboard');
 
     Route::name('manage.')->group(function () {
-        Route::prefix('menus')->name('menus')->group(function () {
+        Route::prefix('permissions')->name('permissions')->group(function () {
             Route::get('', [PermissionController::class, 'index'])->name('index');
         });
 

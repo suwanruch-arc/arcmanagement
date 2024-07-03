@@ -128,7 +128,8 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex justify-content-end">
+                <div class="d-flex justify-content-between">
+                    <span>จำนวนข้อมูล <strong class="initialism">{{ $users->total() }}</strong> รายการ</span>
                     {!! $users->appends($_GET)->links() !!}
                 </div>
             </div>

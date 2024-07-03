@@ -13,17 +13,27 @@ trait Search
                 if (isset($column['ref'])) {
                     $table = $column['ref'];
                     $fields = $column['field'];
+                    $withTrashed = $columns['withTrashed'] ?? false;
                     if (is_array($fields)) {
-                        $query = $query->orWhereHas($table, function ($query) use ($fields, $search) {
-                            $query = $query->where(function ($query) use ($fields, $search) {
+                        $query = $query->orWhereHas($table, function ($query) use ($fields, $search, $withTrashed) {
+                            $query = $query->where(function ($query) use ($fields, $search, $withTrashed) {
+                                if ($withTrashed) {
+                                    $query = $query->withTrashed();
+                                }
                                 foreach ($fields as $field) {
                                     $query = $query->orWhere($field, 'LIKE', "%{$search}%");
                                 }
                             });
+                            if ($withTrashed) {
+                                $query = $query->withTrashed();
+                            }
                         });
                     } else {
-                        $query = $query->orWhereHas($table, function ($query) use ($fields, $search) {
-                            $query = $query->orWhere($fields, 'LIKE', "%{$search}%");
+                        $query = $query->orWhereHas($table, function ($query) use ($fields, $search, $withTrashed) {
+                            $query = $query->where($fields, 'LIKE', "%{$search}%");
+                            if ($withTrashed) {
+                                $query = $query->withTrashed();
+                            }
                         });
                     }
                 } else {
