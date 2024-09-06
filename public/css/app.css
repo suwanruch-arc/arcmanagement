@@ -2935,7 +2935,7 @@ textarea.form-control-lg {
   --bs-btn-padding-y: 0.375rem;
   --bs-btn-font-family: ;
   --bs-btn-font-size: 1rem;
-  --bs-btn-font-weight: 700;
+  --bs-btn-font-weight: 500;
   --bs-btn-line-height: 1.5;
   --bs-btn-color: var(--bs-body-color);
   --bs-btn-bg: transparent;
@@ -12323,5 +12323,16 @@ table {
 
 .select2-selection__arrow {
     top: 10px !important;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: gray;
+    border-radius: 0.375rem;
 }
 

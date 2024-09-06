@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
             ]
         ]);
 
-        $partners = Partner::factory()->count(5)->create();
+        $partners = Partner::factory()->count(3)->create();
 
         // Create 10 departments and associate them with the partners
         $departments = collect();
@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
         }
 
         // Create 49 users and associate them with the departments and partners
-        User::factory()->count(3999)->create()->each(function ($user) use ($departments) {
+        User::factory()->count(9)->create()->each(function ($user) use ($departments) {
             $department = $departments->random();
             $user->department_id = $department->id;
             $user->partner_id = $department->partner_id;

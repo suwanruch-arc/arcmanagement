@@ -14,6 +14,7 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
+                                <th>Middleware</th>
                                 <th>URI</th>
                                 <th>Name</th>
                                 <th>Action</th>
@@ -23,6 +24,11 @@
                         <tbody>
                             @foreach ($routes as $route)
                                 <tr>
+                                    <td>
+                                        <span class="d-inline-block text-truncate" style="max-width: 350px;">
+                                            {{ implode(',', $route['middleware']) }}
+                                        </span>
+                                    </td>
                                     <td>{!! preg_replace('/\{([^\}]+)\}/', '<b class="text-danger"><u><i>{$1}</i></u></b>', $route['uri']) !!}</td>
                                     <td>{{ $route['name'] }}</td>
                                     <td>{{ $route['action'] }}</td>

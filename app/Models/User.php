@@ -56,6 +56,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
     public function partner()
     {
         return $this->belongsTo(Partner::class);

@@ -20,7 +20,7 @@
                 <x-search />
                 <hr>
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-custom-font">
                         <thead>
                             <tr>
                                 <th scope="col" class="text-center" width="1%">สถานะ</th>
@@ -135,16 +135,4 @@
             </div>
         </div>
     </x-section>
-@endsection
-@section('style')
-    @parent
-    <style>
-        th:last-child,
-        td:last-child {
-            position: sticky;
-            right: 0;
-            z-index: 1;
-            border: 1px
-        }
-    </style>
 @endsection

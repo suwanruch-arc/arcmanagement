@@ -17,7 +17,7 @@ class Text extends Component
      *
      * @return void
      */
-    public function __construct($label, $name, $id = null, $type = 'text', $prepend = null, $append = null)
+    public function __construct($label = null, $name = null, $id = null, $type = 'text', $prepend = null, $append = null)
     {
         $this->type = $type;
         $this->label = $label;

@@ -27,7 +27,7 @@ class CreateUsersTable extends Migration
             $table->enum('status', ["active", "inactive"])->default('active');
             $table->enum('from', ["ecp", "s95"])->default('ecp');
 
-            $table->foreignId('partner_id')->nullable()->constrained('partners')->cascadeOnUpdate()->nullOnDelete();    
+            $table->foreignId('partner_id')->nullable()->constrained('partners')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('department_id')->nullable()->constrained('departments')->cascadeOnUpdate()->nullOnDelete();
 
             $table->rememberToken();

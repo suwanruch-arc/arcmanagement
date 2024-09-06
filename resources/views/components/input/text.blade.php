@@ -1,15 +1,18 @@
 <div class="mb-3">
-    <label for="{{ $id }}" class="form-label">
-        {{ $label }}
-        @if ($attributes->has('required'))
-            <span class="text-danger">*</span>
-        @endif
-    </label>
+    @if ($attributes->has('label'))
+        <label for="{{ $id }}" class="form-label">
+            {{ $label }}
+            @if ($attributes->has('required'))
+                <span class="text-danger">*</span>
+            @endif
+        </label>
+    @endif
     <div class="input-group">
         @if ($prepend)
             <span class="input-group-text">{{ $prepend }}</span>
         @endif
-        <input type="{{ $type }}" name="{{ $name }}" id="{{ $id }}"
+        <input type="{{ $type }}" @if ($attributes->has('name')) name="{{ $name }}" @endif
+            id="{{ $id }}"
             {{ $attributes->class(['is-invalid' => $hasError])->merge(['class' => 'form-control']) }}
             {{ $attributes }} />
         @if ($append)

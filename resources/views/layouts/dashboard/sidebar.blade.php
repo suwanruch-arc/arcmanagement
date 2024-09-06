@@ -1,4 +1,4 @@
-<div class="sidebar border border-right col-md-3 col-lg-2 p-0">
+<div class="sidebar border border-right col-md-3 col-lg-2 p-0 overflow-auto">
     <div class="offcanvas-md offcanvas-end" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel"
         data-bs-scroll="true">
         <div class="offcanvas-header">
@@ -17,37 +17,6 @@
                 </li>
             </ul>
             <x-sidebar-menu :menus="config('menu')" />
-            {{-- <h6
-                class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary">
-                <span>MANAGEMENTs</span>
-            </h6>
-            
-            <ul class="nav flex-column mb-auto">
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2" href="{{ route('manage.partners.index') }}">
-                        <span class="material-symbols-rounded">
-                            groups
-                        </span>
-                        พาร์ทเนอร์
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2" href="{{ route('manage.users.index') }}">
-                        <span class="material-symbols-rounded">
-                            person
-                        </span>
-                        ผู้ใช้งาน
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2" href="{{ route('manage.routes.index') }}">
-                        <span class="material-symbols-rounded">
-                            route
-                        </span>
-                        รายการเส้นทาง
-                    </a>
-                </li>
-            </ul> --}}
 
             <hr class="my-3" />
 

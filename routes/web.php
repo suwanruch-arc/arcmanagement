@@ -31,5 +31,5 @@ Route::prefix('auth')->name('auth.')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
-    })->name('dashboard');
+    })->name('dashboard')->middleware('check.permission:dashboard');
 });

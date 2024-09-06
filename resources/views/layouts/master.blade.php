@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ isset($title) ? $title . ' · ' : '' }}ARC Management</title>
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <style>
@@ -38,6 +39,7 @@
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+    @routes
     @yield('style')
     @livewireStyles
 </head>
@@ -81,7 +83,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ mix('js/app.js') }}" defer></script>
     <script src="{{ mix('js/sweetalert2.all.min.js') }}"></script>
-    
+
     <script src="{{ asset('js/filepond.min.js') }}"></script>
     <script src="{{ asset('js/filepond.jquery.js') }}"></script>
     <script src="{{ asset('js/filepond-plugin-image-preview.min.js') }}"></script>
