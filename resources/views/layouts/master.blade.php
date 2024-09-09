@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ isset($title) ? $title . ' · ' : '' }}ARC Management</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('/favicon.ico') }}">
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <style>
         .nav-scroller {
@@ -39,9 +40,9 @@
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+    <link href="{{ asset('css/trumbowyg.min.css') }}" rel="stylesheet">
     @routes
     @yield('style')
-    @livewireStyles
 </head>
 
 <body>
@@ -91,6 +92,8 @@
     <script src="{{ asset('js/filepond-plugin-file-validate-type.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+    <script src="{{ asset('js/trumbowyg.min.js') }}"></script>
+    <script src="{{ asset('js/ui/th.min.js') }}"></script>
     @yield('script')
     @livewireScripts
     <x-toasts />

@@ -39,7 +39,7 @@
                                 <div class="col">
                                     <x-input.select class="select2" label="พาร์ทเนอร์" name="department_id"
                                         :options="$partner_lists"
-                                        selected="{{ old('department_id') ?? ($model->department_id ?? null) }}" required/>
+                                        selected="{{ old('department_id') ?? ($model->department_id ?? null) }}" required />
                                 </div>
                             </div>
                             @if (is_null($model))

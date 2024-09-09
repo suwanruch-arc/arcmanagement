@@ -1,5 +1,4 @@
 require("./bootstrap");
-
 import * as bootstrap from "bootstrap";
 
 import Swal from "sweetalert2";
@@ -13,6 +12,11 @@ const tooltipList = [...tooltipTriggerList].map(
 );
 
 $(document).ready(function () {
+    $('.uppercase').keyup(function (e) {
+        const value = this.value.toUpperCase()
+        $(this).val(value);
+    });
+    
     $("form.form-destroy").submit(function (e) {
         e.preventDefault();
         Swal.fire({
@@ -30,11 +34,11 @@ $(document).ready(function () {
             }
         });
     });
-    
-    $('.select2').select2({
-        themes: 'bootstrap-5',
-    })
+
+    $(".select2").select2({
+        themes: "bootstrap-5",
+    });
 
     $.fn.filepond.registerPlugin(FilePondPluginImagePreview);
-    $('.file-pond').filepond();
+    $(".file-pond").filepond();
 });

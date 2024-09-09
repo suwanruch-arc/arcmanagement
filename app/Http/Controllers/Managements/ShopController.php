@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Managements;
 use App\Http\Controllers\Controller;
 use App\Models\Shop;
 use App\Traits\Search;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 
 class ShopController extends Controller
 {
@@ -25,12 +27,7 @@ class ShopController extends Controller
 
         return view('manage.shops.index', compact('shops'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function create(): View
     {
         $this->authorize('create');
@@ -39,58 +36,39 @@ class ShopController extends Controller
             'model' => null,
         ]);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    
+    public function store(Request $request): RedirectResponse
     {
-        //
-    }
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'keyword' => 'required|min:3|max:3|unique:shops',
+            'tandc' => 'nullable',
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+        $shop = new Shop;
+        $shop->fill($validated);
+        $shop->keyword = Str::upper($shop->keyword);
+        $shop->save();
+
+        return redirect()->route('manage.shops.index')
+            ->with('success', __('message.created', ['name' => $shop->name]));
+    }
+    
     public function show($id)
     {
         //
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function edit($id)
     {
         //
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function update(Request $request, $id)
     {
         //
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function destroy($id)
     {
         //

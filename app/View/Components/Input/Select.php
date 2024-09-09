@@ -18,7 +18,7 @@ class Select extends Component
      *
      * @return void
      */
-    public function __construct($label, $name, $id = null, $options = [], $selected = null, $placeholder = 'กรุณาเลือกข้อมูล')
+    public function __construct($label = null, $name, $id = null, $options = [], $selected = null, $placeholder = 'กรุณาเลือกข้อมูล')
     {
         $this->label = $label;
         $this->options = $options;
