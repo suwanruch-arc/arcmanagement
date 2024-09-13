@@ -13,11 +13,6 @@ use Illuminate\Support\Str;
 
 class DepartmentController extends Controller
 {
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create(Partner $partner): View
     {
         $this->authorize('create');
@@ -27,13 +22,7 @@ class DepartmentController extends Controller
             'model' => null
         ]);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    
     public function store(Request $request, Partner $partner): RedirectResponse
     {
         $this->authorize('create');
@@ -59,28 +48,15 @@ class DepartmentController extends Controller
             $department->save();
         }
 
-
         return redirect()->route("manage.partners.index")
             ->with('success', __('message.created', ['name' => $department->name]));
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function show($id)
     {
         //
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function edit(Partner $partner, Department $department): View
     {
         $this->authorize('update', $department);
@@ -90,14 +66,7 @@ class DepartmentController extends Controller
             'model' => $department
         ]);
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function update(Request $request, Partner $partner, Department $department): RedirectResponse
     {
         $this->authorize('update', $department);
@@ -108,6 +77,7 @@ class DepartmentController extends Controller
             'logo_file' => 'nullable|image',
             'logo_width' => 'nullable'
         ]);
+        
         $department->fill($validated);
         $department->save();
 
@@ -121,13 +91,7 @@ class DepartmentController extends Controller
         return redirect()->route("manage.partners.index")
             ->with('success', __('message.updated', ['name' => $department->name]));
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function destroy(Partner $partner, Department $department): RedirectResponse
     {
         $this->authorize('delete', $department);

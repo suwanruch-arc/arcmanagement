@@ -43,7 +43,7 @@
                             </div>
                             <div class="row row-cols-1 row-cols-md-2">
                                 <div class="col">
-                                    <x-input.file label="Default Template" name="banner" accept="image/*"
+                                    <x-input.file label="Default Template" name="template" accept="image/*"
                                         :path="isset($model) ? $model->getTemplateFilePath() : null" />
                                 </div>
                                 <div class="col">
@@ -63,7 +63,8 @@
     @parent
     <script>
         $('#editor').trumbowyg({
-            lang: 'th'
+            lang: 'th',
+            resetCss: true
         });
     </script>
 @endsection

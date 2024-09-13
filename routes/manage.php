@@ -6,7 +6,6 @@ use App\Http\Controllers\Managements\PermissionController;
 use App\Http\Controllers\Managements\ShopController;
 use App\Http\Controllers\Managements\UserController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ManageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +18,6 @@ use App\Http\Controllers\ManageController;
 |
 */
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/dashboard', [ManageController::class, 'dashboard'])->name('manage.dashboard');
-
     Route::name('manage.')->group(function () {
         Route::middleware('check.permission:permission')->controller(PermissionController::class)->prefix('permissions')->name('permissions.')->group(function () {
             Route::get('', 'index')->name('index');
@@ -41,6 +38,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::prefix('departments')->name('departments.')->group(function () {
                 Route::post('/restore', [DepartmentController::class, 'restore'])->name('restore');
             });
+        });
+
+        Route::middleware('check.permission:shop')->prefix('shops')->name('shops.')->group(function () {
+            Route::post('/restore', [ShopController::class, 'restore'])->name('restore');
         });
 
         Route::resource('users', UserController::class)->middleware('check.permission:user');

@@ -12335,3 +12335,13 @@ table {
     background: gray;
     border-radius: 0.375rem;
 }
+
+.custom-tooltip {
+    --bs-tooltip-bg: var(--bs-light);
+    --bs-tooltip-color: var(--bs-white);
+}
+
+.pointer {
+    cursor: pointer;
+}
+

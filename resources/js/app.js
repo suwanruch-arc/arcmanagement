@@ -12,11 +12,11 @@ const tooltipList = [...tooltipTriggerList].map(
 );
 
 $(document).ready(function () {
-    $('.uppercase').keyup(function (e) {
-        const value = this.value.toUpperCase()
+    $(".uppercase").keyup(function (e) {
+        const value = this.value.toUpperCase();
         $(this).val(value);
     });
-    
+
     $("form.form-destroy").submit(function (e) {
         e.preventDefault();
         Swal.fire({
@@ -42,3 +42,4 @@ $(document).ready(function () {
     $.fn.filepond.registerPlugin(FilePondPluginImagePreview);
     $(".file-pond").filepond();
 });
+

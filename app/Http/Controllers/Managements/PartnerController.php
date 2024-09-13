@@ -12,11 +12,6 @@ use Illuminate\View\View;
 
 class PartnerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(): View
     {
         $query = Partner::query()->withTrashed();
@@ -24,12 +19,7 @@ class PartnerController extends Controller
 
         return view('manage.partners.index', compact('partners'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function create(): View
     {
         $this->authorize('create');
@@ -38,13 +28,7 @@ class PartnerController extends Controller
             'model' => null
         ]);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    
     public function store(Request $request): RedirectResponse
     {
         $this->authorize('create');
@@ -72,24 +56,12 @@ class PartnerController extends Controller
         return redirect()->route("manage.partners.index")
             ->with('success', __('message.created', ['name' => $partner->name]));
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function show($id)
     {
         //
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function edit(Partner $partner): View
     {
         $this->authorize('update', $partner);
@@ -98,14 +70,7 @@ class PartnerController extends Controller
             'model' => $partner
         ]);
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function update(Request $request, Partner $partner): RedirectResponse
     {
         $this->authorize('update', $partner);
@@ -120,13 +85,7 @@ class PartnerController extends Controller
         return redirect()->route("manage.partners.index")
             ->with('success', __('message.updated', ['name' => $partner->name]));
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function destroy(Partner $partner): RedirectResponse
     {
         $this->authorize('delete', $partner);

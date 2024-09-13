@@ -26,4 +26,14 @@ class File extends Model
     {
         return $this->hasMany(Department::class);
     }
+
+    public function shopsTemplate()
+    {
+        return $this->hasMany(Shop::class, 'template_id');
+    }
+
+    public function shopsBanner()
+    {
+        return $this->hasMany(Shop::class, 'banner_id');
+    }
 }

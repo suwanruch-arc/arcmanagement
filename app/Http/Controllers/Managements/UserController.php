@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\Partner;
 use App\Models\User;
-use App\Traits\Search;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -15,12 +14,9 @@ use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    use Search;
-
     public function index(): View
     {
-        $query = User::query()->withTrashed();
-        $query = Search::getData($query, [
+        $users = User::withTrashed()->search([
             ['field' => 'name'],
             ['field' => 'email'],
             ['field' => 'username'],
@@ -29,9 +25,10 @@ class UserController extends Controller
             ['field' => 'role'],
             ['field' => 'name', 'ref' => 'partner', 'withTrashed' => true],
             ['field' => ['name', 'keyword'], 'ref' => 'department', 'withTrashed' => true]
-        ]);
-
-        $users = $query->orderByRaw("id = ? DESC", [auth()->user()->id])->orderBy('status')->orderByDesc('created_at')->paginate(25);
+        ])->orderByRaw("id = ? DESC", [auth()->user()->id])
+            ->orderBy('status')
+            ->orderByDesc('created_at')
+            ->paginate(25);
 
         return view('manage.users.index', compact('users'));
     }

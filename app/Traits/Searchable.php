@@ -2,9 +2,11 @@
 
 namespace App\Traits;
 
-trait Search
+use Illuminate\Database\Eloquent\Builder;
+
+trait Searchable
 {
-    public static function getData($query, $columns)
+    public function scopeSearch(Builder $query, array $columns): Builder
     {
         $request = request();
         if ($request->has('search')) {
@@ -13,31 +15,32 @@ trait Search
                 if (isset($column['ref'])) {
                     $table = $column['ref'];
                     $fields = $column['field'];
-                    $withTrashed = $columns['withTrashed'] ?? false;
+                    $withTrashed = $column['withTrashed'] ?? false;
+
                     if (is_array($fields)) {
-                        $query = $query->orWhereHas($table, function ($query) use ($fields, $search, $withTrashed) {
-                            $query = $query->where(function ($query) use ($fields, $search, $withTrashed) {
+                        $query->orWhereHas($table, function (Builder $query) use ($fields, $search, $withTrashed) {
+                            $query->where(function (Builder $query) use ($fields, $search, $withTrashed) {
                                 if ($withTrashed) {
-                                    $query = $query->withTrashed();
+                                    $query->withTrashed();
                                 }
                                 foreach ($fields as $field) {
-                                    $query = $query->orWhere($field, 'LIKE', "%{$search}%");
+                                    $query->orWhere($field, 'LIKE', "%{$search}%");
                                 }
                             });
                             if ($withTrashed) {
-                                $query = $query->withTrashed();
+                                $query->withTrashed();
                             }
                         });
                     } else {
-                        $query = $query->orWhereHas($table, function ($query) use ($fields, $search, $withTrashed) {
-                            $query = $query->where($fields, 'LIKE', "%{$search}%");
+                        $query->orWhereHas($table, function (Builder $query) use ($fields, $search, $withTrashed) {
+                            $query->where($fields, 'LIKE', "%{$search}%");
                             if ($withTrashed) {
-                                $query = $query->withTrashed();
+                                $query->withTrashed();
                             }
                         });
                     }
                 } else {
-                    $query = $query->orWhere($column['field'], 'LIKE', "%{$search}%");
+                    $query->orWhere($column['field'], 'LIKE', "%{$search}%");
                 }
             }
         }

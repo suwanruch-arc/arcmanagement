@@ -157,12 +157,3 @@
         </div>
     </x-section>
 @endsection
-
-@section('style')
-    <style>
-        .custom-tooltip {
-            --bs-tooltip-bg: var(--bs-light);
-            --bs-tooltip-color: var(--bs-white);
-        }
-    </style>
-@endsection

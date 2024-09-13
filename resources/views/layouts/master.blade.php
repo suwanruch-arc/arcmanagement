@@ -52,8 +52,7 @@
         </a>
         <div class="me-md-auto order-1 order-md-1">
             @if (isset($prev_route))
-                <a class="m-2 text-decoration-none text-white d-flex gap-2 justify-content-center"
-                    href="{{ $prev_route }}">
+                <a class="m-2 text-decoration-none text-white d-flex gap-2 justify-content-center" href="{{ $prev_route }}">
                     <span class="material-symbols-rounded">undo</span> ย้อนกลับ
                 </a>
             @endif

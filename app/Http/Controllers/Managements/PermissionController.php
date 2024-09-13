@@ -6,12 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Partner;
 use App\Models\Permission;
 use App\Models\User;
-use App\Traits\Search;
 use Illuminate\Http\Request;
 
 class PermissionController extends Controller
 {
-    use Search;
     public function index()
     {
         $partners = Partner::orderBy('name')->get();

@@ -6,28 +6,22 @@ return [
         'id' => 'menus',
         'children' => [
             [
-                'label' => 'แดชบอร์ด',
-                'id' => 'dashboard',
-                'icon' => 'dashboard',
-                'url' => '/',
-            ],
-            [
                 'label' => 'แคมเปญ',
                 'id' => 'campaign',
                 'icon' => 'campaign',
-                'url' => '/site/campaigns/'
+                'url' => '/campaigns',
             ],
             [
                 'label' => 'E-Code',
                 'id' => 'ecode',
                 'icon' => 'qr_code',
-                'url' => '/site/ecode/'
+                'url' => '/ecode',
             ],
             [
                 'label' => 'รายงาน',
                 'id' => 'report',
                 'icon' => 'pie_chart',
-                'url' => '/manage/reports/',
+                'url' => '/reports',
             ]
         ],
     ],
@@ -39,31 +33,31 @@ return [
                 'label' => 'ร้านค้า',
                 'id' => 'shop',
                 'icon' => 'store',
-                'url' => '/manage/shops'
+                'url' => '/shops'
             ],
             [
                 'label' => 'Partner / Department',
                 'id' => 'partner',
                 'icon' => 'handshake',
-                'url' => '/manage/partners/'
+                'url' => '/partners'
             ],
             [
                 'label' => 'ผู้ใช้งาน',
                 'id' => 'user',
                 'icon' => 'person',
-                'url' => '/manage/users'
+                'url' => '/users'
             ],
             [
                 'label' => 'จัดการสิทธิ์',
                 'id' => 'permission',
                 'icon' => 'format_list_bulleted',
-                'url' => '/manage/permissions'
+                'url' => '/permissions'
             ],
             [
                 'label' => 'รายการเส้นทาง',
                 'id' => 'route',
                 'icon' => 'route',
-                'url' => '/manage/routes'
+                'url' => '/routes'
             ]
         ]
     ],
