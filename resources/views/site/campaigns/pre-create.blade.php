@@ -1,6 +1,6 @@
 @extends('layouts.master', [
     'prev_route' => url()->previous(),
-    'breadcrumb' => [['url' => route('dashboard'), 'label' => 'แดชบอร์ด'], ['url' => route('campaigns.index'), 'label' => 'แคมเปญ'], ['label' => 'เลือกประเภท']],
+    'breadcrumb' => [['url' => route('dashboard'), 'label' => 'แดชบอร์ด'], ['url' => route('site.campaigns.index'), 'label' => 'แคมเปญ'], ['label' => 'เลือกประเภท']],
 ])
 
 @section('content')
@@ -15,7 +15,7 @@
             <div class="col-md-12 col-lg-10 col-xl-8">
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{ route('campaigns.create') }}" method="GET">
+                        <form action="{{ route('site.campaigns.create') }}" method="GET">
                             <div class="row row-cols-1 row-cols-md-2">
                                 <div class="col">
                                     <x-input.select label="ประเภทแคมเปญ" name="template_type" :options="[

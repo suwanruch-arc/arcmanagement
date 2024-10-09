@@ -16,12 +16,11 @@ body {
     .navbar-search {
         display: block;
     }
-}
-
-.sidebar {
-    background-color: #f0f0f0;
-    position: fixed;
-    height: 100%;
+    .sidebar {
+        background-color: #f0f0f0;
+        position: fixed;
+        height: 100%;
+    }
 }
 
 .sidebar .nav-link {

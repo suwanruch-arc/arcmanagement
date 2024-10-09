@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Sites;
 
+use App\Http\Controllers\Controller;
 use App\Traits\PartnerTrait;
 use Illuminate\Http\Request;
 use App\Models\Campaign;

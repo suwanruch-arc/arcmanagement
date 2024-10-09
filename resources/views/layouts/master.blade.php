@@ -41,6 +41,7 @@
         href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
     <link href="{{ asset('css/trumbowyg.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/jquery.datetimepicker.min.css') }}" rel="stylesheet">
     @routes
     @yield('style')
 </head>
@@ -73,7 +74,7 @@
     <div class="container-fluid h-100 pt-md-5">
         <div class="row h-100">
             @include('layouts.dashboard.sidebar')
-            <main class="col-md-9 col-lg-10 ms-sm-auto pt-sm-5 pt-md-0">
+            <main class="col-md-9 col-lg-10 ms-sm-auto pt-sm-5 pt-md-0 pb-3">
                 <x-breadcrumb :links="$breadcrumb ?? null" />
                 @yield('content')
             </main>
@@ -93,6 +94,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
     <script src="{{ asset('js/trumbowyg.min.js') }}"></script>
     <script src="{{ asset('js/ui/th.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
     @yield('script')
     @livewireScripts
     <x-toasts />

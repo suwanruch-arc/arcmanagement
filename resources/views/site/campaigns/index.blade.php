@@ -12,7 +12,7 @@
     </x-slot>
     <x-slot name="toolbar">
         @can('create')
-            <x-button type="a" label="เพิ่มแคมเปญ" icon="add" color="primary" :href="route('campaigns.pre-create')" />
+            <x-button type="a" size="sm" label="เพิ่มแคมเปญ" icon="add" color="primary" :href="route('site.campaigns.pre-create')" />
         @endcan
     </x-slot>
     <div class="card">

@@ -4,29 +4,27 @@ namespace App\View\Components\Input;
 
 use Illuminate\View\Component;
 
-class Text extends Component
+class Date extends Component
 {
     public $label;
     public $name;
     public $id;
-    public $type;
     public $prepend;
     public $append;
-    public $value;
+    public $format;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($label = null, $name = null, $id = null, $type = 'text', $prepend = null, $append = null, $value = null)
+    public function __construct($label = null, $name = null, $id = null, $prepend = null, $append = null, $format = 'Y-m-d H:i:s')
     {
-        $this->type = $type;
         $this->label = $label;
         $this->name = $name;
         $this->id = $id ?? $name;
         $this->prepend = $prepend;
         $this->append = $append;
-        $this->value = $value;
+        $this->format = $format;
     }
 
     /**
@@ -36,7 +34,7 @@ class Text extends Component
      */
     public function render()
     {
-        return view('components.input.text', [
+        return view('components.input.date', [
             'hasError' => session()->get('errors') ? session()->get('errors')->has($this->name) : false
         ]);
     }

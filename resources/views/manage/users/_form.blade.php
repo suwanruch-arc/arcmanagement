@@ -58,12 +58,12 @@
                                 <div class="col">
                                     <x-input.select label="ตำแหน่ง" name="position" :options="['admin' => 'Admin', 'leader' => 'Leader', 'employee' => 'Employee']"
                                         selected="{{ old('position') ?? ($model->position ?? 'employee') }}"
-                                        placeholder="กรุณาเลือกตำแหน่ง" class="select2" />
+                                        placeholder="กรุณาเลือกตำแหน่ง" />
                                 </div>
                                 <div class="col">
                                     <x-input.select label="สิทธิ์" name="role" :options="['admin' => 'Admin', 'moderator' => 'Moderator', 'user' => 'User']"
                                         selected="{{ old('role') ?? ($model->role ?? 'user') }}"
-                                        placeholder="กรุณาเลือกสิทธิ์" class="select2" />
+                                        placeholder="กรุณาเลือกสิทธิ์" />
                                 </div>
                             </div>
                         </x-form>

@@ -48,6 +48,7 @@ class PermissionController extends Controller
                 $permission = new Permission;
                 $permission->user_id = $user_id;
                 $permission->menu_name = $menu;
+                $permission->assigned_by = auth()->id();
                 $permission->save();
             }
         }

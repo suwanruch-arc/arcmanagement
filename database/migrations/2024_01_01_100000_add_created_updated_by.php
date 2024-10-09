@@ -25,6 +25,14 @@ class AddCreatedUpdatedBy extends Migration
             $table->foreignId('created_by')->nullable()->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');
         });
+        Schema::table('shops', function (Blueprint $table) {
+            $table->foreignId('created_by')->nullable()->constrained('users');
+            $table->foreignId('updated_by')->nullable()->constrained('users');
+        });
+        Schema::table('campaigns', function (Blueprint $table) {
+            $table->foreignId('created_by')->nullable()->constrained('users');
+            $table->foreignId('updated_by')->nullable()->constrained('users');
+        });
     }
 
     /**

@@ -19,9 +19,17 @@
         @if ($prepend)
             <span class="input-group-text">{{ $prepend }}</span>
         @endif
-        <input type="{{ $type }}" name="{{ $name }}" id="{{ $id }}"
-            {{ $attributes->class(['is-invalid' => $hasError])->merge(['class' => 'form-control']) }}
-            minlength="{{ $attributes->get('min') }}" maxlength="{{ $attributes->get('max') }}" {{ $attributes }} />
+        @if ($type === 'area')
+            <textarea class="form-control" name="{{ $name }}" id="{{ $id }}"
+                rows="{{ $attributes->get('rows') ?? 3 }}"
+                {{ $attributes->class(['is-invalid' => $hasError])->merge(['class' => 'form-control']) }} {{ $attributes }}>{{ $value }}</textarea>
+        @else
+            <input type="{{ $type }}" name="{{ $name }}" id="{{ $id }}"
+                value="{{ $value }}"
+                {{ $attributes->class(['is-invalid' => $hasError])->merge(['class' => 'form-control']) }}
+                minlength="{{ $attributes->get('min') }}" maxlength="{{ $attributes->get('max') }}"
+                {{ $attributes }} />
+        @endif
         @if ($append)
             <span class="input-group-text">{{ $append }}</span>
         @endif

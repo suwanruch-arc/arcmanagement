@@ -60,11 +60,11 @@
 @endsection
 
 @section('script')
-    @parent
     <script>
         $('#editor').trumbowyg({
             lang: 'th',
             resetCss: true
         });
     </script>
+    @parent
 @endsection

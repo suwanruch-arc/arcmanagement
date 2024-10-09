@@ -12,7 +12,7 @@
     </x-slot>
     <x-slot name="toolbar">
         @can('create')
-            <x-button type="a" label="เพิ่มร้านค้า" icon="add" color="primary" :href="route('manage.shops.create')" />
+            <x-button type="a" size="sm" label="เพิ่มร้านค้า" icon="add" color="primary" :href="route('manage.shops.create')" />
         @endcan
     </x-slot>
     <div class="card">

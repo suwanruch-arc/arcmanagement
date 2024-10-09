@@ -21,11 +21,11 @@ class Partner extends Model
 
     public function departments()
     {
-        return $this->hasMany(Department::class);
+        return $this->hasMany(Department::class)->orderBy('name');
     }
 
     public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class)->orderBy('name');
     }
 }

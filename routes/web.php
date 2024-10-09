@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\Sites\CampaignController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,8 +34,10 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard')->middleware('check.permission:dashboard');
 
-    Route::middleware('check.permission:campaign')->controller(CampaignController::class)->prefix('campaigns')->name('campaigns.')->group(function () {
-        Route::get('pre-create', 'preCreate')->name('pre-create');
+    Route::name('site.')->group(function () {
+        Route::middleware('check.permission:campaign')->controller(CampaignController::class)->prefix('campaigns')->name('campaigns.')->group(function () {
+            Route::get('pre-create', 'preCreate')->name('pre-create');
+        });
+        Route::resource('campaigns', CampaignController::class)->middleware('check.permission:campaign');
     });
-    Route::resource('campaigns', CampaignController::class)->middleware('check.permission:campaign');
 });
