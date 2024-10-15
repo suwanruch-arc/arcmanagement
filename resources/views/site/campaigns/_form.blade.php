@@ -58,48 +58,129 @@
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
-                                    <label for="keyword" class="form-label">
-                                        ข้อความแจ้งเตือนยืนยันรับสิทธิ์
-                                    </label>
-                                    <div class="card mx-auto text-center" style="width: 32em;">
-                                        <div class="swal2-icon swal2-warning my-3" style="display: flex;">
-                                            <div class="swal2-icon-content">!</div>
-                                        </div>
-                                        <div class="mx-auto w-50">
-                                            <x-input.text name="settings[alert][title]" id="setting-alert-title"
-                                                :value="old('settings.alert.title') ??
-                                                    ($model->settings->alert->title ?? 'ยืนยันรับสิทธิ์')" />
-                                        </div>
-                                        <div class="mx-auto w-75">
-                                            <x-input.text type="area" name="settings[alert][description]"
-                                                id="setting-alert-description" :value="old('settings.alert.description') ??
-                                                    ($model->settings->alert->description ??
-                                                        '*ถ้ากดรับสิทธิแล้ว ไม่สามารถแก้ไขหรือยกเลิกได้')" />
-                                        </div>
-                                        <div class="mx-auto w-75 row">
-                                            <div class="col">
-                                                <x-input.text name="settings[alert][confirm]" id="setting-alert-confirm"
-                                                    :value="old('settings.alert.confirm') ??
-                                                        ($model->settings->alert->confirm ?? 'รับสิทธิ์')">
-                                                    <x-slot name="prepend">
-                                                        <input class="form-control form-control-color" type="color"
-                                                            name="settings[alert][color][confirm]"
-                                                            id="setting-alert-color-confirm"
-                                                            value="{{ old('settings.alert.color.confirm') ?? ($model->settings->alert->confirm ?? '#02B875') }}" />
-                                                    </x-slot>
-                                                </x-input.text>
+                                    <div class="row mb-2">
+                                        <div class="col-12">
+                                            <label class="form-label">
+                                                ข้อความแจ้งเตือนยืนยันรับสิทธิ์
+                                            </label>
+                                            <div class="card mx-auto text-center" style="width: 32em;">
+                                                <div class="swal2-icon swal2-warning my-3" style="display: flex;">
+                                                    <div class="swal2-icon-content">!</div>
+                                                </div>
+                                                <div class="mx-auto w-50">
+                                                    <x-input.text name="settings[alert][title]" id="setting-alert-title"
+                                                        :value="old('settings.alert.title') ??
+                                                            ($model->settings->alert->title ?? 'ยืนยันรับสิทธิ์')" />
+                                                </div>
+                                                <div class="mx-auto w-75">
+                                                    <x-input.text type="area" name="settings[alert][description]"
+                                                        id="setting-alert-description" :value="old('settings.alert.description') ??
+                                                            ($model->settings->alert->description ??
+                                                                '*ถ้ากดรับสิทธิแล้ว ไม่สามารถแก้ไขหรือยกเลิกได้')" />
+                                                </div>
+                                                <div class="mx-auto w-75 row">
+                                                    <div class="col">
+                                                        <x-input.text name="settings[alert][confirm]"
+                                                            id="setting-alert-confirm" :value="old('settings.alert.confirm') ??
+                                                                ($model->settings->alert->confirm ?? 'รับสิทธิ์')">
+                                                            <x-slot name="prepend">
+                                                                <input class="form-control form-control-color"
+                                                                    type="color" name="settings[alert][color][confirm]"
+                                                                    id="setting-alert-color-confirm"
+                                                                    value="{{ old('settings.alert.color.confirm') ?? ($model->settings->alert->confirm ?? '#02B875') }}" />
+                                                            </x-slot>
+                                                        </x-input.text>
+                                                    </div>
+                                                    <div class="col">
+                                                        <x-input.text name="settings[alert][cancel]"
+                                                            id="setting-alert-cancel" :value="old('settings.alert.cancel') ??
+                                                                ($model->settings->alert->cancel ?? 'ยกเลิก')">
+                                                            <x-slot name="prepend">
+                                                                <input class="form-control form-control-color"
+                                                                    type="color" name="settings[alert][color][cancel]"
+                                                                    id="setting-alert-color-cancel"
+                                                                    value="{{ old('settings.alert.color.cancel') ?? ($model->settings->alert->cancel ?? '#D9534F') }}" />
+                                                            </x-slot>
+                                                        </x-input.text>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col">
-                                                <x-input.text name="settings[alert][cancel]" id="setting-alert-cancel"
-                                                    :value="old('settings.alert.cancel') ??
-                                                        ($model->settings->alert->cancel ?? 'ยกเลิก')">
-                                                    <x-slot name="prepend">
-                                                        <input class="form-control form-control-color" type="color"
-                                                            name="settings[alert][color][cancel]"
-                                                            id="setting-alert-color-cancel"
-                                                            value="{{ old('settings.alert.color.cancel') ?? ($model->settings->alert->cancel ?? '#D9534F') }}" />
-                                                    </x-slot>
-                                                </x-input.text>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-12">
+                                            <div class="row row-cols-1 row-cols-md-2">
+                                                <div class="col">
+                                                    <x-input.text type="color" label="สีหลัก" name="settings[color][main]" id="setting-color-main"
+                                                        :value="old('settings.color.main') ??
+                                                            ($model->settings->color->main ?? '#FFFFFF')"/>
+                                                </div>
+                                                <div class="col">
+                                                    <x-input.text type="color" label="สีรอง" name="settings[color][secondary]" id="setting-color-secondary"
+                                                        :value="old('settings.color.secondary') ??
+                                                            ($model->settings->color->secondary ?? '#2196F3')" />
+                                                </div>
+                                                <div class="col">
+                                                    <label class="form-label">
+                                                        ปุ่มรับสิทธิ์
+                                                    </label>
+                                                    <x-input.text name="settings[button][redeem]" id="setting-button-redeem"
+                                                        :value="old('settings.button.redeem') ??
+                                                            ($model->settings->button->redeem ?? 'กดรับสิทธิ์')">
+                                                        <x-slot name="prepend">
+                                                            <input class="form-control form-control-color" type="color"
+                                                                name="settings[button][color][redeem]"
+                                                                id="setting-button-color-redeem"
+                                                                value="{{ old('settings.button.color.redeem') ?? ($model->settings->button->color->redeem ?? '#02B875') }}" />
+                                                        </x-slot>
+                                                    </x-input.text>
+                                                </div>
+                                                <div class="col">
+                                                    <label class="form-label">
+                                                        ปุ่มดู
+                                                    </label>
+                                                    <x-input.text name="settings[button][view]" id="setting-button-view"
+                                                        :value="old('settings.button.view') ??
+                                                            ($model->settings->button->view ?? 'ดูโค้ด')">
+                                                        <x-slot name="prepend">
+                                                            <input class="form-control form-control-color" type="color"
+                                                                name="settings[button][color][view]"
+                                                                id="setting-button-color-view"
+                                                                value="{{ old('settings.button.color.view') ?? ($model->settings->button->color->view ?? '#F0AD4E') }}" />
+                                                        </x-slot>
+                                                    </x-input.text>
+                                                </div>
+                                                <div class="col">
+                                                    <label class="form-label">
+                                                        ปุ่มรับสิทธิ์แล้ว
+                                                    </label>
+                                                    <x-input.text name="settings[button][already]"
+                                                        id="setting-button-already" :value="old('settings.button.already') ??
+                                                            ($model->settings->button->already ??
+                                                                'คุณได้รับสิทธิ์แล้ว')">
+                                                        <x-slot name="prepend">
+                                                            <input class="form-control form-control-color" type="color"
+                                                                name="settings[button][color][already]"
+                                                                id="setting-button-color-already"
+                                                                value="{{ old('settings.button.color.already') ?? ($model->settings->button->color->already ?? '#ADB5BD') }}" />
+                                                        </x-slot>
+                                                    </x-input.text>
+                                                </div>
+                                                <div class="col">
+                                                    <label class="form-label">
+                                                        ปุ่มหมดอายุ
+                                                    </label>
+                                                    <x-input.text name="settings[button][expired]"
+                                                        id="setting-button-expired" :value="old('settings.button.expired') ??
+                                                            ($model->settings->button->expired ?? 'หมดอายุ')">
+                                                        <x-slot name="prepend">
+                                                            <input class="form-control form-control-color" type="color"
+                                                                name="settings[button][color][expired]"
+                                                                id="setting-button-color-expired"
+                                                                value="{{ old('settings.button.color.expired') ?? ($model->settings->button->color->expired ?? '#D9534F') }}" />
+                                                        </x-slot>
+                                                    </x-input.text>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

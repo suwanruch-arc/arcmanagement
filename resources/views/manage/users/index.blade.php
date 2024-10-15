@@ -12,7 +12,7 @@
         </x-slot>
         <x-slot name="toolbar">
             @can('create')
-                <x-button type="a" size="sm" label="เพิ่มผู้ใช้งาน" icon="add" color="primary" :href="route('manage.users.create')" />
+                <x-button type="a" label="เพิ่มผู้ใช้งาน" icon="add" color="primary" :href="route('manage.users.create')" />
             @endcan
         </x-slot>
         <div class="card">

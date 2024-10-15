@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Traits\PartnerTrait;
 use Illuminate\Http\Request;
 use App\Models\Campaign;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class CampaignController extends Controller
@@ -37,5 +38,10 @@ class CampaignController extends Controller
             'model' => null,
             'template_type' => $template_type
         ]);
+    }
+
+    public function store(Request $request): Redirect
+    {
+        dd($request->all());
     }
 }
